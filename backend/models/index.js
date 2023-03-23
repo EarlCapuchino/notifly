@@ -5,5 +5,6 @@ module.exports = {
     Category: require("./Category"),
     Member: require("./Member"),
     Cluster: require("./Cluster"),
-    Post_List: require("./Post_List")
+    Post_List: require("./Post_List"),
+    Page_List: require("./Page_List")
   };

@@ -73,6 +73,81 @@ async function sendMessage(message, recipients){
         await delay(5000)
     }
 }
+async function deployTag(el, recipients){
+    for (let i = 0; i < recipients.length; i++) {
+        comment = "@"+recipients[i].username
+        await delay(1000)
+        el.sendKeys(comment);
+        await delay(1000)
+        el.sendKeys(Key.RETURN);
+        await delay(1000)
+        el.sendKeys(" ");
+    }
+}
+async function tagPeople(postID, recipients, tagMessage){
+    var driver = await login();
+    await delay(10000)
+    await driver.get(postID);
+    await delay(10000)
+    let by = By.css('div[aria-label="Write a comment"]');
+    el = await driver.wait(until.elementLocated(by, 10000))
+    el = driver.findElement(by);
+    driver.wait(until.elementIsVisible(el), 10000);
+    el.sendKeys(tagMessage + " ");
+    await deployTag(el, recipients)
+    el.sendKeys(Key.RETURN)
+}
+async function likePosts(postArray){
+    var driver = await login();
+    await delay(10000)
+
+    for (i=0; i< postArray.length; i++){
+        await driver.get(postArray[i]);
+        await delay(10000)
+        let by = By.css('div[aria-label="Like"]');
+        el = await driver.wait(until.elementLocated(by, 10000))
+        el = driver.findElement(by);
+        driver.wait(until.elementIsVisible(el), 10000);
+        el.click();
+        await delay(2000)
+    }
+}
+async function sharePosts(postArray){
+    var driver = await login();
+    await delay(10000)
+    for (i=0; i< postArray.length; i++){
+        await driver.get(postArray[i]);
+        await delay(10000)
+        let by = By.css('div[aria-label="Send this to friends or post it on your timeline."]');
+        el = await driver.wait(until.elementLocated(by, 10000))
+        el = driver.findElement(by);
+        driver.wait(until.elementIsVisible(el), 10000);
+        el.click();
+
+        await delay(2000)
+        by = By.xpath("//*[text()='Share now (Public)']");
+        el = await driver.wait(until.elementLocated(by, 10000))
+        el = driver.findElement(by);
+        driver.wait(until.elementIsVisible(el), 10000);
+        el.click();
+
+        await delay(2000)
+    }
+}
+async function followPages(pageArray){
+    var driver = await login();
+    await delay(10000)
+    for (i=0; i< pageArray.length; i++){
+        await driver.get(pageArray[i]);
+        await delay(10000)
+        let by = By.xpath('//div[@aria-label="Like" or @aria-label="Follow"]');
+        el = await driver.wait(until.elementLocated(by, 10000))
+        el = driver.findElement(by);
+        driver.wait(until.elementIsVisible(el), 10000);
+        el.click();
+        await delay(2000)
+    }
+}
 //CLUSTER
 const getClustersWithMembers= function() {
     return db.Cluster.find()
@@ -209,10 +284,32 @@ const deleteMember = function (ID){
 }
 
 //Methods
+//Post_List
 const addPostList = async function (postList){
     const docPostList = await db.Post_List.create(postList)
     return docPostList
 }
+const getPostList = function (){
+    return db.Post_List.find({})
+}
+const deletePostlist = function (ID){
+    //delete the postlist
+    return db.Post_List.findByIdAndDelete(ID)
+}
+
+//Page_List
+const addPageList = async function (pageList){
+    const docPageList = await db.Page_List.create(pageList)
+    return docPageList
+}
+const getPageList = function (){
+    return db.Page_List.find({})
+}
+const deletePagelist = function (ID){
+    //delete the pagelist
+    return db.Page_List.findByIdAndDelete(ID)
+}
+
 app.get('/get-members', async (req,res) => {
     console.log("[BACKEND] \n >>Get Members")
 
@@ -336,84 +433,169 @@ app.post('/submit-posts', async(req, res)=>{
         })
     }
 })
-async function deployTag(el, recipient){
-    for (let i = 0; i < recipients.length; i++) {
-        comment = "@"+recipient[i].username
-        await delay(1000)
-        el.sendKeys(comment);
-        await delay(1000)
-        el.sendKeys(Key.RETURN);
-        await delay(1000)
-        el.sendKeys(" ");
+app.get('/get-postlist', async(req,res)=>{
+    console.log(">>> Get Postlist")
+    
+    const postlist = await getPostList()
+    try{
+       
+        res.status(200).json({
+            status : 'Success',
+            data : {
+                postlist
+            }
+        })
+       
+    }catch(err){
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
     }
-}
-async function tagPeople(postID, recipients){
-    var driver = await login();
-    await delay(10000)
-    await driver.get(postID);
-    await delay(10000)
+})
+app.delete('/delete-postlist/:id', async(req,res) => {
+    console.log("[BACKEND] \n >>Delete Postlist")
+    
+    try{
+        var deletedPostlist = await deletePostlist(req.params.id)
+        console.log("deletedPostlist", deletedPostlist)
 
-    let by = By.css('div[aria-label="Write a comment"]');
-    el = await driver.wait(until.elementLocated(by, 10000))
-    el = driver.findElement(by);
-    driver.wait(until.elementIsVisible(el), 10000);
-    await deployTag(el, recipients)
-    el.sendKeys(Key.RETURN)
-}
+        res.status(204).json({
+          status : 'Success',
+          message:deletedPostlist,
+          data : {
+            deletedPostlist
+          }
+      })
 
-async function likePosts(postArray){
-    var driver = await login();
-    await delay(10000)
-
-    for (i=0; i< postArray.length; i++){
-        await driver.get(postArray[i]);
-        await delay(10000)
-        let by = By.css('div[aria-label="Like"]');
-        el = await driver.wait(until.elementLocated(by, 10000))
-        el = driver.findElement(by);
-        driver.wait(until.elementIsVisible(el), 10000);
-        el.click();
-        await delay(2000)
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
     }
-}
-
-async function sharePosts(postArray){
-    var driver = await login();
-    await delay(10000)
-    for (i=0; i< postArray.length; i++){
-        await driver.get(postArray[i]);
-        await delay(10000)
-        let by = By.css('div[aria-label="Send this to friends or post it on your timeline."]');
-        el = await driver.wait(until.elementLocated(by, 10000))
-        el = driver.findElement(by);
-        driver.wait(until.elementIsVisible(el), 10000);
-        el.click();
-
-        await delay(2000)
-        by = By.xpath("//*[text()='Share now (Public)']");
-        el = await driver.wait(until.elementLocated(by, 10000))
-        el = driver.findElement(by);
-        driver.wait(until.elementIsVisible(el), 10000);
-        el.click();
-
-        await delay(2000)
+})
+app.post('/tag-people', async(req, res) => {
+    console.log(">>> Tag People")
+    console.log(req.body.recipients)
+    try{
+        await tagPeople(req.body.tagLink, req.body.recipients, req.body.tagMessage)
+        console.log("Successfully Tag")
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
     }
-}
 
-async function followPages(pageArray){
-    var driver = await login();
-    await delay(10000)
-    for (i=0; i< pageArray.length; i++){
-        await driver.get(pageArray[i]);
-        await delay(10000)
-        let by = By.xpath('//div[@aria-label="Like" or @aria-label="Follow"]');
-        el = await driver.wait(until.elementLocated(by, 10000))
-        el = driver.findElement(by);
-        driver.wait(until.elementIsVisible(el), 10000);
-        el.click();
-        await delay(2000)
+})
+app.post('/like-posts', async(req, res) => {
+    console.log(">>> Like Posts")
+    try{
+        await likePosts(req.body.selectedPost)
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
     }
-}
+})
+
+app.post('/share-posts', async(req, res) => {
+    console.log(">>> Share Posts")
+    try{
+        await sharePosts(req.body.selectedPost)
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+})
+
+//Page_List
+app.post('/submit-pages', async(req, res)=>{
+    console.log(">>> Submit pages")
+    pageArray = req.body.pageArray
+    urls = [] //push all the urls
+    for (let i=0; i<pageArray.length; i++){urls.push(pageArray[i].value)}
+    try{
+        var addedPageList = await addPageList({pageListName: req.body.pageListName, urls: urls})
+        res.status(201).json({
+            status: 'Success',
+            data : {
+                addedPageList
+            }
+        })
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+})
+app.get('/get-pagelist', async(req,res)=>{
+    console.log(">>> Get Pagelist")
+    
+    const pagelist = await getPageList()
+    try{
+       
+        res.status(200).json({
+            status : 'Success',
+            data : {
+                pagelist
+            }
+        })
+       
+    }catch(err){
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+})
+app.delete('/delete-pagelist/:id', async(req,res) => {
+    console.log("[BACKEND] \n >>Delete Pagelist")
+    try{
+        var deletedPagelist = await deletePagelist(req.params.id)
+        res.status(204).json({
+          status : 'Success',
+          message:deletedPagelist,
+          data : {
+            deletedPagelist
+          }
+      })
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+})
+app.post('/like-pages', async(req, res) => {
+    console.log(">>> Like Pages")
+    try{
+        await followPages(req.body.selectedPage)
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+})
+
+
+
+
+
 
 // message = `lol`
 // recipients = [{name: "sam", username:"sammy.capuchino", user_id:"100063722853475"},

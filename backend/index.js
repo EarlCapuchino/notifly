@@ -592,10 +592,87 @@ app.post('/like-pages', async(req, res) => {
     }
 })
 
+//Meeting
+const addMeeting = function(meeting) {
+    const docMeeting = db.Meeting.create(meeting)
+    console.log(">>> Meeting DB", docMeeting)
+    return docMeeting
+};
 
+app.post('/add-meeting', async(req,res) => {
+    console.log("[BACKEND] \n >>Add Meeting", req.body.date)
+    newMeeting = {
+        "title":req.body.meetingTitle,
+        "date": req.body.date,
+        "content":req.body.content,
+    }
+    console.log("new meeting >> \n", newMeeting)
+    try{
+        const addedMeeting = await addMeeting(newMeeting)
+        res.status(201).json({
+            status: 'Success',
+            data : {
+                addedMeeting
+            }
+        })
+    }catch(err){
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+})
 
+app.get('/get-meetings', async(req,res)=>{
+    console.log(">>> Get Meetings")
+    
+    const meetings = await db.Meeting.find({})
+    try{
+       
+        res.status(200).json({
+            status : 'Success',
+            data : {
+                meetings
+            }
+        })
+       
+    }catch(err){
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+    console.log(meetings)
+})
 
+app.delete('/delete-meeting/:id', async(req,res) => {
+    console.log("[BACKEND] \n >>Delete Meeting")
+    try{
+        var deletedMeeting = await db.Meeting.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+          status : 'Success',
+          message:deletedMeeting,
+          data : {
+            deletedMeeting
+          }
+      })
 
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+    console.log(deletedMeeting)
+})
+
+app.post('/alert-meeting', async(req,res)=>{
+    console.log(">>> Alert Meeting")
+    selectedMeeting = await db.Meeting.findById(req.body.selectedMeetingID)
+    console.log(selectedMeeting)
+    //gamitin mo yung recipients saka selectedMeeting para i-alert meetings 
+})
 
 // message = `lol`
 // recipients = [{name: "sam", username:"sammy.capuchino", user_id:"100063722853475"},

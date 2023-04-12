@@ -31,6 +31,22 @@ mongoose
   .then(() => console.log("Successfully connect to MongoDB."))
   .catch(err => console.error("Connection error", err));
 
+const trim = (message) =>{
+    return message.replaceAll("\n", Key.chord(Key.SHIFT, Key.ENTER));
+}
+
+const pretty = (meeting, message) => {
+let prompt = 
+`
+${message}
+
+${meeting.title} 
+${meeting.date}
+${meeting.content}` 
+
+return prompt
+}
+
 async function login(){
     var webdriver = require("selenium-webdriver");
     var chrome = require("selenium-webdriver/chrome");
@@ -54,6 +70,8 @@ async function login(){
 
     return driver
 }
+
+
 async function deployMessage(driver, message, recipient){
     message = message.replaceAll("@{nickname}", recipient.nickname);
     let by = By.css('div[aria-label="Message"]');
@@ -61,6 +79,7 @@ async function deployMessage(driver, message, recipient){
     el = driver.findElement(by);
     driver.wait(until.elementIsVisible(el), 10000);
     el.sendKeys(message, Key.RETURN);
+    // await driver.executeScript(script, el, message);
 }
 async function sendMessage(message, recipients){
     var driver = await login();
@@ -146,6 +165,21 @@ async function followPages(pageArray){
         driver.wait(until.elementIsVisible(el), 10000);
         el.click();
         await delay(2000)
+    }
+}
+
+async function alertMeeting(meeting, recipients, message){
+    var prompt = trim(pretty(meeting, message))
+    var driver = await login();
+    await delay(10000)
+    
+    console.log("PROMPT")
+    console.log(prompt)
+    for (let i = 0; i < recipients.length; i++) {
+        await driver.get(`https://facebook.com/messages/t/${recipients[i].user_id}`)
+        await delay(5000)
+        deployMessage(driver, prompt, recipients[i])
+        await delay(5000)
     }
 }
 //CLUSTER
@@ -247,7 +281,6 @@ app.delete('/delete-cluster/:id', async(req,res) => {
         })
     }
 })
-
 //MEMBERS
 const getMembers= function() {
     return db.Member.find({})
@@ -598,7 +631,6 @@ const addMeeting = function(meeting) {
     console.log(">>> Meeting DB", docMeeting)
     return docMeeting
 };
-
 app.post('/add-meeting', async(req,res) => {
     console.log("[BACKEND] \n >>Add Meeting", req.body.date)
     newMeeting = {
@@ -670,7 +702,16 @@ app.delete('/delete-meeting/:id', async(req,res) => {
 app.post('/alert-meeting', async(req,res)=>{
     console.log(">>> Alert Meeting")
     selectedMeeting = await db.Meeting.findById(req.body.selectedMeetingID)
-    console.log(selectedMeeting)
+    try{
+        await alertMeeting(selectedMeeting, req.body.recipients, req.body.alertMessage)
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'Failed',
+            message : err
+        })
+    }
+
     //gamitin mo yung recipients saka selectedMeeting para i-alert meetings 
 })
 

@@ -550,7 +550,7 @@ function App() {
       <button  className='edit-btn' onClick={() =>{editCluster(toEditClusterID)}}>Edit</button>
       <hr/>
 
-      <h4>Get Members by Cluster</h4>
+      <h4>View Clusters</h4>
       <MembersByCluster/><br/>
 
       <h4>Send Message</h4>
@@ -571,9 +571,13 @@ function App() {
       <h4>Post Lists</h4>
       <br/>
       <div>
+      <br/>
+        Post List Name
       <input type="text" onChange={(e) => {setPostListName(e.target.value)}}/><br/><br/>
       <button onClick={addInputPost}>+</button>
       <button onClick={deleteInputPost}> - </button>
+      <br/>
+      Post Links
       {postArray.map((item, i) => {
         return (
           <>
@@ -591,6 +595,13 @@ function App() {
       <br/><br/>
       <button  className='send-btn' onClick={() =>{submitPosts()}}>Submit Post List</button>
     </div>
+    <h4>View Post List</h4>
+    <PostsByName/><br/>
+    <button  className='delete-btn' onClick={() =>{deletePostlist(displayPostListID)}}>Delete Post List</button>
+    <button  className='send-btn' onClick={() =>{likePosts()}}>Like Post</button>
+    <button  className='send-btn' onClick={() =>{sharePosts()}}>Share Post</button>
+    <br/>
+
     <h4>Tag People</h4>
     <SelectClusterOption/>
     Link:
@@ -599,19 +610,16 @@ function App() {
     <textarea onChange={(e) => {setTagMessage(e.target.value)}}/><br/><br/>
     <button  className='submit-btn' onClick={() =>{tagPeople(tagLink, clusterID, tagMessage)}}>Tag People</button>
     <br/>
-    <h4>Get Posts by Name</h4>
-    <PostsByName/><br/>
-    <button  className='delete-btn' onClick={() =>{deletePostlist(displayPostListID)}}>Delete Post List</button>
-    <button  className='send-btn' onClick={() =>{likePosts()}}>Like Post</button>
-    <button  className='send-btn' onClick={() =>{sharePosts()}}>Share Post</button>
-    <br/>
 
     <h4>Page Lists</h4>
       <br/>
       <div>
+        Page List Name
       <input type="text" onChange={(e) => {setPageListName(e.target.value)}}/><br/><br/>
       <button onClick={addInputPage}>+</button>
       <button onClick={deleteInputPage}> - </button>
+      <br/>
+      Page links
       {pageArray.map((item, i) => {
         return (
           <>

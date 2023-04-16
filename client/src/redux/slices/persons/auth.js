@@ -147,6 +147,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { THEME, PROGRESS, MAXPAGE, RESET } = authSlice.actions;
+export const { THEME, MAXPAGE, RESET } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,0 +1,19 @@
+.custom-text {
+  font-size: 0.8rem;
+}
+
+.custom-path {
+  opacity: 0.6;
+}
+.custom-bread-height {
+  height: 0.5rem;
+  margin-top: 0.01rem;
+}
+
+.custom-sticky-bread {
+  position: fixed;
+  top: 3.8rem;
+  z-index: 1;
+  padding: 0.5rem;
+  min-width: 450px;
+}

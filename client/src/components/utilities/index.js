@@ -1,6 +1,5 @@
 import axios from "axios";
 import io from "socket.io-client";
-import PresetUser from "../../assets/images/default.jpg";
 import ErrorPage from "../../assets/images/404.gif";
 import ErrorFalse from "../../assets/images/400.png";
 
@@ -19,4 +18,4 @@ const register = data =>
       throw new Error(err.response.data.error);
     });
 
-export { PresetUser, ErrorPage, ErrorFalse, BASE, ENDPOINT, register, socket };
+export { ErrorPage, ErrorFalse, BASE, ENDPOINT, register, socket };

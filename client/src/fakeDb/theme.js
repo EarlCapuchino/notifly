@@ -1,3 +1,5 @@
+// file for setting up different classnames per theme
+
 const light = {
   icon: "sun",
   dark: false,
@@ -18,7 +20,7 @@ const dark = {
   icon: "moon",
   dark: true,
   bg: "bg-dark",
-  bgHex: "#d5d4d5",
+  bgHex: "#332D2D",
   text: "text-white",
   skin: "dark-skin",
   skinText: "text-white",

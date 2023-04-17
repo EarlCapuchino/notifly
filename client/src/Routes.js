@@ -21,7 +21,7 @@ const Routers = () => {
   const { token } = useSelector(({ auth }) => auth);
 
   const handleRoutes = () =>
-    // token &&
+    token &&
     Platforms.map(route => {
       if (route.children) {
         return route.children?.map(child => (

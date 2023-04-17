@@ -1,6 +1,6 @@
 import Dashboard from "./pages/platforms/dashboard";
-// import UsersList from "./users/list";
-// import UsersArchive from "./users/archive";
+import ClustersList from "./pages/platforms/clusters/list";
+// import ClustersArchive from "./pages/platforms/clusters/archive";
 // import CompaniesList from "./companies/list";
 // import CompaniesArchive from "./companies/archive";
 // import Logs from "./logs";
@@ -10,19 +10,19 @@ const routes = [
     path: "dashboard",
     element: <Dashboard />,
   },
-  //   {
-  //     path: "users",
-  //     children: [
-  //       {
-  //         path: "list",
-  //         element: <UsersList />,
-  //       },
-  //       {
-  //         path: "archive",
-  //         element: <UsersArchive />,
-  //       },
-  //     ],
-  //   },
+  {
+    path: "clusters",
+    children: [
+      {
+        path: "list",
+        element: <ClustersList />,
+      },
+      // {
+      //   path: "archive",
+      //   element: <ClustersArchive />,
+      // },
+    ],
+  },
   //   {
   //     path: "companies",
   //     children: [

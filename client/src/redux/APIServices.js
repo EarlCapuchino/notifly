@@ -9,12 +9,11 @@ export const login = async (email, password) =>
   await axios
     .get(`auth/login?email=${email}&password=${password}`)
     .then(res => {
-      if (res.data.error) {
-        toast.warn(res.data.error);
-        throw new Error(res.data.error);
+      if (res.data.status) {
+        return res.data.content;
       } else {
-        localStorage.setItem("token", res.data.token);
-        return res.data;
+        toast.warn(res.data.message);
+        throw new Error(res.data.message);
       }
     });
 
@@ -26,11 +25,11 @@ export const validateRefresh = async token =>
       },
     })
     .then(res => {
-      if (res.data.error) {
+      if (res.data.status) {
+        return res.data.content;
+      } else {
         localStorage.removeItem("token");
         window.location.href = "/login";
-      } else {
-        return res.data;
       }
     })
     .catch(() => {

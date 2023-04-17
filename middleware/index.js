@@ -9,7 +9,7 @@ exports.protect = (req, res, proceed) => {
       error: "Not authorized, no token",
     });
   } else {
-    if (token.startsWith("QTracy")) {
+    if (token.startsWith("Bearer")) {
       // decode token
       jwt.verify(
         token.split(" ")[1],
@@ -22,7 +22,9 @@ exports.protect = (req, res, proceed) => {
               "-createdAt -updatedAt -__v -password"
             );
             if (user) {
-              res.locals.email = email;
+              res.locals.user = user;
+              res.locals.email = response.email;
+              res.locals.password = response.password;
               proceed();
             } else {
               res

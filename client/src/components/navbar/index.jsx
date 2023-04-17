@@ -17,7 +17,7 @@ import NavSettings from "./settings";
 import "./index.css";
 
 const TopNavigation = ({ toggle }) => {
-  const { theme } = useSelector(state => state.auth);
+  const { theme, auth } = useSelector(state => state.auth);
 
   return (
     <MDBNavbar

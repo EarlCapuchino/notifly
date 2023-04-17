@@ -7,7 +7,7 @@ const Sidebar = [
   {
     name: "Cluster",
     icon: "object-group",
-    path: "cluster",
+    path: "clusters",
     children: [
       {
         name: "List",

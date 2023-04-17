@@ -80,6 +80,7 @@ exports.restore = (req, res) =>
           res.json({
             status: true,
             message: `(${req.params.id}) restored successfully`,
+            content: req.params.id,
           })
         )
       );
@@ -107,6 +108,7 @@ exports.destroy = (req, res) =>
           res.json({
             status: true,
             message: `(${req.params.id}) archived successfully`,
+            content: req.params.id,
           })
         )
       );

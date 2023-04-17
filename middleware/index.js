@@ -6,7 +6,8 @@ exports.protect = (req, res, proceed) => {
 
   if (!token) {
     res.status(401).json({
-      error: "Not authorized, no token",
+      status: false,
+      message: "Not authorized, no token",
     });
   } else {
     if (token.startsWith("Bearer")) {
@@ -16,7 +17,10 @@ exports.protect = (req, res, proceed) => {
         process.env.JWT_SECRET,
         async (error, response) => {
           if (error && error.name) {
-            res.status(401).json({ expired: "Not authorized, token expired" });
+            res.status(401).json({
+              status: false,
+              expired: "Not authorized, token expired",
+            });
           } else {
             const user = await Members.findById(response.id).select(
               "-createdAt -updatedAt -__v -password"
@@ -27,15 +31,18 @@ exports.protect = (req, res, proceed) => {
               res.locals.password = response.password;
               proceed();
             } else {
-              res
-                .status(401)
-                .json({ expired: "Not authorized, invalid credentials" });
+              res.status(401).json({
+                status: false,
+                expired: "Not authorized, invalid credentials",
+              });
             }
           }
         }
       );
     } else {
-      res.status(401).json({ error: "Not authorized, invalid token" });
+      res
+        .status(401)
+        .json({ status: false, error: "Not authorized, invalid token" });
     }
   }
 };

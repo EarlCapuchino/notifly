@@ -8,8 +8,9 @@ import Search from "../../../../components/search";
 import Swal from "sweetalert2";
 import {
   BROWSE,
-  // DESTROY,
-  // UPDATE,
+  SAVE,
+  DESTROY,
+  UPDATE,
 } from "../../../../redux/slices/organizations/clusters";
 import Modal from "../../../../components/modal";
 
@@ -71,24 +72,27 @@ export default function ClustersList() {
     Swal.fire({
       icon: "question",
       title: "Are you sure?",
-      html: `You are about to archive <b>${data.fullName?.fname}</b>.`,
+      html: `You are about to archive <b>${data.name}</b>.`,
       showCancelButton: true,
       confirmButtonText: "Proceed",
     }).then(result => {
       if (result.isConfirmed) {
-        // dispatch(DESTROY({ id: data._id, token }));
+        dispatch(DESTROY({ id: data._id, token }));
       }
     });
 
-  const handleAttendance = data =>
-    window.open(
-      `/attendance/${data._id}`,
-      "Attendance",
-      "top=100px,width=768px,height=650px"
-    );
+  const handleUpdate = data => {
+    setRecord(data);
+    setModal({ visibility: true, create: false });
+  };
 
   const handleModalSubmit = data => {
-    console.log(data);
+    if (modal.create) {
+      dispatch(SAVE({ data, token }));
+    } else {
+      dispatch(UPDATE({ data, token }));
+    }
+    setModal({ visibility: false, create: true });
   };
 
   return (
@@ -141,10 +145,6 @@ export default function ClustersList() {
               titles={[
                 "Name",
                 {
-                  _title: "Created By",
-                  _styles: "text-center",
-                },
-                {
                   _title: "Actions",
                   _styles: "text-center",
                 },
@@ -153,24 +153,12 @@ export default function ClustersList() {
                 {
                   _keys: "name",
                 },
-                // {
-                //   _keys: "createdAt",
-                //   _format: data => new Date(data).toDateString(),
-                //   _styles: "text-center",
-                // },
-                // {
-                //   _keys: ["createdAt", "updatedAt"],
-                //   _format: [
-                //     data => new Date(data).toDateString(),
-                //     data => new Date(data).toDateString(),
-                //   ],
-                // },
               ]}
-              handlers={[handleAttendance, handleArchive]}
+              handlers={[handleUpdate, handleArchive]}
               actions={[
                 {
-                  _title: "Attendance",
-                  _icon: "calendar-alt",
+                  _title: "Update",
+                  _icon: "pen",
                   _color: "primary",
                   _placement: "left",
                   _function: 0,

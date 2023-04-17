@@ -53,7 +53,7 @@ export const browse = async (entity, key = "", token) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => res.data)
+      .then(res => res.data.content)
       .catch(err => {
         if (err.response.data.expired) {
           toast.warn("Session expired, login again.");
@@ -95,7 +95,7 @@ export const save = async (entity, form, token, willToast = true) =>
       if (willToast) {
         toast.success("Item saved successfully");
       }
-      return res.data;
+      return res.data.content;
     })
     .catch(err => {
       if (err.response.data.expired) {
@@ -106,30 +106,19 @@ export const save = async (entity, form, token, willToast = true) =>
       throw new Error(err);
     });
 
-export const update = (
-  entity,
-  data,
-  id,
-  token,
-  willToast = true,
-  restore = false
-) =>
+export const update = (entity, data, id, token, willToast = true) =>
   !breached &&
   axios
-    .put(`${entity}/update?id=${id}`, data, {
+    .put(`${entity}/${id}/update`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
     .then(res => {
       if (willToast) {
-        if (restore) {
-          toast.success("Item restored successfully");
-        } else {
-          toast.info("Item updated successfully");
-        }
+        toast.info("Item updated successfully");
       }
-      return res.data;
+      return res.data.content;
     })
     .catch(err => {
       if (err.response.data.expired) {
@@ -143,14 +132,39 @@ export const update = (
 export const destroy = async (entity, id, token) =>
   !breached &&
   axios
-    .delete(`${entity}/destroy?id=${id}`, {
+    .delete(`${entity}/${id}/destroy`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
     .then(res => {
       toast.success("Item archived successfully");
-      return res.data;
+      return res.data.content;
+    })
+    .catch(err => {
+      if (err.response.data.expired) {
+        toast.warn("Session expired, login again.");
+        localStorage.removeItem("token");
+      }
+      toast.error(err.response.data.error);
+      throw new Error(err);
+    });
+
+export const restore = async (entity, id, token) =>
+  !breached &&
+  axios
+    .put(
+      `${entity}/${id}/restore`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then(res => {
+      toast.success("Item restored successfully");
+      return res.data.content;
     })
     .catch(err => {
       if (err.response.data.expired) {

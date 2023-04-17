@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { MDBCard, MDBCardBody, MDBContainer, MDBRow } from "mdb-react-ui-kit";
-import BreadCrumb from "../../../../../components/breadcrumb";
+import BreadCrumb from "../../../../components/breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
-import DataTable from "../../../../../components/dataMapping/table";
-import Pager from "../../../../../components/pager";
-import Search from "../../../../../components/search";
+import DataTable from "../../../../components/dataTable";
+import Pager from "../../../../components/pager";
+import Search from "../../../../components/search";
 import Swal from "sweetalert2";
-import { RESTORE, ARCHIVE } from "../../../../../redux/slices/persons/users";
 import {
-  fullMobile,
-  fullName,
-  roleBadge,
-} from "../../../../../components/utilities";
+  ARCHIVE,
+  RESTORE,
+} from "../../../../redux/slices/organizations/clusters";
 
 const paths = [
   {
-    name: "Archived Users",
+    name: "Archived Clusters",
   },
 ];
-
-export default function UsersArchive() {
+export default function ClustersArchive() {
   const { theme, maxPage, token } = useSelector(({ auth }) => auth),
-    { catalogs, isLoading } = useSelector(({ users }) => users),
-    [users, setUsers] = useState([]),
+    { catalogs, isLoading } = useSelector(({ clusters }) => clusters),
+    [clusters, setClusters] = useState([]),
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
     dispatch = useDispatch();
@@ -32,32 +29,30 @@ export default function UsersArchive() {
   }, [token]);
 
   useEffect(() => {
-    if (users.length > 0) {
-      let totalPages = Math.floor(users.length / maxPage);
-      if (users.length % maxPage > 0) totalPages += 1;
+    if (clusters.length > 0) {
+      let totalPages = Math.floor(clusters.length / maxPage);
+      if (clusters.length % maxPage > 0) totalPages += 1;
       setTotalPages(totalPages);
 
       if (page > totalPages) {
         setPage(totalPages);
       }
     }
-  }, [users, page, maxPage]);
+  }, [clusters, page, maxPage]);
 
   useEffect(() => {
-    setUsers(catalogs);
+    setClusters(catalogs);
   }, [catalogs]);
 
   const handleSearch = e => {
     const key = e.target.value;
 
     if (key) {
-      setUsers(
-        catalogs.filter(archive =>
-          fullName(archive.fullName).includes(key.toUpperCase())
-        )
+      setClusters(
+        catalogs.filter(catalog => catalog.name.includes(key.toUpperCase()))
       );
     } else {
-      setUsers(catalogs);
+      setClusters(catalogs);
     }
   };
 
@@ -65,7 +60,7 @@ export default function UsersArchive() {
     Swal.fire({
       icon: "question",
       title: "Are you sure?",
-      html: `You are about to restore <b>${data.fullName?.fname}</b>.`,
+      html: `You are about to restore <b>${data.name}</b>.`,
       showCancelButton: true,
       confirmButtonText: "Proceed",
     }).then(result => {
@@ -76,13 +71,13 @@ export default function UsersArchive() {
 
   return (
     <>
-      <BreadCrumb title="Users History" paths={paths} />
+      <BreadCrumb title="Clusters Archive List" paths={paths} />
 
       <MDBContainer fluid className="pt-5 mt-5">
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
           <MDBCardBody>
             <MDBRow>
-              <Search label="Search by Fullname" handler={handleSearch} />
+              <Search label="Search by Name" handler={handleSearch} />
               <Pager total={totalPages} page={page} setPage={setPage} />
             </MDBRow>
           </MDBCardBody>
@@ -90,18 +85,10 @@ export default function UsersArchive() {
         <MDBCard background={theme.color} className={`${theme.text}`}>
           <MDBCardBody>
             <DataTable
-              name="Users"
-              datas={users}
+              name="Clusters"
+              datas={clusters}
               titles={[
-                "Credentials",
-                {
-                  _title: "Mobile",
-                  _styles: "text-center",
-                },
-                {
-                  _title: "Role",
-                  _styles: "text-center",
-                },
+                "Name",
                 {
                   _title: "Actions",
                   _styles: "text-center",
@@ -109,31 +96,8 @@ export default function UsersArchive() {
               ]}
               contents={[
                 {
-                  _keys: ["fullName", "email"],
-                  _format: [data => fullName(data)],
+                  _keys: "name",
                 },
-                {
-                  _keys: "mobile",
-                  _styles: "text-center",
-                  _format: data => fullMobile(data),
-                },
-                {
-                  _keys: "role",
-                  _styles: "text-center",
-                  _format: data => roleBadge(data),
-                },
-                // {
-                //   _keys: "createdAt",
-                //   _format: data => new Date(data).toDateString(),
-                //   _styles: "text-center",
-                // },
-                // {
-                //   _keys: ["createdAt", "updatedAt"],
-                //   _format: [
-                //     data => new Date(data).toDateString(),
-                //     data => new Date(data).toDateString(),
-                //   ],
-                // },
               ]}
               handlers={[handleRestore]}
               actions={[
@@ -147,7 +111,7 @@ export default function UsersArchive() {
               ]}
               isLoading={isLoading}
               page={page}
-              empty="Users archive is empty"
+              empty="Clusters are empty"
             />
           </MDBCardBody>
         </MDBCard>

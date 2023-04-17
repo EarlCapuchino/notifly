@@ -10,12 +10,17 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { ENDPOINT } from "./components/utilities";
 
+// set the default base url for axios so we do not have to call the url everytime we call an API
 axios.defaults.baseURL = ENDPOINT;
+
+// requests will include credentials in cross-origin requests
 axios.defaults.withCredentials = true;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
+    {/* We eclose <App> with <Provided> so we can allow redux within the whole project */}
+    {/* We pass the props {store} so we can provide redux the allowed reducers */}
     <Provider store={store}>
       <App />
     </Provider>

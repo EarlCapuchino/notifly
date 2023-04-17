@@ -24,10 +24,8 @@ const Login = () => {
 
   useEffect(() => {
     document.title = `${Company.name} | Login`;
-    if (auth && auth._id) {
-      toast.info(
-        `Hello, ${auth.isMale ? "Mr" : "Mrs"}. ${auth.alias || auth.email}`
-      );
+    if (auth._id) {
+      toast.info(`Hello, ${auth.email}`);
       navigate(`/${BASE}/dashboard`);
     }
   }, [auth, navigate]);

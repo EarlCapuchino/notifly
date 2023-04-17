@@ -16,6 +16,7 @@ const Dashboard = () => {
       width: window.innerWidth,
     });
 
+  // this code handles page resize
   useEffect(() => {
     function debounce(fn, ms) {
       let timer;
@@ -45,6 +46,7 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", debounceResize);
   }, []);
 
+  // this code handles socket room creation via your ID so we can send real time notifications
   useEffect(() => {
     document.title = `${Company.name} | Dashboard`;
     if (auth._id) {

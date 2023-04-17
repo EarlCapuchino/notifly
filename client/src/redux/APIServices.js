@@ -1,3 +1,5 @@
+// this file is used for redux it handles all axios calls so we do not have to call axios everytime, it greatly reduces redundancy
+
 import axios from "axios";
 import { toast } from "react-toastify";
 

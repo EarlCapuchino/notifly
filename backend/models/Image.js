@@ -6,7 +6,7 @@ const Image = mongoose.model(
     path: String,
     url: String,
     caption: String,
-    createdAt: Date
+    createdAt: Date,
   })
 );
 

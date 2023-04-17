@@ -4,7 +4,6 @@ import Routers from "./Routes";
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { REFRESH } from "./redux/slices/persons/auth";
-import Company from "./fakeDb/company";
 // import DevTools from "devtools-detect";
 
 const App = () => {
@@ -12,12 +11,13 @@ const App = () => {
     dispatch = useDispatch();
 
   useEffect(() => {
-    document.title = Company.name;
     if (token && !auth._id) {
+      // this is used to validate and update our token in case the user restarts so we can initialize our auth redux
       dispatch(REFRESH(token));
     }
   }, [auth, token, dispatch]);
 
+  // this commented block of code will be used in deployment, it traps users that try to tweak the website using inspect button
   // useEffect(() => {
   // if (localStorage.getItem("rush_reload") === "true") {
   //   window.location.reload();
@@ -37,10 +37,14 @@ const App = () => {
   // }, []);
 
   return (
+    // BrowserRouter lets us handle Routers
     <BrowserRouter>
       <main className="h-100">
+        {/* This is where our components takes turn to show */}
         <Routers />
       </main>
+
+      {/* We declare the design for Toast */}
       <ToastContainer
         theme={theme.color}
         position="bottom-center"

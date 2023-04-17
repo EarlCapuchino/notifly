@@ -5,9 +5,9 @@ const Sidebar = [
     path: "dashboard",
   },
   {
-    name: "Users",
-    icon: "users",
-    path: "users",
+    name: "Cluster",
+    icon: "object-group",
+    path: "cluster",
     children: [
       {
         name: "List",

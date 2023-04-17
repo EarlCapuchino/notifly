@@ -7,8 +7,8 @@ const Cluster = mongoose.model(
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Member"
-      }
+        ref: "Member",
+      },
     ],
   })
 );

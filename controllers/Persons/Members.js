@@ -19,6 +19,71 @@ exports.browse = (req, res) =>
       res.status(400).json({ status: false, message: error.message })
     );
 
+exports.cluster = (req, res) =>
+  Members.find()
+    .byActive(true)
+    .select("-createdAt -updatedAt -__v -isActive")
+    .populate("clusters")
+    .sort({ createdAt: -1 })
+    .lean()
+    .then(members => {
+      //only fetch members with existing cluster
+      const withCluster = members.filter(member => member.clusters.length > 0);
+
+      // container to collect all available cluster
+      var clusters = [];
+
+      for (let i = 0; i < withCluster.length; i++) {
+        const member = withCluster[i];
+
+        for (let j = 0; j < member.clusters.length; j++) {
+          const cluster = member.clusters[j];
+
+          // only push active cluster
+          if (cluster.isActive) {
+            clusters.push(cluster);
+          }
+        }
+      }
+
+      // remove all duplicate cluster
+      const newClusters = Array.from(new Set(clusters.map(cluster => cluster)));
+
+      // add the members to the collected clusters
+      const parsedClusters = newClusters?.map(cluster => {
+        const newObj = { ...cluster };
+
+        var container = [];
+
+        for (let i = 0; i < withCluster.length; i++) {
+          var member = withCluster[i];
+
+          for (let j = 0; j < member.clusters.length; j++) {
+            var _cluster = member.clusters[j];
+
+            if (cluster._id === _cluster._id) {
+              const _newObj = { ...member };
+              _newObj.clusters = undefined;
+              container.push(_newObj);
+            }
+          }
+        }
+
+        newObj.members = container;
+
+        return newObj;
+      });
+
+      res.json({
+        status: true,
+        message: "Fetched Successfully",
+        content: parsedClusters,
+      });
+    })
+    .catch(error =>
+      res.status(400).json({ status: false, message: error.message })
+    );
+
 exports.archive = (req, res) =>
   Members.find()
     .byActive(false)

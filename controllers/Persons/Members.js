@@ -4,26 +4,49 @@ const Members = require("../../models/Persons/Members"),
 exports.browse = (req, res) =>
   Members.find()
     .byActive(true)
-    .select("-password -createdAt -updatedAt -__v -isActive")
+    .select("-createdAt -updatedAt -__v -isActive")
     .sort({ createdAt: -1 })
     .lean()
-    .then(users => res.json(users))
-    .catch(error => res.status(400).json({ error: error.message }));
+    .then(members =>
+      res.json({
+        status: true,
+        message: "Fetched Successfully",
+        content: members,
+      })
+    )
+    .catch(error =>
+      res.status(400).json({ status: false, message: error.message })
+    );
 
 exports.archive = (req, res) =>
   Members.find()
     .byActive(false)
-    .select("-password -createdAt -updatedAt -__v -isActive")
+    .select("-createdAt -updatedAt -__v -isActive")
     .sort({ createdAt: -1 })
     .lean()
-    .then(users => res.json(users))
-    .catch(error => res.status(400).json({ error: error.message }));
+    .then(members =>
+      res.json({
+        status: true,
+        message: "Fetched Successfully",
+        content: members,
+      })
+    )
+    .catch(error =>
+      res.status(400).json({ status: false, message: error.message })
+    );
 
-exports.find = (req, res) =>
-  Members.findById(req.query.id)
-    .select("-password -deletedAt -createdAt -updatedAt -__v")
-    .then(user => res.json(user))
-    .catch(error => res.status(400).json({ error: error.message }));
+exports.save = (req, res) =>
+  Members.create(req.body)
+    .then(member =>
+      res.status(201).json({
+        status: true,
+        message: `(${member._id}) Created Successfully`,
+        content: member,
+      })
+    )
+    .catch(error =>
+      res.status(400).json({ status: false, message: error.message })
+    );
 
 exports.update = (req, res) => {
   Members.findByIdAndUpdate(req.params.id, req.body, {
@@ -42,40 +65,58 @@ exports.update = (req, res) => {
     );
 };
 
-exports.restore = (req, res) =>
-  Members.findById(req.query.id).then(user => {
-    if (!user.isActive) {
-      User.findByIdAndUpdate(req.query.id, {
-        deletedAt: "",
-        isActive: true,
-      }).then(() =>
-        Logs.create({
-          model: "users",
-          itemId: req.query.id,
-          action: "restore",
-          user: res.locals.user._id,
-        }).then(() => res.json(req.query.id))
-      );
-    } else {
-      res.status(400).json(`(${req.query.id}) is already Active`);
-    }
-  });
-
 exports.destroy = (req, res) =>
-  Members.findById(req.query.id).then(user => {
-    if (user.isActive) {
-      Members.findByIdAndUpdate(req.query.id, {
+  Members.findById(req.params.id).then(member => {
+    if (member.isActive) {
+      Members.findByIdAndUpdate(req.params.id, {
         deletedAt: new Date().toLocaleString(),
         isActive: false,
       }).then(() =>
         Logs.create({
-          model: "users",
-          itemId: req.query.id,
+          model: "members",
+          itemId: req.params.id,
           action: "archive",
-          user: res.locals.user._id,
-        }).then(() => res.json(req.query.id))
+          member: res.locals.user._id,
+        }).then(() =>
+          res.json({
+            status: true,
+            message: `(${req.params.id}) archived successfully`,
+            content: req.params.id,
+          })
+        )
       );
     } else {
-      res.status(400).json(`(${req.query.id}) is already Inactive`);
+      res.status(400).json({
+        status: false,
+        message: `(${req.params.id}) is already Inactive`,
+      });
+    }
+  });
+
+exports.restore = (req, res) =>
+  Members.findById(req.params.id).then(member => {
+    if (!member.isActive) {
+      Members.findByIdAndUpdate(req.params.id, {
+        deletedAt: "",
+        isActive: true,
+      }).then(() =>
+        Logs.create({
+          model: "members",
+          itemId: req.params.id,
+          action: "restore",
+          member: res.locals.user._id,
+        }).then(() =>
+          res.json({
+            status: true,
+            message: `(${req.params.id}) restored successfully`,
+            content: req.params.id,
+          })
+        )
+      );
+    } else {
+      res.status(400).json({
+        status: false,
+        message: `(${req.params.id}) is already Active`,
+      });
     }
   });

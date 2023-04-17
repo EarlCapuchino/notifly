@@ -48,4 +48,8 @@ const modelSchema = new mongoose.Schema(
   }
 );
 
+modelSchema.query.byActive = function (isActive) {
+  return this.where({ isActive });
+};
+
 module.exports = mongoose.model("Members", modelSchema);

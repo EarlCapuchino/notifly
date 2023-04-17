@@ -1,8 +1,8 @@
 const router = require("express").Router(),
   {
     browse,
-    find,
     update,
+    save,
     destroy,
     archive,
     restore,
@@ -10,11 +10,11 @@ const router = require("express").Router(),
   { protect } = require("../../middleware");
 
 router
-  .get("/browse", protect, browse)
+  .get("/", protect, browse)
   .get("/archive", protect, archive)
-  .get("/find", protect, find)
+  .post("/save", protect, save)
   .put("/:id/update", protect, update)
-  .get("/restore", protect, restore)
-  .delete("/destroy", protect, destroy);
+  .put("/:id/restore", protect, restore)
+  .delete("/:id/destroy", protect, destroy);
 
 module.exports = router;

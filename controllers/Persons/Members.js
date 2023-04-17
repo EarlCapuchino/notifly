@@ -5,6 +5,7 @@ exports.browse = (req, res) =>
   Members.find()
     .byActive(true)
     .select("-createdAt -updatedAt -__v -isActive")
+    .populate("clusters")
     .sort({ createdAt: -1 })
     .lean()
     .then(members =>
@@ -51,6 +52,7 @@ exports.save = (req, res) =>
 exports.update = (req, res) => {
   Members.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
+    populate: "clusters",
   })
     .select("-password -createdAt -updatedAt -__v -isActive")
     .then(user =>

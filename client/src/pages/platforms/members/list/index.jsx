@@ -12,7 +12,9 @@ import {
   DESTROY,
   UPDATE,
 } from "../../../../redux/slices/persons/members";
+import { BROWSE as CLUSTER } from "../../../../redux/slices/organizations/clusters";
 import Modal from "../../../../components/modal";
+import ViewClusters from "./clusters";
 
 const paths = [
     {
@@ -29,6 +31,7 @@ const paths = [
 export default function MembersList() {
   const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ members }) => members),
+    clusters = useSelector(({ clusters }) => clusters),
     [members, setMembers] = useState([]),
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
@@ -37,10 +40,13 @@ export default function MembersList() {
       visibility: false,
       create: true,
     }),
+    [member, setMember] = useState({}),
+    [viewCluster, setViewCluster] = useState(false),
     dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(BROWSE(token));
+    dispatch(CLUSTER(token));
   }, [token]);
 
   useEffect(() => {
@@ -100,6 +106,11 @@ export default function MembersList() {
     setModal({ visibility: false, create: true });
   };
 
+  const handleClusters = data => {
+    setMember(data);
+    setViewCluster(true);
+  };
+
   return (
     <>
       <BreadCrumb
@@ -150,6 +161,13 @@ export default function MembersList() {
         setVisibility={() => setModal({ visibility: false, create: true })}
       />
 
+      <ViewClusters
+        visibility={viewCluster}
+        setVisibility={setViewCluster}
+        member={member}
+        clusters={clusters.catalogs}
+      />
+
       <MDBContainer fluid className="pt-5 mt-5">
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
           <MDBCardBody>
@@ -186,14 +204,22 @@ export default function MembersList() {
                   _format: [data => data || "-", data => data || "-"],
                 },
               ]}
-              handlers={[handleUpdate, handleArchive]}
+              handlers={[handleClusters, handleUpdate, handleArchive]}
               actions={[
+                {
+                  _title: "View Clusters",
+                  _icon: "object-group",
+                  _color: "info",
+                  _placement: "left",
+                  _function: 0,
+                  _condition: () => isAdmin,
+                },
                 {
                   _title: "Update",
                   _icon: "pen",
                   _color: "primary",
-                  _placement: "left",
-                  _function: 0,
+                  _placement: "top",
+                  _function: 1,
                   _condition: () => isAdmin,
                 },
                 {
@@ -201,7 +227,7 @@ export default function MembersList() {
                   _icon: "folder-minus",
                   _color: "warning",
                   _placement: "right",
-                  _function: 1,
+                  _function: 2,
                   _condition: () => isAdmin,
                 },
               ]}

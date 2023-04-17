@@ -24,7 +24,7 @@ const paths = [
   };
 
 export default function ClustersList() {
-  const { theme, maxPage, token } = useSelector(({ auth }) => auth),
+  const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ clusters }) => clusters),
     [clusters, setClusters] = useState([]),
     [page, setPage] = useState(1),
@@ -99,7 +99,7 @@ export default function ClustersList() {
     <>
       <BreadCrumb
         title="Clusters List"
-        button={true}
+        button={isAdmin}
         paths={paths}
         tooltip="Create new Cluster"
         handler={() => setModal({ visibility: true, create: true })}
@@ -162,6 +162,7 @@ export default function ClustersList() {
                   _color: "primary",
                   _placement: "left",
                   _function: 0,
+                  _condition: () => isAdmin,
                 },
                 {
                   _title: "Archive",
@@ -169,6 +170,7 @@ export default function ClustersList() {
                   _color: "warning",
                   _placement: "right",
                   _function: 1,
+                  _condition: () => isAdmin,
                 },
               ]}
               isLoading={isLoading}

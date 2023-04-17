@@ -17,7 +17,7 @@ const paths = [
   },
 ];
 export default function ClustersArchive() {
-  const { theme, maxPage, token } = useSelector(({ auth }) => auth),
+  const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ clusters }) => clusters),
     [clusters, setClusters] = useState([]),
     [page, setPage] = useState(1),
@@ -107,6 +107,7 @@ export default function ClustersArchive() {
                   _color: "success",
                   _placement: "right",
                   _function: 0,
+                  _condition: () => isAdmin,
                 },
               ]}
               isLoading={isLoading}

@@ -23,23 +23,19 @@ const routes = [
       },
     ],
   },
-  //   {
-  //     path: "companies",
-  //     children: [
-  //       {
-  //         path: "list",
-  //         element: <CompaniesList />,
-  //       },
-  //       {
-  //         path: "archive",
-  //         element: <CompaniesArchive />,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     path: "logs",
-  //     element: <Logs />,
-  //   },
+  {
+    path: "members",
+    children: [
+      {
+        path: "list",
+        element: <ClustersList />,
+      },
+      {
+        path: "archive",
+        element: <ClustersArchive />,
+      },
+    ],
+  },
 ];
 
 export default routes;

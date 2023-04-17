@@ -15,6 +15,7 @@ import NavbarProfile from "./profile";
 // import NavbarTodo from "./todo";
 import NavSettings from "./settings";
 import "./index.css";
+import NavbarAdminToggle from "./adminToggle";
 
 const TopNavigation = ({ toggle }) => {
   const { theme, auth } = useSelector(state => state.auth);
@@ -47,6 +48,7 @@ const TopNavigation = ({ toggle }) => {
 
         <MDBCol>
           <MDBNavbarNav className="d-flex flex-row justify-content-end">
+            <NavbarAdminToggle />
             {/* <NavbarTodo /> */}
             {/* <NavbarNotifications /> */}
             <NavSettings />

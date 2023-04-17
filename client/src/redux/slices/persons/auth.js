@@ -10,6 +10,7 @@ const theme = JSON.parse(localStorage.getItem("theme")),
 const initialState = {
   auth: {},
   token,
+  isAdmin: false,
   maxPage: maxPage || 6,
   theme: theme || light,
   progress: 0,
@@ -102,6 +103,9 @@ export const authSlice = createSlice({
         }
       }
     },
+    ADMIN: state => {
+      state.isAdmin = !state.isAdmin;
+    },
     RESET: state => {
       state.isSuccess = false;
     },
@@ -148,6 +152,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { THEME, MAXPAGE, RESET } = authSlice.actions;
+export const { THEME, MAXPAGE, RESET, ADMIN } = authSlice.actions;
 
 export default authSlice.reducer;

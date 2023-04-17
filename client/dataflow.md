@@ -1,5 +1,4 @@
 cluster is department
--remove members array
 -if I delete a cluster, hide it from the members cluster list
 
 members is basically the user list

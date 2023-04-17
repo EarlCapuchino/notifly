@@ -8,26 +8,29 @@ import {
   MDBBtn,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import UserCircle from "../../../assets/images/default.png";
+import { BASE } from "../../../components/utilities";
 
-// const items = [
-//   {
-//     name: "My Profile",
-//     icon: "user-circle",
-//     path: `/${BASE}/profile`,
-//     external: false,
-//   },
-//   {
-//     name: "Time Records",
-//     icon: "calendar-alt",
-//     path: `/attendance/${auth._id}`,
-//     external: true,
-//   },
-// ];
+const items = [
+  {
+    name: "My Profile",
+    icon: "user-circle",
+    path: `/${BASE}/profile`,
+    external: false,
+  },
+  // {
+  //   name: "Time Records",
+  //   icon: "calendar-alt",
+  //   path: `/attendance/${auth._id}`,
+  //   external: true,
+  // },
+];
 
 const NavbarProfile = () => {
   const [visibility, setVisibility] = useState(false),
-    { auth, theme } = useSelector(state => state.auth);
+    { auth, theme } = useSelector(state => state.auth),
+    navigate = useNavigate();
 
   const handleLogout = () => {
     toast.info("Removing all your cache.");
@@ -75,7 +78,7 @@ const NavbarProfile = () => {
           style={{ backgroundColor: theme.bgHex }}
         >
           <MDBListGroup>
-            {/* {items.map((item, index) => (
+            {items.map((item, index) => (
               <MDBListGroupItem
                 key={`profile-item-${index}`}
                 onClick={() => {
@@ -97,7 +100,7 @@ const NavbarProfile = () => {
                 &nbsp;
                 {item.name}
               </MDBListGroupItem>
-            ))} */}
+            ))}
 
             <MDBListGroupItem
               onClick={handleLogout}

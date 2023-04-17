@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { browse, find } from "../../APIServices";
+import { browse, find, save } from "../../APIServices";
 
 const initialState = {
     catalogs: [],
@@ -14,6 +14,24 @@ export const BROWSE = createAsyncThunk(
   async (token, thunkAPI) => {
     try {
       return await browse(`${entity}/browse`, "", token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const SAVE = createAsyncThunk(
+  `${entity}/save`,
+  async (item, thunkAPI) => {
+    try {
+      return await save(`${entity}`, item.form, item.token);
     } catch (error) {
       const message =
         (error.response &&
@@ -62,6 +80,20 @@ export const entitySlice = createSlice({
         state.catalogs = action.payload;
       })
       .addCase(BROWSE.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      // SAVE
+      .addCase(SAVE.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(SAVE.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.catalogs.unshift(action.payload);
+      })
+      .addCase(SAVE.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

@@ -7,14 +7,21 @@ const modelSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Members",
+    deletedAt: {
+      type: String,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   {
     timestamps: true,
   }
 );
+
+modelSchema.query.byActive = function (isActive) {
+  return this.where({ isActive });
+};
 
 module.exports = mongoose.model("Clusters", modelSchema);

@@ -38,6 +38,10 @@ const modelSchema = new mongoose.Schema(
     deletedAt: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

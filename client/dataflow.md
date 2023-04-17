@@ -1,7 +1,7 @@
-cluster is department
+cluster is department -done
 -if I delete a cluster, hide it from the members cluster list
 
-members is basically the user list
+members is basically the user list -done
 -user id is manual generation
 -add cluster ids
 

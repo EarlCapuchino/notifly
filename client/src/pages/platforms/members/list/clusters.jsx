@@ -111,28 +111,30 @@ export default function ViewClusters({
               <MDBCol md={6}>
                 <MDBTypography>Selected Clusters</MDBTypography>
                 <MDBListGroup>
-                  {selectedClusters?.map((cluster, index) => (
-                    <MDBListGroupItem
-                      key={`selected-cluster-${index}`}
-                      className="d-flex justify-content-between align-items-center"
-                    >
-                      <span>{cluster.name}</span>
-                      <MDBTooltip
-                        tag="span"
-                        wrapperClass="d-inline-block"
-                        title="Remove cluster"
-                        placement="left"
+                  {selectedClusters?.map((cluster, index) =>
+                    cluster.isActive ? (
+                      <MDBListGroupItem
+                        key={`selected-cluster-${index}`}
+                        className="d-flex justify-content-between align-items-center"
                       >
-                        <MDBBtn
-                          size="sm"
-                          floating
-                          onClick={() => handleRemove(index)}
+                        <span>{cluster.name}</span>
+                        <MDBTooltip
+                          tag="span"
+                          wrapperClass="d-inline-block"
+                          title="Remove cluster"
+                          placement="left"
                         >
-                          <MDBIcon icon="arrow-right" />
-                        </MDBBtn>
-                      </MDBTooltip>
-                    </MDBListGroupItem>
-                  ))}
+                          <MDBBtn
+                            size="sm"
+                            floating
+                            onClick={() => handleRemove(index)}
+                          >
+                            <MDBIcon icon="arrow-right" />
+                          </MDBBtn>
+                        </MDBTooltip>
+                      </MDBListGroupItem>
+                    ) : null
+                  )}
                 </MDBListGroup>
               </MDBCol>
               <MDBCol md={6}>

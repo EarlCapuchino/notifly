@@ -59,7 +59,7 @@ export const browse = async (entity, key = "", token) => {
           toast.warn("Session expired, login again.");
           localStorage.removeItem("token");
         }
-        toast.error(err.response.data.error);
+        toast.error(err.response.data.message);
         throw new Error(err);
       });
   }
@@ -79,7 +79,7 @@ export const find = async (entity, pk, token) =>
         toast.warn("Session expired, login again.");
         localStorage.removeItem("token");
       }
-      toast.error(err.response.data.error);
+      toast.error(err.response.data.message);
       throw new Error(err);
     });
 
@@ -102,7 +102,7 @@ export const save = async (entity, form, token, willToast = true) =>
         toast.warn("Session expired, login again.");
         localStorage.removeItem("token");
       }
-      toast.error(err.response.data.error);
+      toast.error(err.response.data.message);
       throw new Error(err);
     });
 
@@ -125,7 +125,7 @@ export const update = (entity, data, id, token, willToast = true) =>
         toast.warn("Session expired, login again.");
         localStorage.removeItem("token");
       }
-      toast.error(err.response.data.error);
+      toast.error(err.response.data.message);
       throw new Error(err);
     });
 
@@ -146,7 +146,7 @@ export const destroy = async (entity, id, token) =>
         toast.warn("Session expired, login again.");
         localStorage.removeItem("token");
       }
-      toast.error(err.response.data.error);
+      toast.error(err.response.data.message);
       throw new Error(err);
     });
 
@@ -171,6 +171,6 @@ export const restore = async (entity, id, token) =>
         toast.warn("Session expired, login again.");
         localStorage.removeItem("token");
       }
-      toast.error(err.response.data.error);
+      toast.error(err.response.data.message);
       throw new Error(err);
     });

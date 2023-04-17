@@ -1,8 +1,8 @@
 import Dashboard from "./pages/platforms/dashboard";
 import ClustersList from "./pages/platforms/clusters/list";
 import ClustersArchive from "./pages/platforms/clusters/archive";
-// import CompaniesList from "./companies/list";
-// import CompaniesArchive from "./companies/archive";
+import MembersList from "./pages/platforms/members/list";
+import MembersArchive from "./pages/platforms/members/archive";
 // import Logs from "./logs";
 
 const routes = [
@@ -28,11 +28,11 @@ const routes = [
     children: [
       {
         path: "list",
-        element: <ClustersList />,
+        element: <MembersList />,
       },
       {
         path: "archive",
-        element: <ClustersArchive />,
+        element: <MembersArchive />,
       },
     ],
   },

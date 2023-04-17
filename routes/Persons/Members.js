@@ -13,7 +13,7 @@ router
   .get("/browse", protect, browse)
   .get("/archive", protect, archive)
   .get("/find", protect, find)
-  .put("/update", protect, update)
+  .put("/:id/update", protect, update)
   .get("/restore", protect, restore)
   .delete("/destroy", protect, destroy);
 

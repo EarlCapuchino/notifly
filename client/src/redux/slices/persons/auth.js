@@ -52,7 +52,7 @@ export const UPDATE = createAsyncThunk(
   "auth/update",
   async (data, thunkAPI) => {
     try {
-      return await update("users", data.user.form, data.user._id, data.token);
+      return await update("members", data.form, data.form._id, data.token);
     } catch (error) {
       const message =
         (error.response &&
@@ -113,7 +113,6 @@ export const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(LOGIN.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.auth = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem("token", state.token);

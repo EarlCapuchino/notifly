@@ -2,6 +2,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import ErrorPage from "../../assets/images/404.gif";
 import ErrorFalse from "../../assets/images/400.png";
+import customID from "./customID";
 
 const BASE = "snapshot"; // initial routes, snapshot is used for deployment, we will change this depending on our status
 const ENDPOINT = "http://localhost:5000"; // used for development
@@ -18,4 +19,4 @@ const register = data =>
       throw new Error(err.response.data.error);
     });
 
-export { ErrorPage, ErrorFalse, BASE, ENDPOINT, register, socket };
+export { ErrorPage, ErrorFalse, BASE, ENDPOINT, register, socket, customID };

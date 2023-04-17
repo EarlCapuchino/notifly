@@ -26,12 +26,20 @@ exports.find = (req, res) =>
     .catch(error => res.status(400).json({ error: error.message }));
 
 exports.update = (req, res) => {
-  Members.findByIdAndUpdate(req.query.id, req.body, {
+  Members.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   })
-    .select("-password -createdAt -updatedAt -__v")
-    .then(user => res.json(user))
-    .catch(error => res.status(400).json({ error: error.message }));
+    .select("-password -createdAt -updatedAt -__v -isActive")
+    .then(user =>
+      res.json({
+        status: true,
+        message: `(${user._id}) Updated Successfully`,
+        content: user,
+      })
+    )
+    .catch(error =>
+      res.status(400).json({ status: false, message: error.message })
+    );
 };
 
 exports.restore = (req, res) =>

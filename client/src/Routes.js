@@ -14,11 +14,14 @@ import Login from "./pages/sessions/login";
 // Platforms
 import Platforms from "./platformRoutes";
 
+// Profile
+import UserProfile from "./components/profile";
+
 import { BASE } from "./components/utilities";
 import { useSelector } from "react-redux";
 
 const Routers = () => {
-  const { token } = useSelector(({ auth }) => auth);
+  const { token, auth } = useSelector(({ auth }) => auth);
 
   const handleRoutes = () =>
     token &&
@@ -46,6 +49,11 @@ const Routers = () => {
 
       {/* Platforms */}
       <Route path={BASE} element={<Dashboard />}>
+        <Route
+          path="profile"
+          element={<UserProfile auth={auth} view={false} />}
+        />
+
         {handleRoutes()}
 
         {/* Error 400 */}

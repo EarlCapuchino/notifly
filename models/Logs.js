@@ -14,9 +14,9 @@ const modelSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    user: {
+    member: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "Members",
       required: true,
     },
   },
@@ -29,8 +29,8 @@ modelSchema.query.byModel = function (model) {
   return this.where({ model });
 };
 
-modelSchema.query.byUser = function (user) {
-  return this.where({ user });
+modelSchema.query.byMember = function (member) {
+  return this.where({ member });
 };
 
 module.exports = mongoose.model("Logs", modelSchema);

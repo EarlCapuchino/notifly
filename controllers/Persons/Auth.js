@@ -1,34 +1,42 @@
-const User = require("../../models/Persons/Users"),
+const Members = require("../../models/Persons/Members"),
   generateToken = require("../../config/generateToken"),
-  bcrypt = require("bcryptjs"),
-  fs = require("fs");
+  seleniumLogin = require("../../config/selenium/login");
 
-const encrypt = async password => {
-  const salt = await bcrypt.genSalt(10);
-  return await bcrypt.hash(password, salt);
-};
+exports.login = async (req, res) => {
+  console.log("[BACKEND] \n >>auth/login");
 
-exports.login = (req, res) => {
   const { email, password } = req.query;
 
-  User.findOne({ email })
+  Members.findOne({ email })
     .select("-createdAt -updatedAt -__v")
     .then(async user => {
-      if (user) {
-        if (await user.matchPassword(password)) {
-          if (user.isActive) {
-            user.password = undefined;
-
-            res.json({ user, token: generateToken(user._id) });
-          } else {
-            res.json({ error: "Your account has been banned!" });
-          }
-        } else {
-          res.json({ error: "Password is incorrect!" });
-        }
-      } else {
-        res.json({ error: "Invalid Credentials!" });
-      }
+      const seleniumResponse = await seleniumLogin(email, password);
+      console.log(seleniumResponse, "response");
+      // if (user) {
+      //   console.log("[BACKEND] \n >>auth/login \n >>200 user found");
+      // if (await user.matchPassword(password)) {
+      //   if (user.isActive) {
+      //     user.password = undefined;
+      //     res.json({ user, token: generateToken(user._id) });
+      //   } else {
+      //     res.json({ error: "Your account has been banned!" });
+      //   }
+      // } else {
+      //   res.json({ error: "Password is incorrect!" });
+      // }
+      // } else {
+      //   console.log("[BACKEND] \n >>auth/login \n >>404 user not found");
+      //   Members.create({
+      //     email,
+      //     customId: new Date().toLocaleString(),
+      //   }).then(user => {
+      //     res.status(201).json({
+      //       status: "Success",
+      //       message: `(${email}) Created Successfully`,
+      //       data: user,
+      //     });
+      //   });
+      // }
     })
     .catch(error => res.status(400).json({ error: error.message }));
 };
@@ -44,46 +52,3 @@ exports.login = (req, res) => {
 //       }
 //     })
 //     .catch(error => res.status(400).json({ error: error.message }));
-
-exports.save = (req, res) =>
-  User.create(req.body)
-    .then(user => res.status(201).json(`(${user._id}) Created successfully.`))
-    .catch(error => res.status(400).json({ error: error.message }));
-
-exports.changePassword = (req, res) => {
-  const { email, password, old } = req.body;
-
-  User.findOne({ email })
-    .then(async user => {
-      if (!user.isActive) {
-        res.status(400).json({ expired: "Your account has been banned" });
-      } else {
-        if (await user.matchPassword(old)) {
-          let newPassword = await encrypt(password);
-          User.findByIdAndUpdate(user._id, { password: newPassword })
-            .select("-password")
-            .then(user => res.json(`(${user._id}) Updated successfully.`));
-        } else {
-          res.json({ error: "Old Password is incorrect." });
-        }
-      }
-    })
-    .catch(error => res.status(400).json({ error: error.message }));
-};
-
-exports.file = (req, res) => {
-  const { path, base64, name } = req.body;
-  let url = `./assets/${path}`;
-  if (!fs.existsSync(url)) {
-    fs.mkdirSync(url, { recursive: true });
-  }
-  try {
-    let filename = `${url}/${name}`;
-    fs.writeFileSync(filename, base64, "base64");
-    return res
-      .status(200)
-      .json({ success: true, message: "Successfully Uploaded." });
-  } catch (error) {
-    return res.status(400).json({ success: false, message: error.message });
-  }
-};

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"),
-  User = require("../models/Persons/Users");
+  Members = require("../models/Persons/Members");
 
 exports.protect = (req, res, proceed) => {
   let token = req.headers.authorization;
@@ -18,7 +18,7 @@ exports.protect = (req, res, proceed) => {
           if (error && error.name) {
             res.status(401).json({ expired: "Not authorized, token expired" });
           } else {
-            const user = await User.findById(response.id).select(
+            const user = await Members.findById(response.id).select(
               "-createdAt -updatedAt -__v -password"
             );
             if (user) {

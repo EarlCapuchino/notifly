@@ -58,5 +58,5 @@ app.get("*", (req, res) =>
   res.sendFile(path.resolve(__dirname, "./", "client", "build", "index.html"))
 );
 
-const port = process.env.PORT || 8080; // Dynamic port for deployment
+const port = process.env.PORT || 5000; // Dynamic port for deployment
 server.listen(port, () => console.log(`Server is running on port: ${port}`));

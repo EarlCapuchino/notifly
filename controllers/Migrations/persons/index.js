@@ -1,10 +1,10 @@
-const Users = require("../../../models/Persons/Users"),
-  users = require("./users");
+const Members = require("../../../models/Persons/Members"),
+  members = require("./members");
 
 module.exports = [
   {
-    entity: Users,
-    collections: users,
-    name: "users",
+    entity: Members,
+    collections: members,
+    name: "members",
   },
 ];

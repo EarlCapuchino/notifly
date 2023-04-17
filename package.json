@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chromedriver": "^112.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
@@ -23,6 +24,7 @@
     "mongoose": "^6.3.5",
     "nodemailer": "^6.7.7",
     "nodemon": "^2.0.20",
+    "selenium-webdriver": "^4.8.2",
     "socket.io": "^4.5.1"
   }
 }

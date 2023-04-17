@@ -1,19 +1,9 @@
-const User = require("../../models/Persons/Users"),
+const Members = require("../../models/Persons/Members"),
   Logs = require("../../models/Logs");
 
 exports.browse = (req, res) =>
-  User.find()
+  Members.find()
     .byActive(true)
-    .select("-password -createdAt -updatedAt -__v -isActive")
-    .sort({ createdAt: -1 })
-    .lean()
-    .then(users => res.json(users))
-    .catch(error => res.status(400).json({ error: error.message }));
-
-exports.guests = (req, res) =>
-  User.find()
-    .byActive(true)
-    .byRole("guest")
     .select("-password -createdAt -updatedAt -__v -isActive")
     .sort({ createdAt: -1 })
     .lean()
@@ -21,7 +11,7 @@ exports.guests = (req, res) =>
     .catch(error => res.status(400).json({ error: error.message }));
 
 exports.archive = (req, res) =>
-  User.find()
+  Members.find()
     .byActive(false)
     .select("-password -createdAt -updatedAt -__v -isActive")
     .sort({ createdAt: -1 })
@@ -30,13 +20,13 @@ exports.archive = (req, res) =>
     .catch(error => res.status(400).json({ error: error.message }));
 
 exports.find = (req, res) =>
-  User.findById(req.query.id)
+  Members.findById(req.query.id)
     .select("-password -deletedAt -createdAt -updatedAt -__v")
     .then(user => res.json(user))
     .catch(error => res.status(400).json({ error: error.message }));
 
 exports.update = (req, res) => {
-  User.findByIdAndUpdate(req.query.id, req.body, {
+  Members.findByIdAndUpdate(req.query.id, req.body, {
     new: true,
   })
     .select("-password -createdAt -updatedAt -__v")
@@ -45,7 +35,7 @@ exports.update = (req, res) => {
 };
 
 exports.restore = (req, res) =>
-  User.findById(req.query.id).then(user => {
+  Members.findById(req.query.id).then(user => {
     if (!user.isActive) {
       User.findByIdAndUpdate(req.query.id, {
         deletedAt: "",
@@ -64,9 +54,9 @@ exports.restore = (req, res) =>
   });
 
 exports.destroy = (req, res) =>
-  User.findById(req.query.id).then(user => {
+  Members.findById(req.query.id).then(user => {
     if (user.isActive) {
-      User.findByIdAndUpdate(req.query.id, {
+      Members.findByIdAndUpdate(req.query.id, {
         deletedAt: new Date().toLocaleString(),
         isActive: false,
       }).then(() =>

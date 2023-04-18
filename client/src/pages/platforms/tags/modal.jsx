@@ -69,7 +69,7 @@ export default function GenerateTags({
         );
 
         if (response) {
-          toast.success("Messages sent successfully");
+          toast.success("Recipients tagged successfully");
           setMessage("");
           setUrl("");
           setLoading(false);

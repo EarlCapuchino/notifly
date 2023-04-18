@@ -178,3 +178,23 @@ export const restore = async (entity, id, token) =>
       toast.error(err.response.data.message);
       throw new Error(err);
     });
+
+export const selenium = async (endpoint, form, token) =>
+  !breached &&
+  axios
+    .post(`selenium/${endpoint}`, form, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(res => {
+      return res.data.status;
+    })
+    .catch(err => {
+      if (err.response.data.expired) {
+        toast.warn("Session expired, login again.");
+        localStorage.removeItem("token");
+      }
+      toast.error(err.response.data.message);
+      throw new Error(err);
+    });

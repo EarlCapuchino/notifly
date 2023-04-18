@@ -1,6 +1,6 @@
 const Members = require("../../models/Persons/Members"),
   generateToken = require("../../config/generateToken"),
-  seleniumLogin = require("../../config/selenium/login");
+  seleniumLogin = require("../../config/seleniumLogin");
 
 exports.login = async (req, res) => {
   console.log("[BACKEND] \n >>auth/login");
@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
   Members.findOne({ email })
     .select("-createdAt -updatedAt -__v")
     .then(async user => {
-      const seleniumResponse = await seleniumLogin(email, password);
+      const seleniumResponse = await seleniumLogin(email, password, true);
       if (seleniumResponse.status) {
         if (user) {
           res.status(200).json({

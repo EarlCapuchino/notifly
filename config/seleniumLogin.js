@@ -3,7 +3,7 @@ const chrome = require("selenium-webdriver/chrome"),
   chromeOptions = new chrome.Options(),
   { By, Key, Builder } = require("selenium-webdriver");
 
-module.exports = async (email, password) => {
+module.exports = async (email, password, initial = false) => {
   chromeOptions.addArguments("test-type");
   chromeOptions.addArguments("start-maximized");
   chromeOptions.addArguments("--js-flags=--expose-gc");
@@ -30,20 +30,24 @@ module.exports = async (email, password) => {
       return { status: false, message: "Invalid Credentials", driver };
     }
   } catch (error) {
-    try {
-      const elements = await driver.findElements(
-        By.css(
-          'span[class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]'
-        )
-      );
+    if (initial) {
+      try {
+        const elements = await driver.findElements(
+          By.css(
+            'span[class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]'
+          )
+        );
 
-      if (elements.length > 0) {
-        const value = await elements[1].getAttribute("innerText");
+        if (elements.length > 0) {
+          const value = await elements[1].getAttribute("innerText");
 
-        return { status: true, content: value, driver };
+          return { status: true, content: value, driver };
+        }
+      } catch (error) {
+        return { status: false, message: "Cannot find name", driver };
       }
-    } catch (error) {
-      return { status: false, message: "Cannot find name", driver };
+    } else {
+      return { status: true, driver };
     }
   }
 };

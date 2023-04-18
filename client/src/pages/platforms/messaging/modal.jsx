@@ -13,17 +13,21 @@ import {
   MDBRow,
   MDBCol,
   MDBTextArea,
+  MDBIcon,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { selenium } from "../../../redux/APIServices";
 
 export default function GenerateMessage({
   visibility,
   setVisibility,
   clusters = [],
 }) {
-  const { theme } = useSelector(({ auth }) => auth),
+  const { theme, token } = useSelector(({ auth }) => auth),
     [message, setMessage] = useState(""),
-    [facebooks, setFacebooks] = useState([]);
+    [loading, setLoading] = useState(false),
+    [recipients, setRecipients] = useState([]);
 
   useEffect(() => {
     if (clusters.length > 0) {
@@ -33,13 +37,34 @@ export default function GenerateMessage({
         cluster.members?.map(member => member.facebook && members.push(member))
       );
 
-      setFacebooks(Array.from(new Set(members.map(member => member.facebook))));
+      const newMembers = [];
+
+      Array.from(new Set(members.map(member => member._id))).map(mmbr =>
+        newMembers.push(members.find(e => e._id === mmbr))
+      );
+
+      setRecipients(newMembers);
     }
   }, [clusters]);
 
-  const handleSend = () => {
-    console.log(facebooks);
-    console.log(message);
+  const handleSend = async () => {
+    if (message) {
+      setLoading(true);
+      const response = await selenium(
+        "messaging",
+        { message, recipients },
+        token
+      );
+
+      if (response) {
+        toast.success("Messages sent successfully");
+        setMessage("");
+        setLoading(false);
+        setVisibility(false);
+      }
+    } else {
+      toast.warn("Please create a message");
+    }
   };
 
   return (
@@ -56,12 +81,12 @@ export default function GenerateMessage({
                   To:
                 </MDBCol>
                 <MDBCol size={11}>
-                  {facebooks?.map((facebook, index) => (
+                  {recipients?.map((recipient, index) => (
                     <MDBBadge
-                      key={`selected-facebook-${index}`}
+                      key={`selected-recipient-${index}`}
                       className="mx-1"
                     >
-                      {facebook}
+                      {recipient.facebook}
                     </MDBBadge>
                   ))}
                 </MDBCol>
@@ -69,6 +94,7 @@ export default function GenerateMessage({
             </MDBContainer>
             <MDBTextArea
               label="Message"
+              readOnly={loading}
               value={message}
               onChange={e => setMessage(e.target.value)}
               className="mt-2"
@@ -80,6 +106,7 @@ export default function GenerateMessage({
             <MDBBtn
               type="button"
               color={theme.color}
+              disabled={loading}
               className="shadow-0"
               onClick={() => setVisibility(false)}
             >
@@ -88,10 +115,11 @@ export default function GenerateMessage({
             <MDBBtn
               type="button"
               color="success"
+              disabled={loading}
               className="shadow-0"
               onClick={handleSend}
             >
-              send
+              {loading ? <MDBIcon icon="clock" spin /> : "send"}
             </MDBBtn>
           </MDBModalFooter>
         </MDBModalContent>

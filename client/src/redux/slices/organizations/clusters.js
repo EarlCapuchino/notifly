@@ -13,7 +13,7 @@ export const BROWSE = createAsyncThunk(
   `${entity}/`,
   async (token, thunkAPI) => {
     try {
-      return await browse(`${entity}`, "", token);
+      return await browse(`members/cluster`, "", token);
     } catch (error) {
       const message =
         (error.response &&

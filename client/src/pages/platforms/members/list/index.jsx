@@ -22,6 +22,7 @@ const paths = [
     },
   ],
   preset = {
+    facebook: "",
     customId: "",
     email: "",
     username: "",
@@ -144,16 +145,22 @@ export default function MembersList() {
             _md: 6,
           },
           {
+            _name: "facebook",
+            _label: "Facebook",
+            _style: "mt-3",
+            _md: 4,
+          },
+          {
             _name: "username",
             _label: "Username",
             _style: "mt-3",
-            _md: 6,
+            _md: 4,
           },
           {
             _name: "nickname",
             _label: "Nickname",
             _style: "mt-3",
-            _md: 6,
+            _md: 4,
           },
         ]}
         data={modal.create ? preset : record}
@@ -185,9 +192,14 @@ export default function MembersList() {
               titles={[
                 "E-mail & Custom ID",
                 {
+                  _title: "Facebook",
+                  _styles: "text-center",
+                },
+                {
                   _title: "Username & Nickname",
                   _styles: "text-center",
                 },
+
                 {
                   _title: "Action",
                   _styles: "text-center",
@@ -197,6 +209,11 @@ export default function MembersList() {
                 {
                   _keys: ["email", "customId"],
                   _format: [],
+                },
+                {
+                  _keys: "facebook",
+                  _styles: "text-center",
+                  _format: data => data || "-",
                 },
                 {
                   _keys: ["username", "nickname"],

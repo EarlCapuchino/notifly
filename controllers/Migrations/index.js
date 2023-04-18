@@ -1,13 +1,7 @@
 const persons = require("./persons"),
   mongoose = require("mongoose");
 
-const migrations = [
-  ...persons,
-  {
-    collections: [],
-    name: "logs",
-  },
-];
+const migrations = [...persons];
 
 exports.save = (req, res) => {
   migrations.map(migration => {

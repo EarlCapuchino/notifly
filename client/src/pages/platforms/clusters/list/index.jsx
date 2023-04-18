@@ -13,6 +13,7 @@ import {
   UPDATE,
 } from "../../../../redux/slices/organizations/clusters";
 import Modal from "../../../../components/modal";
+import ViewMembers from "./members";
 
 const paths = [
     {
@@ -30,6 +31,8 @@ export default function ClustersList() {
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
     [record, setRecord] = useState({}),
+    [cluster, setCluster] = useState({}),
+    [viewMembers, setViewMembers] = useState(false),
     [modal, setModal] = useState({
       visibility: false,
       create: true,
@@ -95,6 +98,11 @@ export default function ClustersList() {
     setModal({ visibility: false, create: true });
   };
 
+  const handleMembers = data => {
+    setCluster(data);
+    setViewMembers(true);
+  };
+
   return (
     <>
       <BreadCrumb
@@ -128,6 +136,12 @@ export default function ClustersList() {
         setVisibility={() => setModal({ visibility: false, create: true })}
       />
 
+      <ViewMembers
+        visibility={viewMembers}
+        setVisibility={setViewMembers}
+        cluster={cluster}
+      />
+
       <MDBContainer fluid className="pt-5 mt-5">
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
           <MDBCardBody>
@@ -154,14 +168,22 @@ export default function ClustersList() {
                   _keys: "name",
                 },
               ]}
-              handlers={[handleUpdate, handleArchive]}
+              handlers={[handleMembers, handleUpdate, handleArchive]}
               actions={[
+                {
+                  _title: "View Members",
+                  _icon: "users",
+                  _color: "info",
+                  _placement: "left",
+                  _function: 0,
+                  _condition: () => isAdmin,
+                },
                 {
                   _title: "Update",
                   _icon: "pen",
                   _color: "primary",
-                  _placement: "left",
-                  _function: 0,
+                  _placement: "top",
+                  _function: 1,
                   _condition: () => isAdmin,
                 },
                 {
@@ -169,7 +191,7 @@ export default function ClustersList() {
                   _icon: "folder-minus",
                   _color: "warning",
                   _placement: "right",
-                  _function: 1,
+                  _function: 2,
                   _condition: () => isAdmin,
                 },
               ]}

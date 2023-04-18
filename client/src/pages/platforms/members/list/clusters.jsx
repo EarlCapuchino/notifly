@@ -14,7 +14,6 @@ import {
   MDBListGroup,
   MDBListGroupItem,
   MDBIcon,
-  MDBInput,
   MDBTooltip,
 } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,7 +56,10 @@ export default function ViewClusters({
     const newClusters = [...availableClusters],
       newSelectedClusters = [...selectedClusters];
 
-    newSelectedClusters.push(newClusters[index]);
+    const newObj = { ...newClusters[index] };
+    newObj.isActive = true;
+
+    newSelectedClusters.push(newObj);
     newClusters.splice(index, 1);
 
     const newArr = newSelectedClusters.map(e => e._id);

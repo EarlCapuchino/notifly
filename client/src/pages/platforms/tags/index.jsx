@@ -13,6 +13,7 @@ import Pager from "../../../components/pager";
 import Search from "../../../components/search";
 import { BROWSE } from "../../../redux/slices/organizations/clusters";
 import { toast } from "react-toastify";
+import GenerateTags from "./modal";
 
 const paths = [
   {
@@ -26,6 +27,7 @@ export default function TagPeople() {
     [clusters, setClusters] = useState([]),
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
+    [generateTags, setGenerateTags] = useState(false),
     dispatch = useDispatch();
 
   useEffect(() => {
@@ -78,7 +80,7 @@ export default function TagPeople() {
     const selected = clusters.filter(e => e.isSelected);
 
     if (selected.length > 0) {
-      alert(selected.length);
+      setGenerateTags(true);
     } else {
       toast.warn("Please select a cluster first");
     }
@@ -92,6 +94,12 @@ export default function TagPeople() {
         paths={paths}
         tooltip="Tag selected clusters"
         handler={handleTagging}
+      />
+
+      <GenerateTags
+        visibility={generateTags}
+        setVisibility={setGenerateTags}
+        clusters={clusters.filter(e => e.isSelected)}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">

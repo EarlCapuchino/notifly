@@ -15,6 +15,7 @@ array of posts that can be liked
 -filter out duplicate links before sending action
 
 tag people
+-aria-label Like & Remove Like
 -shows list of members
 -you can tag these members to the provided link
 -for now, manual input of link, but if possible, we can select from post list

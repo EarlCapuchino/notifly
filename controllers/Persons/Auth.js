@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
   Members.findOne({ email })
     .select("-createdAt -updatedAt -__v")
     .then(async user => {
-      const seleniumResponse = await seleniumLogin(email, password, true);
+      const seleniumResponse = await seleniumLogin(email, password);
       if (seleniumResponse.status) {
         if (user) {
           res.status(200).json({

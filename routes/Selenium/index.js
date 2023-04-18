@@ -1,7 +1,7 @@
 const router = require("express").Router(),
-  { messages } = require("../../controllers/Selenium"),
+  { messages, tagging } = require("../../controllers/Selenium"),
   { protect } = require("../../middleware");
 
-router.post("/messaging", protect, messages);
+router.post("/messaging", protect, messages).post("/tagging", protect, tagging);
 
 module.exports = router;

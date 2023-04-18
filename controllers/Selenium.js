@@ -1,7 +1,5 @@
 const seleniumLogin = require("../config/seleniumLogin"),
-  { By, Key } = require("selenium-webdriver");
-
-const delay = ms => new Promise(res => setTimeout(res, ms));
+  { By, Key, until } = require("selenium-webdriver");
 
 exports.messages = async (req, res) => {
   const seleniumResponse = await seleniumLogin(
@@ -12,25 +10,29 @@ exports.messages = async (req, res) => {
   const { status, driver } = seleniumResponse;
 
   if (status) {
-    await delay(10000);
+    const { message, recipients } = req.body;
 
-    const { recipients, message } = req.body;
+    try {
+      // Loop through the recipients array and open each URL
+      for (const recipient of recipients) {
+        var parsedMessage = message
+          .replaceAll("\n", Key.chord(Key.SHIFT, Key.ENTER))
+          .replaceAll("@{nickname}", recipient.nickname || recipient.facebook);
 
-    for (let i = 0; i < recipients.length; i++) {
-      const recipient = recipients[i];
+        const url = `https://facebook.com/messages/t/${recipient.messengerId}`;
+        console.log(`Processing URL: ${url}`);
+        await driver.get(url);
 
-      var parsedMessage = message
-        .replaceAll("\n", Key.chord(Key.SHIFT, Key.ENTER))
-        .replaceAll("@{nickname}", recipient.nickname || recipient.facebook);
+        // Wait for the "Message" element to appear and send the message
+        const messageInput = await driver.wait(
+          until.elementLocated(By.css('div[aria-label="Message"]'))
+        );
+        await messageInput.sendKeys(parsedMessage, Key.ENTER);
 
-      await driver.get(
-        `https://facebook.com/messages/t/${recipient.messengerId}`
-      );
-      await delay(5000);
-      await driver
-        .findElement(By.css('div[aria-label="Message"]'))
-        .sendKeys(parsedMessage, Key.RETURN);
-      await delay(5000);
+        await driver.sleep(3000);
+      }
+    } finally {
+      await driver.quit();
     }
 
     res.json({
@@ -43,5 +45,55 @@ exports.messages = async (req, res) => {
       message: seleniumResponse.message,
     });
   }
-  driver.quit();
+};
+
+exports.tagging = async (req, res) => {
+  const seleniumResponse = await seleniumLogin(
+    res.locals.email,
+    res.locals.password
+  );
+
+  const { status, driver } = seleniumResponse;
+
+  if (status) {
+    const { recipients, message, url } = req.body;
+
+    try {
+      console.log(`Processing URL: ${url}`);
+      await driver.get(url);
+
+      // Wait for the "Write a comment" element to appear and send the message
+      const messageInput = await driver.wait(
+        until.elementLocated(By.css('div[aria-label="Write a comment"]'))
+      );
+
+      await messageInput.sendKeys(`${message} `);
+
+      // Loop through the recipients array and tag each username
+      for (const recipient of recipients) {
+        const { facebook } = recipient;
+
+        await messageInput.sendKeys(
+          `@${facebook.slice(0, facebook.length - 1)}`
+        );
+        await driver.sleep(1000);
+        await messageInput.sendKeys(Key.ENTER);
+      }
+
+      await messageInput.sendKeys(Key.ENTER);
+    } finally {
+      await driver.quit();
+    }
+
+    res.json({
+      status: true,
+      message: "Recipients tagged successfully",
+    });
+  } else {
+    res.status(400).json({
+      status: false,
+      message: seleniumResponse.message,
+    });
+  }
+  // driver.quit();
 };

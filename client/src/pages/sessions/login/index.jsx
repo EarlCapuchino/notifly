@@ -64,7 +64,7 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
               <MDBInput
                 type="text"
-                label="E-mail Address / Mobile"
+                label="E-mail Address"
                 name="email"
                 onInvalid={e =>
                   e.target.setCustomValidity("Identification is required.")

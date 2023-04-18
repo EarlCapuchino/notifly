@@ -42,7 +42,10 @@ mongoose.connection.once("open", () =>
   console.log("MongoDB connection established successfully")
 );
 
+// allowed public folder
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+// path for build when deployed
 app.use(express.static(path.join(__dirname, "./client/build")));
 
 // Routes
@@ -54,9 +57,11 @@ require("./config/socket")(
   })
 );
 
+// handles initial html for deployment
 app.get("*", (req, res) =>
   res.sendFile(path.resolve(__dirname, "./", "client", "build", "index.html"))
 );
 
+// port
 const port = process.env.PORT || 5000; // Dynamic port for deployment
 server.listen(port, () => console.log(`Server is running on port: ${port}`));

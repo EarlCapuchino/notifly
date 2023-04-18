@@ -3,12 +3,17 @@ import ClustersList from "./pages/platforms/clusters/list";
 import ClustersArchive from "./pages/platforms/clusters/archive";
 import MembersList from "./pages/platforms/members/list";
 import MembersArchive from "./pages/platforms/members/archive";
+import BulkMessaging from "./pages/platforms/messaging";
 // import Logs from "./logs";
 
 const routes = [
   {
     path: "dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "messaging",
+    element: <BulkMessaging />,
   },
   {
     path: "clusters",

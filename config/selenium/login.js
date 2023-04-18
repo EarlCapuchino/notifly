@@ -19,10 +19,17 @@ module.exports = async (email, password) => {
     .setChromeOptions(chromeOptions)
     .build();
 
-  await driver.get("https://facebook.com");
+  try {
+    await driver.get("https://facebook.com");
+    await driver.findElement(By.name("email")).sendKeys(email);
+    await driver.findElement(By.name("pass")).sendKeys(password, Key.RETURN);
 
-  await driver.findElement(By.name("email")).sendKeys(email);
-  await driver.findElement(By.name("pass")).sendKeys(password, Key.RETURN);
+    const element = await driver.findElement(By.css('div[class="_9ay7"]'));
 
-  return driver;
+    if (element) {
+      return { status: false, message: "Invalid Credentials", driver };
+    }
+  } catch (error) {
+    return { status: true, driver };
+  }
 };

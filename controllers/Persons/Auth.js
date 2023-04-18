@@ -10,31 +10,12 @@ exports.login = async (req, res) => {
   Members.findOne({ email })
     .select("-createdAt -updatedAt -__v")
     .then(async user => {
-      // const seleniumResponse = await seleniumLogin(email, password);
-      // console.log(seleniumResponse, "response");
-      if (user) {
-        console.log("[BACKEND] \n >>auth/login \n >>200 user found");
-        res.status(200).json({
-          status: true,
-          message: `(${email}) Logged in Successfully`,
-          content: {
-            user,
-            token: generateToken({
-              id: user._id,
-              email,
-              password,
-            }),
-          },
-        });
-      } else {
-        console.log("[BACKEND] \n >>auth/login \n >>404 user not found");
-        Members.create({
-          email,
-          customId: new Date().toLocaleString(),
-        }).then(user => {
-          res.status(201).json({
+      const seleniumResponse = await seleniumLogin(email, password);
+      if (seleniumResponse.status) {
+        if (user) {
+          res.status(200).json({
             status: true,
-            message: `(${email}) Created Successfully`,
+            message: `(${email}) Logged in Successfully`,
             content: {
               user,
               token: generateToken({
@@ -44,10 +25,36 @@ exports.login = async (req, res) => {
               }),
             },
           });
+        } else {
+          Members.create({
+            email,
+            customId: new Date().toLocaleString(),
+          }).then(user => {
+            res.status(201).json({
+              status: true,
+              message: `(${email}) Created Successfully`,
+              content: {
+                user,
+                token: generateToken({
+                  id: user._id,
+                  email,
+                  password,
+                }),
+              },
+            });
+          });
+        }
+      } else {
+        res.status(400).json({
+          status: false,
+          message: seleniumResponse.message,
         });
       }
+      seleniumResponse.driver.quit();
     })
-    .catch(error => res.status(400).json({ error: error.message }));
+    .catch(error =>
+      res.status(400).json({ status: false, message: error.message })
+    );
 };
 
 exports.validateRefresh = (req, res) =>

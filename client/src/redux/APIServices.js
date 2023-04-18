@@ -15,6 +15,10 @@ export const login = async (email, password) =>
         toast.warn(res.data.message);
         throw new Error(res.data.message);
       }
+    })
+    .catch(err => {
+      toast.warn(err.response.data.message);
+      throw new Error(err.response.data.message);
     });
 
 export const validateRefresh = async token =>

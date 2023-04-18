@@ -16,18 +16,12 @@ exports.messages = async (req, res) => {
 
     const { recipients, message } = req.body;
 
-    var parsedMessage = message.replaceAll(
-      "\n",
-      Key.chord(Key.SHIFT, Key.ENTER)
-    );
-
     for (let i = 0; i < recipients.length; i++) {
       const recipient = recipients[i];
 
-      parsedMessage = parsedMessage.replaceAll(
-        "@{nickname}",
-        recipient.nickname || recipient.facebook
-      );
+      var parsedMessage = message
+        .replaceAll("\n", Key.chord(Key.SHIFT, Key.ENTER))
+        .replaceAll("@{nickname}", recipient.nickname || recipient.facebook);
 
       await driver.get(
         `https://facebook.com/messages/t/${recipient.messengerId}`

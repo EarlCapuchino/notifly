@@ -81,7 +81,7 @@ export default function BasicForm({ visibility, setVisibility, auth }) {
                 </MDBCol>
                 <MDBCol size={6}>
                   <MDBInput
-                    label="User ID"
+                    label="Messenger ID"
                     value={form.messengerId}
                     onChange={e => handleChange("messengerId", e.target.value)}
                     contrast={theme.dark}

@@ -119,7 +119,7 @@ export default function GenerateMessage({
               className="shadow-0"
               onClick={handleSend}
             >
-              {loading ? <MDBIcon icon="clock" spin /> : "send"}
+              {loading ? <MDBIcon far icon="clock" spin /> : "send"}
             </MDBBtn>
           </MDBModalFooter>
         </MDBModalContent>

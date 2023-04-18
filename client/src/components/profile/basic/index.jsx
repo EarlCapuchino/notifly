@@ -68,7 +68,7 @@ export default function ProfileBasic({ auth, view }) {
           </MDBCol>
           <MDBCol md={4}>
             <MDBInput
-              label="User ID"
+              label="Messenger ID"
               value={customID(auth.messengerId)}
               contrast={theme.dark}
               readOnly

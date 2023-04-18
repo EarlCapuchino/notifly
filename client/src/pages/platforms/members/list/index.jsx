@@ -131,9 +131,9 @@ export default function MembersList() {
         form={[
           {
             _name: "messengerId",
-            _label: "User ID",
+            _label: "Messenger ID",
             _required: true,
-            _message: "User ID is required.",
+            _message: "Messenger ID is required.",
             _md: 6,
           },
           {

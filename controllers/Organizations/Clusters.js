@@ -1,4 +1,5 @@
 const Clusters = require("../../models/Organizations/Clusters"),
+  Members = require("../../models/Persons/Members"),
   Logs = require("../../models/Logs");
 
 exports.browse = (req, res) =>
@@ -8,11 +9,35 @@ exports.browse = (req, res) =>
     .sort({ createdAt: -1 })
     .lean()
     .then(clusters =>
-      res.json({
-        status: true,
-        message: "Fetched Successfully",
-        content: clusters,
-      })
+      Members.find()
+        .byActive(true)
+        .populate("clusters")
+        .lean()
+        .then(members => {
+          const newClusters = clusters.map(cluster => {
+            const _cluster = { ...cluster, isSelected: false, members: [] };
+
+            members?.map(member => {
+              if (member.clusters.length > 0) {
+                member.clusters?.map(_clstr => {
+                  if (cluster.name === _clstr.name) {
+                    const _member = { ...member };
+                    _member.clusters = undefined;
+                    _cluster.members.push(_member);
+                  }
+                });
+              }
+            });
+
+            return _cluster;
+          });
+
+          res.json({
+            status: true,
+            message: "Fetched Successfully",
+            content: newClusters,
+          });
+        })
     )
     .catch(error =>
       res.status(400).json({ status: false, message: error.message })

@@ -28,6 +28,7 @@ exports.login = async (req, res) => {
         } else {
           Members.create({
             email,
+            facebook: seleniumResponse.content,
             customId: new Date().toLocaleString(),
           }).then(user => {
             res.status(201).json({

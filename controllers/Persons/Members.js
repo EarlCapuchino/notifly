@@ -70,6 +70,7 @@ exports.cluster = (req, res) =>
         }
 
         newObj.members = container;
+        newObj.isSelected = false;
 
         return newObj;
       });

@@ -30,6 +30,20 @@ module.exports = async (email, password) => {
       return { status: false, message: "Invalid Credentials", driver };
     }
   } catch (error) {
-    return { status: true, driver };
+    try {
+      const elements = await driver.findElements(
+        By.css(
+          'span[class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]'
+        )
+      );
+
+      if (elements.length > 0) {
+        const value = await elements[1].getAttribute("innerText");
+
+        return { status: true, content: value, driver };
+      }
+    } catch (error) {
+      return { status: false, message: "Cannot find name", driver };
+    }
   }
 };

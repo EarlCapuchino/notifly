@@ -13,20 +13,18 @@ import Pager from "../../../components/pager";
 import Search from "../../../components/search";
 import { BROWSE } from "../../../redux/slices/organizations/clusters";
 import { toast } from "react-toastify";
-import GenerateMessage from "./modal";
 
 const paths = [
   {
-    name: "Generate Messages",
+    name: "Tag People",
   },
 ];
 
-export default function BulkMessaging() {
+export default function TagPeople() {
   const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ clusters }) => clusters),
     [clusters, setClusters] = useState([]),
     [page, setPage] = useState(1),
-    [generateMessage, setGenerateMessage] = useState(false),
     [totalPages, setTotalPages] = useState(1),
     dispatch = useDispatch();
 
@@ -80,7 +78,7 @@ export default function BulkMessaging() {
     const selected = clusters.filter(e => e.isSelected);
 
     if (selected.length > 0) {
-      setGenerateMessage(true);
+      alert(selected.length);
     } else {
       toast.warn("Please select a cluster first");
     }
@@ -89,17 +87,11 @@ export default function BulkMessaging() {
   return (
     <>
       <BreadCrumb
-        title="Messaging"
+        title="Tag People"
         button={isAdmin}
         paths={paths}
-        tooltip="Generate a message"
+        tooltip="Tag selected clusters"
         handler={handleMessaging}
-      />
-
-      <GenerateMessage
-        visibility={generateMessage}
-        setVisibility={setGenerateMessage}
-        clusters={clusters.filter(e => e.isSelected)}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">

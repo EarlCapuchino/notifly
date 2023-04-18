@@ -4,6 +4,7 @@ import ClustersArchive from "./pages/platforms/clusters/archive";
 import MembersList from "./pages/platforms/members/list";
 import MembersArchive from "./pages/platforms/members/archive";
 import BulkMessaging from "./pages/platforms/messaging";
+import TagPeople from "./pages/platforms/tags";
 // import Logs from "./logs";
 
 const routes = [
@@ -14,6 +15,10 @@ const routes = [
   {
     path: "messaging",
     element: <BulkMessaging />,
+  },
+  {
+    path: "tags",
+    element: <TagPeople />,
   },
   {
     path: "clusters",

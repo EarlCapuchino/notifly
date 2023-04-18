@@ -147,6 +147,7 @@ export default function MembersList() {
           {
             _name: "facebook",
             _label: "Facebook",
+            _required: true,
             _style: "mt-3",
             _md: 4,
           },

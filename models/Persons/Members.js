@@ -13,7 +13,7 @@ const modelSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    customId: {
+    messengerId: {
       type: String,
       unique: true,
       required: true,

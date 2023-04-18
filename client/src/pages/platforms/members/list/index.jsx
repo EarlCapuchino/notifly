@@ -23,7 +23,7 @@ const paths = [
   ],
   preset = {
     facebook: "",
-    customId: "",
+    messengerId: "",
     email: "",
     username: "",
     nickname: "",
@@ -130,7 +130,7 @@ export default function MembersList() {
         visibility={modal.visibility}
         form={[
           {
-            _name: "customId",
+            _name: "messengerId",
             _label: "User ID",
             _required: true,
             _message: "User ID is required.",
@@ -208,7 +208,7 @@ export default function MembersList() {
               ]}
               contents={[
                 {
-                  _keys: ["email", "customId"],
+                  _keys: ["email", "messengerId"],
                   _format: [],
                 },
                 {

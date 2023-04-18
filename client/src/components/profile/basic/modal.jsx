@@ -21,7 +21,7 @@ export default function BasicForm({ visibility, setVisibility, auth }) {
     [form, setForm] = useState({
       facebook: "",
       email: "",
-      customId: "",
+      messengerId: "",
       nickname: "",
       username: "",
     }),
@@ -30,7 +30,7 @@ export default function BasicForm({ visibility, setVisibility, auth }) {
   useEffect(() => {
     if (auth && auth._id) {
       const newObj = { ...auth };
-      newObj.customId = customID(newObj.customId);
+      newObj.messengerId = customID(newObj.messengerId);
       setForm(newObj);
     }
   }, [auth]);
@@ -82,8 +82,8 @@ export default function BasicForm({ visibility, setVisibility, auth }) {
                 <MDBCol size={6}>
                   <MDBInput
                     label="User ID"
-                    value={form.customId}
-                    onChange={e => handleChange("customId", e.target.value)}
+                    value={form.messengerId}
+                    onChange={e => handleChange("messengerId", e.target.value)}
                     contrast={theme.dark}
                     required
                   />

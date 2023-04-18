@@ -29,7 +29,7 @@ exports.login = async (req, res) => {
           Members.create({
             email,
             facebook: seleniumResponse.content,
-            customId: new Date().toLocaleString(),
+            messengerId: new Date().toLocaleString(),
           }).then(user => {
             res.status(201).json({
               status: true,

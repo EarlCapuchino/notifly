@@ -29,7 +29,9 @@ exports.messages = async (req, res) => {
         recipient.nickname || recipient.facebook
       );
 
-      await driver.get(`https://facebook.com/messages/t/${recipient.customId}`);
+      await driver.get(
+        `https://facebook.com/messages/t/${recipient.messengerId}`
+      );
       await delay(5000);
       await driver
         .findElement(By.css('div[aria-label="Message"]'))

@@ -74,7 +74,7 @@ export default function TagPeople() {
     setClusters(newArr);
   };
 
-  const handleMessaging = () => {
+  const handleTagging = () => {
     const selected = clusters.filter(e => e.isSelected);
 
     if (selected.length > 0) {
@@ -91,7 +91,7 @@ export default function TagPeople() {
         button={isAdmin}
         paths={paths}
         tooltip="Tag selected clusters"
-        handler={handleMessaging}
+        handler={handleTagging}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">

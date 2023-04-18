@@ -33,7 +33,7 @@ export default function ViewMembers({ visibility, setVisibility, cluster }) {
                 >
                   <div className="ms-2 me-auto">
                     <div className="fw-bold">{member.email}</div>
-                    {member.customId}
+                    {member.messengerId}
                   </div>
                   {member.facebook && (
                     <MDBBadge pill light>

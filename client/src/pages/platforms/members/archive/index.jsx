@@ -99,7 +99,7 @@ export default function MembersArchive() {
               ]}
               contents={[
                 {
-                  _keys: ["email", "customId"],
+                  _keys: ["email", "messengerId"],
                   _format: [],
                 },
                 {

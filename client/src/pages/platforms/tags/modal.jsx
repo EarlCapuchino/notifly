@@ -19,7 +19,7 @@ import {
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selenium } from "../../../redux/APIServices";
-import { removeEmoji } from "../../../components/utilities";
+import { isValidURL, removeEmoji } from "../../../components/utilities";
 
 export default function GenerateTags({
   visibility,
@@ -49,15 +49,6 @@ export default function GenerateTags({
       setRecipients(newMembers);
     }
   }, [clusters]);
-
-  const isValidURL = url => {
-    try {
-      new URL(url);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
 
   const handleSend = async () => {
     if (message) {

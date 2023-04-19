@@ -111,7 +111,7 @@ export default function GenerateTags({
               label="Message"
               readOnly={loading}
               value={message}
-              onChange={e => setMessage(removeEmoji(e.target.value).trim())}
+              onChange={e => setMessage(removeEmoji(e.target.value))}
               rows={4}
             />
           </MDBModalBody>

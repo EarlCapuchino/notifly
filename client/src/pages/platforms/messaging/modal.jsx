@@ -96,7 +96,7 @@ export default function GenerateMessage({
               label="Message"
               readOnly={loading}
               value={message}
-              onChange={e => setMessage(removeEmoji(e.target.value).trim())}
+              onChange={e => setMessage(removeEmoji(e.target.value))}
               className="mt-2"
               rows={4}
             />

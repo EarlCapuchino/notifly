@@ -74,11 +74,11 @@ exports.tagging = async (req, res) => {
       for (const recipient of recipients) {
         const { username } = recipient;
 
-        await messageInput.sendKeys(
-          `@${username.slice(0, username.length - 1)}`
-        );
+        await messageInput.sendKeys(`@${username}`);
         await driver.sleep(1000);
         await messageInput.sendKeys(Key.ENTER);
+        await driver.sleep(1000);
+        await messageInput.sendKeys(" ");
       }
 
       await messageInput.sendKeys(Key.ENTER);

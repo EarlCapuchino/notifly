@@ -93,14 +93,12 @@ export default function PostsList() {
   };
 
   const handleModalSubmit = data => {
-    console.log(data);
-
-    // if (modal.create) {
-    //   dispatch(SAVE({ data, token }));
-    // } else {
-    //   dispatch(UPDATE({ data, token }));
-    // }
-    // setModal({ visibility: false, create: true });
+    if (modal.create) {
+      dispatch(SAVE({ data, token }));
+    } else {
+      dispatch(UPDATE({ data, token }));
+    }
+    setModal({ visibility: false, create: true });
   };
 
   const handleURLs = data => {

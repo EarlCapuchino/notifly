@@ -53,7 +53,9 @@ export default function PostModal({
             <MDBInput
               label="Name"
               value={form.name}
-              onChange={e => setForm({ ...form, name: e.target.value })}
+              onChange={e =>
+                setForm({ ...form, name: e.target.value.toUpperCase() })
+              }
             />
             <MDBListGroup className="mt-2">
               <MDBListGroupItem className="d-flex align-items-center justify-content-between">

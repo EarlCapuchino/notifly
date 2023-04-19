@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -10,11 +10,25 @@ import {
   MDBModalFooter,
   MDBListGroup,
   MDBListGroupItem,
+  MDBIcon,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
+import { selenium } from "../../../../redux/APIServices";
+import { toast } from "react-toastify";
 
 export default function ViewModal({ visibility, setVisibility, post }) {
-  const { theme } = useSelector(({ auth }) => auth);
+  const { theme, token } = useSelector(({ auth }) => auth),
+    [loading, setLoading] = useState(false);
+
+  const handleLikes = async () => {
+    setLoading(true);
+    const response = await selenium("liking", { urls: post.urls }, token);
+    if (response) {
+      toast.success("Posts liked successfully");
+      setLoading(false);
+      setVisibility(false);
+    }
+  };
 
   return (
     <MDBModal staticBackdrop show={visibility} tabIndex="-1">
@@ -42,6 +56,7 @@ export default function ViewModal({ visibility, setVisibility, post }) {
 
           <MDBModalFooter>
             <MDBBtn
+              disabled={loading}
               type="button"
               color={theme.color}
               className="shadow-0"
@@ -51,9 +66,15 @@ export default function ViewModal({ visibility, setVisibility, post }) {
             >
               Close
             </MDBBtn>
-            <MDBBtn color="danger">delete</MDBBtn>
-            <MDBBtn>like</MDBBtn>
-            <MDBBtn color="success">share</MDBBtn>
+            <MDBBtn disabled={loading} color="danger">
+              {loading ? <MDBIcon far icon="clock" spin /> : "delete"}
+            </MDBBtn>
+            <MDBBtn disabled={loading} onClick={handleLikes}>
+              {loading ? <MDBIcon far icon="clock" spin /> : "like"}
+            </MDBBtn>
+            <MDBBtn disabled={loading} color="success">
+              {loading ? <MDBIcon far icon="clock" spin /> : "share"}
+            </MDBBtn>
           </MDBModalFooter>
         </MDBModalContent>
       </MDBModalDialog>

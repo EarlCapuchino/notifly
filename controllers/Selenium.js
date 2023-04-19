@@ -29,7 +29,8 @@ exports.messages = async (req, res) => {
         );
         await messageInput.sendKeys(parsedMessage, Key.ENTER);
 
-        await driver.sleep(3000);
+        // wait for the message to be sent
+        await driver.sleep(5000);
       }
     } finally {
       await driver.quit();

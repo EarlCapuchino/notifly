@@ -29,17 +29,15 @@ export default function ViewMembers({ visibility, setVisibility, cluster }) {
               {cluster?.members?.map((member, index) => (
                 <MDBListGroupItem
                   key={`view-member-${index}`}
-                  className="d-flex justify-content-between align-items-start"
+                  className="d-flex justify-content-between align-items-center"
                 >
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">{member.email}</div>
-                    {member.messengerId}
+                  <div className="d-flex align-items-center">
+                    <div>
+                      <p className="fw-bold mb-1">{member.email}</p>
+                      <p className="text-muted mb-0">{member.messengerId}</p>
+                    </div>
                   </div>
-                  {member.facebook && (
-                    <MDBBadge pill light>
-                      {member.facebook}
-                    </MDBBadge>
-                  )}
+                  <MDBBadge pill>{member.facebook}</MDBBadge>
                 </MDBListGroupItem>
               ))}
             </MDBListGroup>

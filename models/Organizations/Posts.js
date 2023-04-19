@@ -29,4 +29,4 @@ modelSchema.query.byActive = function (isActive) {
   return this.where({ isActive });
 };
 
-module.exports = mongoose.model("Posts", modelSchema);
+module.exports = mongoose.model("Post_lists", modelSchema);

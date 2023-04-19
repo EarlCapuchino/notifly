@@ -12,39 +12,23 @@ import DataTable from "../../../../components/dataTable";
 import Pager from "../../../../components/pager";
 import Search from "../../../../components/search";
 import Swal from "sweetalert2";
-import {
-  BROWSE,
-  SAVE,
-  DESTROY,
-  UPDATE,
-} from "../../../../redux/slices/organizations/posts";
-import { BROWSE as CLUSTER } from "../../../../redux/slices/organizations/clusters";
-import PostModal from "./modal";
-import ViewModal from "./view";
+import { ARCHIVE, RESTORE } from "../../../../redux/slices/organizations/posts";
 
 const paths = [
   {
-    name: "Registered Posts",
+    name: "Archived Posts",
   },
 ];
-
-export default function PostsList() {
+export default function PostsArchive() {
   const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ posts }) => posts),
     [posts, setPosts] = useState([]),
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
-    [record, setRecord] = useState({}),
-    [viewURLs, setViewURLs] = useState(false),
-    [modal, setModal] = useState({
-      visibility: false,
-      create: true,
-    }),
     dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(BROWSE(token));
-    dispatch(CLUSTER(token));
+    dispatch(ARCHIVE(token));
   }, [token]);
 
   useEffect(() => {
@@ -75,60 +59,22 @@ export default function PostsList() {
     }
   };
 
-  const handleArchive = data =>
+  const handleRestore = data =>
     Swal.fire({
       icon: "question",
       title: "Are you sure?",
-      html: `You are about to archive <b>${data.name}</b>.`,
+      html: `You are about to restore <b>${data.name}</b>.`,
       showCancelButton: true,
       confirmButtonText: "Proceed",
     }).then(result => {
       if (result.isConfirmed) {
-        dispatch(DESTROY({ id: data._id, token }));
+        dispatch(RESTORE({ id: data._id, token }));
       }
     });
 
-  const handleUpdate = data => {
-    setRecord(data);
-    setModal({ visibility: true, create: false });
-  };
-
-  const handleModalSubmit = data => {
-    if (modal.create) {
-      dispatch(SAVE({ data, token }));
-    } else {
-      dispatch(UPDATE({ data, token }));
-    }
-    setModal({ visibility: false, create: true });
-  };
-
-  const handleURLs = data => {
-    setRecord(data);
-    setViewURLs(true);
-  };
-
   return (
     <>
-      <BreadCrumb
-        title="Posts List"
-        button={isAdmin}
-        paths={paths}
-        tooltip="Create new Post"
-        handler={() => setModal({ visibility: true, create: true })}
-      />
-
-      <PostModal
-        modal={modal}
-        setVisibility={setModal}
-        post={record}
-        handleSubmit={handleModalSubmit}
-      />
-
-      <ViewModal
-        visibility={viewURLs}
-        setVisibility={setViewURLs}
-        post={record}
-      />
+      <BreadCrumb title="Posts Archive List" paths={paths} />
 
       <MDBContainer fluid className="pt-5 mt-5">
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
@@ -165,30 +111,14 @@ export default function PostsList() {
                   _format: data => <MDBBadge>{data.length}</MDBBadge>,
                 },
               ]}
-              handlers={[handleURLs, handleUpdate, handleArchive]}
+              handlers={[handleRestore]}
               actions={[
                 {
-                  _title: "View URLs",
-                  _icon: "link",
-                  _color: "info",
-                  _placement: "left",
-                  _function: 0,
-                  _condition: () => isAdmin,
-                },
-                {
-                  _title: "Update",
-                  _icon: "pen",
-                  _color: "primary",
-                  _placement: "top",
-                  _function: 1,
-                  _condition: () => isAdmin,
-                },
-                {
-                  _title: "Archive",
-                  _icon: "folder-minus",
-                  _color: "warning",
+                  _title: "Restore",
+                  _icon: "folder-open",
+                  _color: "success",
                   _placement: "right",
-                  _function: 2,
+                  _function: 0,
                   _condition: () => isAdmin,
                 },
               ]}

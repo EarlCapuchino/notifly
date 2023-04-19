@@ -18,6 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selenium } from "../../../redux/APIServices";
+import { removeEmoji } from "../../../components/utilities";
 
 export default function GenerateMessage({
   visibility,
@@ -55,7 +56,6 @@ export default function GenerateMessage({
         { message, recipients },
         token
       );
-
       if (response) {
         toast.success("Messages sent successfully");
         setMessage("");
@@ -96,7 +96,7 @@ export default function GenerateMessage({
               label="Message"
               readOnly={loading}
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={e => setMessage(removeEmoji(e.target.value))}
               className="mt-2"
               rows={4}
             />

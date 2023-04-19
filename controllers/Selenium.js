@@ -29,8 +29,11 @@ exports.messages = async (req, res) => {
         );
         await messageInput.sendKeys(parsedMessage, Key.ENTER);
 
-        await driver.sleep(3000);
+        // wait for the message to be sent
+        await driver.sleep(5000);
       }
+    } catch (error) {
+      console.log(error.message);
     } finally {
       await driver.quit();
     }
@@ -73,14 +76,16 @@ exports.tagging = async (req, res) => {
       for (const recipient of recipients) {
         const { username } = recipient;
 
-        await messageInput.sendKeys(
-          `@${username.slice(0, username.length - 1)}`
-        );
+        await messageInput.sendKeys(`@${username}`);
         await driver.sleep(1000);
         await messageInput.sendKeys(Key.ENTER);
+        await driver.sleep(1000);
+        await messageInput.sendKeys(" ");
       }
 
       await messageInput.sendKeys(Key.ENTER);
+    } catch (error) {
+      console.log(error.message);
     } finally {
       await driver.quit();
     }
@@ -96,4 +101,48 @@ exports.tagging = async (req, res) => {
     });
   }
   // driver.quit();
+};
+
+exports.liking = async (req, res) => {
+  const seleniumResponse = await seleniumLogin(
+    res.locals.email,
+    res.locals.password
+  );
+
+  const { status, driver } = seleniumResponse;
+
+  if (status) {
+    const { urls } = req.body;
+
+    try {
+      // Loop through the recipients array and open each URL
+      for (const url of urls) {
+        console.log(`Processing URL: ${url}`);
+        await driver.get(url);
+
+        // Wait for the "Like" element to appear and send the message
+        const likeButton = await driver.wait(
+          until.elementLocated(By.css('div[aria-label="Like"]'))
+        );
+        await likeButton.click();
+
+        // wait for the message to be sent
+        await driver.sleep(5000);
+      }
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      await driver.quit();
+    }
+
+    res.json({
+      status: true,
+      message: "Recipients messaged successfully",
+    });
+  } else {
+    res.status(400).json({
+      status: false,
+      message: seleniumResponse.message,
+    });
+  }
 };

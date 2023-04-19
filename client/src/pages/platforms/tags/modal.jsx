@@ -19,6 +19,7 @@ import {
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selenium } from "../../../redux/APIServices";
+import { removeEmoji } from "../../../components/utilities";
 
 export default function GenerateTags({
   visibility,
@@ -119,7 +120,7 @@ export default function GenerateTags({
               label="Message"
               readOnly={loading}
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={e => setMessage(removeEmoji(e.target.value).trim())}
               rows={4}
             />
           </MDBModalBody>

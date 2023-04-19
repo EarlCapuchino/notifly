@@ -18,6 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selenium } from "../../../redux/APIServices";
+import { removeEmoji } from "../../../components/utilities";
 
 export default function GenerateMessage({
   visibility,
@@ -47,18 +48,12 @@ export default function GenerateMessage({
     }
   }, [clusters]);
 
-  const removeEmojis = text => {
-    const emojiPattern =
-      /[\uD800-\uDBFF][\uDC00-\uDFFF]|\u2700-\u27BF|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEFF]|\uD83E[\uDD00-\uDDFF]/g;
-    return text.replace(emojiPattern, "");
-  };
-
   const handleSend = async () => {
     if (message) {
       setLoading(true);
       const response = await selenium(
         "messaging",
-        { message: removeEmojis(message).trim(), recipients },
+        { message, recipients },
         token
       );
       if (response) {
@@ -101,7 +96,7 @@ export default function GenerateMessage({
               label="Message"
               readOnly={loading}
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={e => setMessage(removeEmoji(e.target.value).trim())}
               className="mt-2"
               rows={4}
             />

@@ -36,7 +36,7 @@ export default function PostModal({
     if (modal && !modal.create) {
       setForm(post);
     }
-  }, [modal]);
+  }, [modal, post]);
 
   return (
     <MDBModal staticBackdrop show={modal.visibility} tabIndex="-1">

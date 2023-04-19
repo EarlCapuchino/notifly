@@ -7,7 +7,7 @@ import {
   MDBTooltip,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
-import SettingsTheme from "./theme";
+// import SettingsTheme from "./theme";
 import SettingsMaxPage from "./maxPage";
 
 const NavbarSettings = () => {

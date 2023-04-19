@@ -10,11 +10,10 @@ import {
   MDBModalFooter,
   MDBListGroup,
   MDBListGroupItem,
-  MDBBadge,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 
-export default function ViewMembers({ visibility, setVisibility, cluster }) {
+export default function ViewModal({ visibility, setVisibility, post }) {
   const { theme } = useSelector(({ auth }) => auth);
 
   return (
@@ -22,22 +21,20 @@ export default function ViewMembers({ visibility, setVisibility, cluster }) {
       <MDBModalDialog centered size="lg">
         <MDBModalContent className={`${theme.bg} ${theme.text}`}>
           <MDBModalHeader>
-            <MDBModalTitle>View Members</MDBModalTitle>
+            <MDBModalTitle>{post.name}</MDBModalTitle>
           </MDBModalHeader>
-          <MDBModalBody>
-            <MDBListGroup>
-              {cluster?.members?.map((member, index) => (
+          <MDBModalBody className="py-0">
+            <MDBListGroup numbered>
+              {post.urls?.map((url, index) => (
                 <MDBListGroupItem
-                  key={`view-member-${index}`}
-                  className="d-flex justify-content-between align-items-center"
+                  key={`url-view-${index}`}
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
                 >
-                  <div className="d-flex align-items-center">
-                    <div>
-                      <p className="fw-bold mb-1">{member.email}</p>
-                      <p className="text-muted mb-0">{member.messengerId}</p>
-                    </div>
-                  </div>
-                  <MDBBadge pill>{member.facebook}</MDBBadge>
+                  {url}
                 </MDBListGroupItem>
               ))}
             </MDBListGroup>
@@ -48,10 +45,15 @@ export default function ViewMembers({ visibility, setVisibility, cluster }) {
               type="button"
               color={theme.color}
               className="shadow-0"
-              onClick={() => setVisibility(false)}
+              onClick={() => {
+                setVisibility(false);
+              }}
             >
               Close
             </MDBBtn>
+            <MDBBtn color="danger">delete</MDBBtn>
+            <MDBBtn>like</MDBBtn>
+            <MDBBtn color="success">share</MDBBtn>
           </MDBModalFooter>
         </MDBModalContent>
       </MDBModalDialog>

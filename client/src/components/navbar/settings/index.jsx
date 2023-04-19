@@ -88,7 +88,7 @@ const NavbarSettings = () => {
             className={`custom-notification-close p-3 cursor-pointer ${theme.text}`}
           />
         </MDBCol>
-        <SettingsTheme />
+        {/* <SettingsTheme /> */}
         <SettingsMaxPage />
       </MDBCol>
       <MDBCol

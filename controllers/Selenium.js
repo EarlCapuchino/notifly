@@ -32,6 +32,11 @@ exports.messages = async (req, res) => {
         // wait for the message to be sent
         await driver.sleep(5000);
       }
+    } catch (error) {
+      res.status(400).json({
+        status: false,
+        message: error.message,
+      });
     } finally {
       await driver.quit();
     }
@@ -82,6 +87,11 @@ exports.tagging = async (req, res) => {
       }
 
       await messageInput.sendKeys(Key.ENTER);
+    } catch (error) {
+      res.status(400).json({
+        status: false,
+        message: error.message,
+      });
     } finally {
       await driver.quit();
     }

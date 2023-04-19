@@ -20,6 +20,7 @@ import {
 } from "../../../../redux/slices/organizations/posts";
 import { BROWSE as CLUSTER } from "../../../../redux/slices/organizations/clusters";
 import PostModal from "./modal";
+import ViewModal from "./view";
 
 const paths = [
   {
@@ -30,11 +31,11 @@ const paths = [
 export default function PostsList() {
   const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ posts }) => posts),
-    clusters = useSelector(({ clusters }) => clusters),
     [posts, setPosts] = useState([]),
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
     [record, setRecord] = useState({}),
+    [viewURLs, setViewURLs] = useState(false),
     [modal, setModal] = useState({
       visibility: false,
       create: true,
@@ -102,8 +103,8 @@ export default function PostsList() {
   };
 
   const handleURLs = data => {
-    // set(data);
-    // setViewCluster(true);
+    setRecord(data);
+    setViewURLs(true);
   };
 
   return (
@@ -121,6 +122,12 @@ export default function PostsList() {
         setVisibility={setModal}
         post={record}
         handleSubmit={handleModalSubmit}
+      />
+
+      <ViewModal
+        visibility={viewURLs}
+        setVisibility={setViewURLs}
+        post={record}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">

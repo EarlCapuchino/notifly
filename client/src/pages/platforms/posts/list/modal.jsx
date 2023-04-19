@@ -14,11 +14,9 @@ import {
   MDBListGroup,
   MDBListGroupItem,
   MDBIcon,
-  MDBTooltip,
   MDBInput,
 } from "mdb-react-ui-kit";
-import { useDispatch, useSelector } from "react-redux";
-import { UPDATE } from "../../../../redux/slices/persons/members";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { isValidURL } from "../../../../components/utilities";
 
@@ -28,7 +26,7 @@ export default function PostModal({
   post,
   handleSubmit,
 }) {
-  const { theme, token } = useSelector(({ auth }) => auth),
+  const { theme } = useSelector(({ auth }) => auth),
     [form, setForm] = useState({
       name: "",
       urls: [""],
@@ -132,21 +130,36 @@ export default function PostModal({
                 const newObj = { ...form };
 
                 if (newObj.urls.length > 0) {
-                  var invalids = [];
+                  var invalids = [],
+                    nonFb = [];
 
                   newObj.urls.map((url, index) => {
                     if (!isValidURL(url)) {
                       invalids.push(`#${index + 1}`);
                     }
+
+                    if (!url.includes("facebook")) {
+                      nonFb.push(`#${index + 1}`);
+                    }
+
+                    return null;
                   });
 
                   if (invalids.length > 0) {
                     toast.warn(`Invalid URL(s): ${invalids.join(", ")}`);
                   } else {
-                    if (newObj.name) {
-                      handleSubmit(form);
+                    if (nonFb.length > 0) {
+                      toast.warn(`Non-Facebook URL(s): ${nonFb.join(", ")}`);
                     } else {
-                      toast.warn("Please specify a name");
+                      if (newObj.name) {
+                        setForm({
+                          name: "",
+                          urls: [""],
+                        });
+                        handleSubmit(form);
+                      } else {
+                        toast.warn("Please specify a name");
+                      }
                     }
                   }
                 } else {

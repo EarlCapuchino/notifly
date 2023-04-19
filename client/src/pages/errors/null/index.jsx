@@ -10,7 +10,7 @@ export default function ErrorNull() {
 
   const handleRedirect = () => {
     if (auth._id) {
-      navigate(`/${BASE}/dashboard`);
+      navigate(`/${BASE}/messaging`);
     } else {
       navigate("/");
     }

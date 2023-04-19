@@ -1,10 +1,5 @@
 const Sidebar = [
   {
-    name: "Dashboard",
-    icon: "tachometer-alt",
-    path: "dashboard",
-  },
-  {
     name: "Messaging",
     icon: "mail-bulk",
     path: "messaging",

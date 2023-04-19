@@ -22,7 +22,7 @@ const paths = [
 ];
 
 export default function BulkMessaging() {
-  const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
+  const { theme, maxPage, token } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ clusters }) => clusters),
     [clusters, setClusters] = useState([]),
     [page, setPage] = useState(1),
@@ -90,7 +90,7 @@ export default function BulkMessaging() {
     <>
       <BreadCrumb
         title="Messaging"
-        button={isAdmin}
+        button={true}
         paths={paths}
         tooltip="Generate a message"
         handler={handleMessaging}
@@ -145,7 +145,7 @@ export default function BulkMessaging() {
                   _color: "success",
                   _placement: "left",
                   _function: 0,
-                  _condition: data => isAdmin && !data.isSelected,
+                  _condition: data => !data.isSelected,
                 },
                 {
                   _title: "Remove",
@@ -153,7 +153,7 @@ export default function BulkMessaging() {
                   _color: "danger",
                   _placement: "left",
                   _function: 0,
-                  _condition: data => isAdmin && data.isSelected,
+                  _condition: data => data.isSelected,
                 },
               ]}
               isLoading={isLoading}

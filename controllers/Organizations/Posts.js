@@ -1,55 +1,30 @@
-const Clusters = require("../../models/Organizations/Clusters"),
-  Members = require("../../models/Persons/Members"),
+const Posts = require("../../models/Organizations/Posts"),
   Logs = require("../../models/Logs");
 
 exports.browse = (req, res) =>
-  Clusters.find()
+  Posts.find()
     .byActive(true)
     .select("-createdAt -updatedAt -__v -isActive")
     .sort({ createdAt: -1 })
     .lean()
-    .then(clusters =>
-      Members.find()
-        .byActive(true)
-        .populate("clusters")
-        .lean()
-        .then(members => {
-          const newClusters = clusters.map(cluster => {
-            const _cluster = { ...cluster, isSelected: false, members: [] };
-
-            members?.map(member => {
-              if (member.clusters.length > 0) {
-                member.clusters?.map(_clstr => {
-                  if (cluster.name === _clstr.name) {
-                    const _member = { ...member };
-                    _member.clusters = undefined;
-                    _cluster.members.push(_member);
-                  }
-                });
-              }
-            });
-
-            return _cluster;
-          });
-
-          res.json({
-            status: true,
-            message: "Fetched Successfully",
-            content: newClusters,
-          });
-        })
+    .then(posts =>
+      res.json({
+        status: true,
+        message: "Fetched Successfully",
+        content: posts,
+      })
     )
     .catch(error =>
       res.status(400).json({ status: false, message: error.message })
     );
 
 exports.save = (req, res) =>
-  Clusters.create(req.body)
-    .then(cluster =>
+  Posts.create(req.body)
+    .then(post =>
       res.status(201).json({
         status: true,
-        message: `(${cluster._id}) Created Successfully`,
-        content: cluster,
+        message: `(${post._id}) Created Successfully`,
+        content: post,
       })
     )
     .catch(error =>
@@ -57,16 +32,16 @@ exports.save = (req, res) =>
     );
 
 exports.archive = (req, res) =>
-  Clusters.find()
+  Posts.find()
     .byActive(false)
     .select("-createdAt -updatedAt -__v -isActive")
     .sort({ createdAt: -1 })
     .lean()
-    .then(clusters =>
+    .then(posts =>
       res.json({
         status: true,
         message: "Fetched Successfully",
-        content: clusters,
+        content: posts,
       })
     )
     .catch(error =>
@@ -74,15 +49,15 @@ exports.archive = (req, res) =>
     );
 
 exports.update = (req, res) =>
-  Clusters.findByIdAndUpdate(req.params.id, req.body, {
+  Posts.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   })
     .select("-password -createdAt -updatedAt -__v -isActive")
-    .then(cluster =>
+    .then(post =>
       res.json({
         status: true,
-        message: `(${cluster._id}) Updated Successfully`,
-        content: cluster,
+        message: `(${post._id}) Updated Successfully`,
+        content: post,
       })
     )
     .catch(error =>
@@ -90,14 +65,14 @@ exports.update = (req, res) =>
     );
 
 exports.restore = (req, res) =>
-  Clusters.findById(req.params.id).then(cluster => {
-    if (!cluster.isActive) {
-      Clusters.findByIdAndUpdate(req.params.id, {
+  Posts.findById(req.params.id).then(post => {
+    if (!post.isActive) {
+      Posts.findByIdAndUpdate(req.params.id, {
         deletedAt: "",
         isActive: true,
       }).then(() =>
         Logs.create({
-          model: "clusters",
+          model: "posts",
           itemId: req.params.id,
           action: "restore",
           member: res.locals.user._id,
@@ -118,14 +93,14 @@ exports.restore = (req, res) =>
   });
 
 exports.destroy = (req, res) =>
-  Clusters.findById(req.params.id).then(cluster => {
-    if (cluster.isActive) {
-      Clusters.findByIdAndUpdate(req.params.id, {
+  Posts.findById(req.params.id).then(post => {
+    if (post.isActive) {
+      Posts.findByIdAndUpdate(req.params.id, {
         deletedAt: new Date().toLocaleString(),
         isActive: false,
       }).then(() =>
         Logs.create({
-          model: "clusters",
+          model: "posts",
           itemId: req.params.id,
           action: "archive",
           member: res.locals.user._id,

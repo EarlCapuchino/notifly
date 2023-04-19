@@ -96,7 +96,7 @@ const BreadCrumb = ({
         <MDBBreadcrumb className="custom-bread-height">
           <MDBBreadcrumbItem
             className={`${theme.text} custom-text cursor-pointer`}
-            onClick={() => navigate(`/${BASE}/dashboard`)}
+            onClick={() => navigate(`/${BASE}/messaging`)}
           >
             Dashboard
           </MDBBreadcrumbItem>

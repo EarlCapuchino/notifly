@@ -26,7 +26,7 @@ const Login = () => {
     document.title = `${Company.name} | Login`;
     if (auth._id) {
       toast.info(`Hello, ${auth.email}`);
-      navigate(`/${BASE}/dashboard`);
+      navigate(`/${BASE}/messaging`);
     }
   }, [auth, navigate]);
 

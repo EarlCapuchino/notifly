@@ -1,4 +1,3 @@
-import Dashboard from "./pages/platforms/dashboard";
 import ClustersList from "./pages/platforms/clusters/list";
 import ClustersArchive from "./pages/platforms/clusters/archive";
 import MembersList from "./pages/platforms/members/list";
@@ -8,10 +7,6 @@ import TagPeople from "./pages/platforms/tags";
 // import Logs from "./logs";
 
 const routes = [
-  {
-    path: "dashboard",
-    element: <Dashboard />,
-  },
   {
     path: "messaging",
     element: <BulkMessaging />,

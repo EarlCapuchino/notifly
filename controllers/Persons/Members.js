@@ -69,7 +69,7 @@ exports.update = (req, res) => {
 
 exports.destroy = (req, res) =>
   Members.findById(req.params.id).then(member => {
-    if (member.isActive) {
+    if (member && member.isActive) {
       Members.findByIdAndUpdate(req.params.id, {
         deletedAt: new Date().toLocaleString(),
         isActive: false,
@@ -97,7 +97,7 @@ exports.destroy = (req, res) =>
 
 exports.restore = (req, res) =>
   Members.findById(req.params.id).then(member => {
-    if (!member.isActive) {
+    if (member && !member.isActive) {
       Members.findByIdAndUpdate(req.params.id, {
         deletedAt: "",
         isActive: true,

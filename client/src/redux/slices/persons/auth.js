@@ -10,7 +10,7 @@ const theme = JSON.parse(localStorage.getItem("theme")),
 const initialState = {
   auth: {},
   token,
-  isAdmin: false,
+  isAdmin: true,
   maxPage: maxPage || 6,
   theme: theme || light,
   progress: 0,

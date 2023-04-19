@@ -66,7 +66,7 @@ exports.update = (req, res) =>
 
 exports.restore = (req, res) =>
   Posts.findById(req.params.id).then(post => {
-    if (!post.isActive) {
+    if (post && !post.isActive) {
       Posts.findByIdAndUpdate(req.params.id, {
         deletedAt: "",
         isActive: true,
@@ -94,7 +94,7 @@ exports.restore = (req, res) =>
 
 exports.destroy = (req, res) =>
   Posts.findById(req.params.id).then(post => {
-    if (post.isActive) {
+    if (post && post.isActive) {
       Posts.findByIdAndUpdate(req.params.id, {
         deletedAt: new Date().toLocaleString(),
         isActive: false,

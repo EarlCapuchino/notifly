@@ -91,7 +91,7 @@ exports.update = (req, res) =>
 
 exports.restore = (req, res) =>
   Clusters.findById(req.params.id).then(cluster => {
-    if (!cluster.isActive) {
+    if (cluster && !cluster.isActive) {
       Clusters.findByIdAndUpdate(req.params.id, {
         deletedAt: "",
         isActive: true,
@@ -119,7 +119,7 @@ exports.restore = (req, res) =>
 
 exports.destroy = (req, res) =>
   Clusters.findById(req.params.id).then(cluster => {
-    if (cluster.isActive) {
+    if (cluster && cluster.isActive) {
       Clusters.findByIdAndUpdate(req.params.id, {
         deletedAt: new Date().toLocaleString(),
         isActive: false,

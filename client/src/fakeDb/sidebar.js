@@ -10,9 +10,9 @@ const Sidebar = [
     path: "tags",
   },
   {
-    name: "Cluster",
-    icon: "object-group",
-    path: "clusters",
+    name: "Posts",
+    icon: "newspaper",
+    path: "posts",
     children: [
       {
         name: "List",
@@ -27,9 +27,9 @@ const Sidebar = [
     ],
   },
   {
-    name: "Members",
-    icon: "users",
-    path: "members",
+    name: "Pages",
+    icon: "book-open",
+    path: "pages",
     children: [
       {
         name: "List",
@@ -61,9 +61,9 @@ const Sidebar = [
     ],
   },
   {
-    name: "Posts",
-    icon: "newspaper",
-    path: "posts",
+    name: "Cluster",
+    icon: "object-group",
+    path: "clusters",
     children: [
       {
         name: "List",
@@ -78,9 +78,9 @@ const Sidebar = [
     ],
   },
   {
-    name: "Pages",
-    icon: "book-open",
-    path: "pages",
+    name: "Members",
+    icon: "users",
+    path: "members",
     children: [
       {
         name: "List",

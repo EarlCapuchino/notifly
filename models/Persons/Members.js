@@ -27,6 +27,7 @@ const modelSchema = new mongoose.Schema(
     username: {
       type: String,
       trim: true,
+      unique: true,
       default: "",
     },
     clusters: [

@@ -87,7 +87,7 @@ export default function MembersArchive() {
               name="Members"
               datas={members}
               titles={[
-                "E-mail & Custom ID",
+                "E-mail & Messenger ID",
                 {
                   _title: "Username & Nickname",
                   _styles: "text-center",

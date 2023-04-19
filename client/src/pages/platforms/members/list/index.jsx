@@ -154,6 +154,7 @@ export default function MembersList() {
           {
             _name: "username",
             _label: "Username",
+            _required: true,
             _style: "mt-3",
             _md: 4,
           },
@@ -191,7 +192,7 @@ export default function MembersList() {
               name="Members"
               datas={members}
               titles={[
-                "E-mail & Custom ID",
+                "E-mail & Messenger ID",
                 {
                   _title: "Facebook",
                   _styles: "text-center",

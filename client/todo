@@ -16,5 +16,6 @@
 ✔ do you have an ideal/preferred API response? @done (4/17/2023, 8:45:14 AM)
 ✔ about the data injection upon login that I suggested, we're literally gonna have a saved copy of credentials of various facebook accounts, should I save the passwords as plain text or should I encrypt it for data privacy @done (4/17/2023, 8:47:00 AM)
 ✔ further explanation of data flow @done (4/17/2023, 10:31:56 AM)
-☐ I dont save the password anymore because there will be a conflict fetching it since it is encrypted
-☐ how to get response for failed login in facebook
+✔ I dont save the password anymore because there will be a conflict fetching it since it is encrypted @done (4/19/2023, 10:48:05 AM)
+✔ how to get response for failed login in facebook @done (4/19/2023, 10:48:05 AM)
+☐ allow emojis on sending

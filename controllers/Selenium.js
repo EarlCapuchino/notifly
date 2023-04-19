@@ -71,10 +71,10 @@ exports.tagging = async (req, res) => {
 
       // Loop through the recipients array and tag each username
       for (const recipient of recipients) {
-        const { facebook } = recipient;
+        const { username } = recipient;
 
         await messageInput.sendKeys(
-          `@${facebook.slice(0, facebook.length - 1)}`
+          `@${username.slice(0, username.length - 1)}`
         );
         await driver.sleep(1000);
         await messageInput.sendKeys(Key.ENTER);

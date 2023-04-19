@@ -61,7 +61,7 @@ const Sidebar = [
     ],
   },
   {
-    name: "Cluster",
+    name: "Clusters",
     icon: "object-group",
     path: "clusters",
     children: [

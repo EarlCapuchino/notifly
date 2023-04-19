@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { MDBCard, MDBCardBody, MDBContainer, MDBRow } from "mdb-react-ui-kit";
+import {
+  MDBBadge,
+  MDBCard,
+  MDBCardBody,
+  MDBContainer,
+  MDBRow,
+} from "mdb-react-ui-kit";
 import BreadCrumb from "../../../../components/breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../../../components/dataTable";
@@ -11,26 +17,19 @@ import {
   SAVE,
   DESTROY,
   UPDATE,
-} from "../../../../redux/slices/persons/members";
+} from "../../../../redux/slices/organizations/posts";
 import { BROWSE as CLUSTER } from "../../../../redux/slices/organizations/clusters";
-import ViewClusters from "./clusters";
+import PostModal from "./modal";
 
 const paths = [
-    {
-      name: "Registered Posts",
-    },
-  ],
-  preset = {
-    facebook: "",
-    messengerId: "",
-    email: "",
-    username: "",
-    nickname: "",
-  };
+  {
+    name: "Registered Posts",
+  },
+];
 
 export default function PostsList() {
   const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
-    { catalogs, isLoading } = useSelector(({ members }) => members),
+    { catalogs, isLoading } = useSelector(({ posts }) => posts),
     clusters = useSelector(({ clusters }) => clusters),
     [posts, setPosts] = useState([]),
     [page, setPage] = useState(1),
@@ -40,7 +39,6 @@ export default function PostsList() {
       visibility: false,
       create: true,
     }),
-    [viewCluster, setViewCluster] = useState(false),
     dispatch = useDispatch();
 
   useEffect(() => {
@@ -80,7 +78,7 @@ export default function PostsList() {
     Swal.fire({
       icon: "question",
       title: "Are you sure?",
-      html: `You are about to archive <b>${data.email}</b>.`,
+      html: `You are about to archive <b>${data.name}</b>.`,
       showCancelButton: true,
       confirmButtonText: "Proceed",
     }).then(result => {
@@ -103,7 +101,7 @@ export default function PostsList() {
     setModal({ visibility: false, create: true });
   };
 
-  const handleClusters = data => {
+  const handleURLs = data => {
     // set(data);
     // setViewCluster(true);
   };
@@ -115,15 +113,10 @@ export default function PostsList() {
         button={isAdmin}
         paths={paths}
         tooltip="Create new Post"
-        // handler={() => setModal({ visibility: true, create: true })}
+        handler={() => setModal({ visibility: true, create: true })}
       />
 
-      {/* <ViewClusters
-        visibility={viewCluster}
-        setVisibility={setViewCluster}
-        member={member}
-        clusters={clusters.catalogs}
-      /> */}
+      <PostModal visibility={modal.visibility} setVisibility={setModal} />
 
       <MDBContainer fluid className="pt-5 mt-5">
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
@@ -140,16 +133,11 @@ export default function PostsList() {
               name="Posts"
               datas={posts}
               titles={[
-                "E-mail & Custom ID",
+                "Name",
                 {
-                  _title: "Facebook",
+                  _title: "URL Count",
                   _styles: "text-center",
                 },
-                {
-                  _title: "Username & Nickname",
-                  _styles: "text-center",
-                },
-
                 {
                   _title: "Action",
                   _styles: "text-center",
@@ -157,25 +145,19 @@ export default function PostsList() {
               ]}
               contents={[
                 {
-                  _keys: ["email", "messengerId"],
-                  _format: [],
+                  _keys: "name",
                 },
                 {
-                  _keys: "facebook",
+                  _keys: "urls",
                   _styles: "text-center",
-                  _format: data => data || "-",
-                },
-                {
-                  _keys: ["username", "nickname"],
-                  _styles: "text-center",
-                  _format: [data => data || "-", data => data || "-"],
+                  _format: data => <MDBBadge>{data.length}</MDBBadge>,
                 },
               ]}
-              handlers={[handleClusters, handleUpdate, handleArchive]}
+              handlers={[handleURLs, handleUpdate, handleArchive]}
               actions={[
                 {
-                  _title: "View Clusters",
-                  _icon: "object-group",
+                  _title: "View URLs",
+                  _icon: "link",
                   _color: "info",
                   _placement: "left",
                   _function: 0,

@@ -8,35 +8,35 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
+  MDBInput,
   MDBRow,
   MDBCol,
-  MDBTypography,
-  MDBListGroup,
-  MDBListGroupItem,
-  MDBIcon,
-  MDBInput,
+  MDBTextArea,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { isValidURL } from "../../../../components/utilities";
 
-export default function PostModal({
+export default function MeetingModal({
   modal,
   setVisibility,
-  post,
+  meeting,
   handleSubmit,
 }) {
   const { theme } = useSelector(({ auth }) => auth),
     [form, setForm] = useState({
-      name: "",
-      urls: [""],
+      title: "",
+      content: "",
+      date: "",
     });
 
   useEffect(() => {
-    if (modal && !modal.create) {
-      setForm(post);
+    if (modal) {
+      document.getElementById("datetime").focus();
+
+      if (!modal.create) {
+        setForm(meeting);
+      }
     }
-  }, [modal, post]);
+  }, [modal, meeting]);
 
   return (
     <MDBModal staticBackdrop show={modal.visibility} tabIndex="-1">
@@ -44,133 +44,70 @@ export default function PostModal({
         <MDBModalContent className={`${theme.bg} ${theme.text}`}>
           <MDBModalHeader>
             <MDBModalTitle>
-              {modal.create ? "Create a Post List" : `Update ${form.name}`}
+              {modal.create ? "Create a Meeting" : `Update ${form.title}`}
             </MDBModalTitle>
           </MDBModalHeader>
-          <MDBModalBody>
-            <MDBInput
-              label="Name"
-              value={form.name}
-              onChange={e =>
-                setForm({ ...form, name: e.target.value.toUpperCase() })
-              }
-            />
-            <MDBListGroup className="mt-2">
-              <MDBListGroupItem className="d-flex align-items-center justify-content-between">
-                <MDBTypography className="mb-0">URLS</MDBTypography>
-                <MDBBtn
-                  size="sm"
-                  floating
-                  onClick={() => {
-                    const newArr = [...form.urls];
-                    newArr.push("");
-                    setForm({ ...form, urls: newArr });
-                  }}
-                >
-                  <MDBIcon icon="plus" />
-                </MDBBtn>
-              </MDBListGroupItem>
-              {form.urls?.map((url, index) => (
-                <MDBListGroupItem key={`url-list-${index}`}>
-                  <MDBRow>
-                    <MDBCol size={11}>
-                      <MDBInput
-                        label={`${form.name} URL #${index + 1}`}
-                        value={url}
-                        onChange={e => {
-                          const newArr = [...form.urls];
+          <form
+            onSubmit={e => {
+              e.preventDefault();
 
-                          newArr[index] = e.target.value;
-
-                          setForm({ ...form, urls: newArr });
-                        }}
-                        className="w-75"
-                      />
-                    </MDBCol>
-                    <MDBCol
-                      size={1}
-                      className="d-flex align-items-center justify-content-center"
-                    >
-                      <MDBBtn
-                        color="danger"
-                        size="sm"
-                        floating
-                        onClick={() => {
-                          const newArr = [...form.urls];
-                          newArr.splice(index, 1);
-                          setForm({ ...form, urls: newArr });
-                        }}
-                      >
-                        <MDBIcon icon="minus" />
-                      </MDBBtn>
-                    </MDBCol>
-                  </MDBRow>
-                </MDBListGroupItem>
-              ))}
-            </MDBListGroup>
-          </MDBModalBody>
-
-          <MDBModalFooter>
-            <MDBBtn
-              type="button"
-              color={theme.color}
-              className="shadow-0"
-              onClick={() => {
-                setForm({
-                  name: "",
-                  urls: [""],
-                });
-                setVisibility({ visibility: false, create: true });
-              }}
-            >
-              Close
-            </MDBBtn>
-            <MDBBtn
-              onClick={() => {
-                const newObj = { ...form };
-
-                if (newObj.urls.length > 0) {
-                  var invalids = [],
-                    nonFb = [];
-
-                  newObj.urls.map((url, index) => {
-                    if (!isValidURL(url)) {
-                      invalids.push(`#${index + 1}`);
+              handleSubmit(form);
+            }}
+          >
+            <MDBModalBody>
+              <MDBRow>
+                <MDBCol>
+                  <MDBInput
+                    label="Title"
+                    value={form.title}
+                    onChange={e =>
+                      setForm({ ...form, title: e.target.value.toUpperCase() })
                     }
+                    required
+                  />
+                </MDBCol>
+                <MDBCol>
+                  <MDBInput
+                    id="datetime"
+                    label="Date"
+                    type="datetime-local"
+                    value={form.date}
+                    onChange={e => setForm({ ...form, date: e.target.value })}
+                    required
+                  />
+                </MDBCol>
+              </MDBRow>
+              <MDBTextArea
+                value={form.content}
+                onChange={e => setForm({ ...form, content: e.target.value })}
+                className="mt-2"
+                label="Content"
+                rows={3}
+                required
+              />
+            </MDBModalBody>
 
-                    if (!url.includes("facebook")) {
-                      nonFb.push(`#${index + 1}`);
-                    }
-
-                    return null;
+            <MDBModalFooter>
+              <MDBBtn
+                type="button"
+                color={theme.color}
+                className="shadow-0"
+                onClick={() => {
+                  setForm({
+                    title: "",
+                    content: "",
+                    date: "",
                   });
-
-                  if (invalids.length > 0) {
-                    toast.warn(`Invalid URL(s): ${invalids.join(", ")}`);
-                  } else {
-                    if (nonFb.length > 0) {
-                      toast.warn(`Non-Facebook URL(s): ${nonFb.join(", ")}`);
-                    } else {
-                      if (newObj.name) {
-                        setForm({
-                          name: "",
-                          urls: [""],
-                        });
-                        handleSubmit(form);
-                      } else {
-                        toast.warn("Please specify a name");
-                      }
-                    }
-                  }
-                } else {
-                  toast.warn("Please specify at least one(1) valid URL");
-                }
-              }}
-              color="success"
-            >
-              submit
-            </MDBBtn>
-          </MDBModalFooter>
+                  setVisibility({ visibility: false, create: true });
+                }}
+              >
+                Close
+              </MDBBtn>
+              <MDBBtn type="submit" color="success">
+                submit
+              </MDBBtn>
+            </MDBModalFooter>
+          </form>
         </MDBModalContent>
       </MDBModalDialog>
     </MDBModal>

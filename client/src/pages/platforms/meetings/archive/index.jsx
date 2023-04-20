@@ -105,6 +105,7 @@ export default function MeetingsArchive() {
                 {
                   _keys: "date",
                   _styles: "text-center",
+                  _format: data => new Date(data).toLocaleString(),
                 },
               ]}
               handlers={[handleRestore]}

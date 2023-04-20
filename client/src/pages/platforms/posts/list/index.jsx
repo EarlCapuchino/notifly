@@ -18,7 +18,6 @@ import {
   DESTROY,
   UPDATE,
 } from "../../../../redux/slices/organizations/posts";
-import { BROWSE as CLUSTER } from "../../../../redux/slices/organizations/clusters";
 import PostModal from "./modal";
 import ViewModal from "./view";
 
@@ -44,7 +43,6 @@ export default function PostsList() {
 
   useEffect(() => {
     dispatch(BROWSE(token));
-    dispatch(CLUSTER(token));
   }, [token]);
 
   useEffect(() => {

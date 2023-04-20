@@ -1,7 +1,7 @@
 const router = require("express").Router(),
-  { sendCode } = require("../../controllers/Persons/Mailer"),
+  { announce } = require("../../controllers/Persons/Mailer"),
   { protect } = require("../../middleware");
 
-router.post("/code", protect, sendCode);
+router.post("/announce", protect, announce);
 
 module.exports = router;

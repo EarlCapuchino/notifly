@@ -12,8 +12,7 @@ import {
   DESTROY,
   UPDATE,
 } from "../../../../redux/slices/organizations/meetings";
-import { BROWSE as CLUSTER } from "../../../../redux/slices/organizations/clusters";
-import PostModal from "./modal";
+import MeetingModal from "./modal";
 import ViewModal from "./view";
 
 const paths = [
@@ -38,7 +37,6 @@ export default function MeetingsList() {
 
   useEffect(() => {
     dispatch(BROWSE(token));
-    dispatch(CLUSTER(token));
   }, [token]);
 
   useEffect(() => {
@@ -111,17 +109,17 @@ export default function MeetingsList() {
         handler={() => setModal({ visibility: true, create: true })}
       />
 
-      <PostModal
+      <MeetingModal
         modal={modal}
         setVisibility={setModal}
-        post={record}
+        meeting={record}
         handleSubmit={handleModalSubmit}
       />
 
       <ViewModal
         visibility={viewURLs}
         setVisibility={setViewURLs}
-        post={record}
+        meeting={record}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">
@@ -156,6 +154,7 @@ export default function MeetingsList() {
                 {
                   _keys: "date",
                   _styles: "text-center",
+                  _format: data => new Date(data).toLocaleString(),
                 },
               ]}
               handlers={[handleURLs, handleUpdate, handleArchive]}

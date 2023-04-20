@@ -21,31 +21,41 @@ let readHTMLFile = (path, cb) =>
     }
   });
 
-exports.sendCode = (req, res) =>
-  readHTMLFile("./mails/code.html", (err, html) => {
-    let template = handlebars.compile(html);
-    let replacements = {
-      code: req.body.code,
-      message: req.body.message,
-      username: req.body.username,
-      appName: process.env.APP_NAME,
-    };
-    let htmlToSend = template(replacements);
-    let msg = {
-      from: `${process.env.APP_NAME} Team <${process.env.EMAIL_USER}>`,
-      to: req.body.to,
-      subject: req.body.subject,
-      html: htmlToSend,
-      attachments: [
-        {
-          filename: "logo.png",
-          path: "./assets/logo.png",
-          cid: "aplogo",
-        },
-      ],
-    };
-    transporter
-      .sendMail(msg)
-      .then(() => res.json({ message: "Email sent successfully." }))
-      .catch(err => res.json({ message: err }));
-  });
+exports.announce = (req, res) => {
+  const { meeting, recipients } = req.body;
+
+  for (const recipient of recipients) {
+    readHTMLFile("./mails/announcement.html", async (err, html) => {
+      let template = handlebars.compile(html);
+      let replacements = {
+        content: meeting.content,
+        title: meeting.title,
+        appName: process.env.APP_NAME,
+      };
+      let htmlToSend = template(replacements);
+      let msg = {
+        from: `${process.env.APP_NAME} Team <${process.env.EMAIL_USER}>`,
+        to: recipient.email,
+        subject: `${meeting.title} - ${new Date(
+          meeting.date
+        ).toLocaleString()}`,
+        html: htmlToSend,
+        attachments: [
+          {
+            filename: "logo.png",
+            path: "./assets/logo.png",
+            cid: "aplogo",
+          },
+        ],
+      };
+
+      try {
+        await transporter.sendMail(msg);
+      } catch (error) {
+        console.log(error.message);
+      }
+    });
+  }
+
+  res.json({ status: true, message: "Meeting announced successfully" });
+};

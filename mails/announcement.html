@@ -19,20 +19,17 @@
           height="175px"
           src="cid:aplogo"
         />
-        <h3 style="text-align: center; margin:0;">{{ appName }}</h3>
       </div>
 
       <div style="margin-left: 2rem;">  
         <div style="line-height: normal; font-size: 14px; text-align: left; font-size:1rem;">
-            <h3 style="font-weight: bold">Dear {{ username }},</h3>
-            <p>{{ message }}</p>
-            <p style="font-size:2rem;letter-spacing:10px;background-color: lightgray; width: fit-content;padding:0.5rem 2rem;margin:0;color: rgb(49, 48, 48);">
-                <i>{{ code }}</i>
-            </p>
+            <h3>{{ title }},</h3>
+            <p style="white-space: pre-wrap;">{{ content }}</p>
+            <hr />
             <p>
               If you didn't request for this code. Please disregard this message.
             </p>
-            <p>Thanks,<br/>The {{ appName }} Team</p>
+            <p>Best regards,<br/>The <b>{{ appName }} Team</b></p>
 
         </div>
     </div>

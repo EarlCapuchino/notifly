@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  MDBBadge,
-  MDBCard,
-  MDBCardBody,
-  MDBContainer,
-  MDBRow,
-} from "mdb-react-ui-kit";
+import { MDBCard, MDBCardBody, MDBContainer, MDBRow } from "mdb-react-ui-kit";
 import BreadCrumb from "../../../../components/breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../../../components/dataTable";
@@ -17,20 +11,20 @@ import {
   SAVE,
   DESTROY,
   UPDATE,
-} from "../../../../redux/slices/organizations/posts";
-import PostModal from "./modal";
+} from "../../../../redux/slices/organizations/meetings";
+import MeetingModal from "./modal";
 import ViewModal from "./view";
 
 const paths = [
   {
-    name: "Registered Posts",
+    name: "Registered Meetings",
   },
 ];
 
-export default function PostsList() {
+export default function MeetingsList() {
   const { theme, maxPage, token, isAdmin } = useSelector(({ auth }) => auth),
-    { catalogs, isLoading } = useSelector(({ posts }) => posts),
-    [posts, setPosts] = useState([]),
+    { catalogs, isLoading } = useSelector(({ meetings }) => meetings),
+    [meetings, setMeetings] = useState([]),
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
     [record, setRecord] = useState({}),
@@ -46,30 +40,30 @@ export default function PostsList() {
   }, [token]);
 
   useEffect(() => {
-    if (posts.length > 0) {
-      let totalPages = Math.floor(posts.length / maxPage);
-      if (posts.length % maxPage > 0) totalPages += 1;
+    if (meetings.length > 0) {
+      let totalPages = Math.floor(meetings.length / maxPage);
+      if (meetings.length % maxPage > 0) totalPages += 1;
       setTotalPages(totalPages);
 
       if (page > totalPages) {
         setPage(totalPages);
       }
     }
-  }, [posts, page, maxPage]);
+  }, [meetings, page, maxPage]);
 
   useEffect(() => {
-    setPosts(catalogs);
+    setMeetings(catalogs);
   }, [catalogs]);
 
   const handleSearch = e => {
     const key = e.target.value;
 
     if (key) {
-      setPosts(
-        catalogs.filter(catalog => catalog.name.includes(key.toUpperCase()))
+      setMeetings(
+        catalogs.filter(catalog => catalog.title.includes(key.toUpperCase()))
       );
     } else {
-      setPosts(catalogs);
+      setMeetings(catalogs);
     }
   };
 
@@ -77,7 +71,7 @@ export default function PostsList() {
     Swal.fire({
       icon: "question",
       title: "Are you sure?",
-      html: `You are about to archive <b>${data.name}</b>.`,
+      html: `You are about to archive <b>${data.title}</b>.`,
       showCancelButton: true,
       confirmButtonText: "Proceed",
     }).then(result => {
@@ -108,31 +102,31 @@ export default function PostsList() {
   return (
     <>
       <BreadCrumb
-        title="Posts List"
+        title="Meetings List"
         button={isAdmin}
         paths={paths}
         tooltip="Create new Post"
         handler={() => setModal({ visibility: true, create: true })}
       />
 
-      <PostModal
+      <MeetingModal
         modal={modal}
         setVisibility={setModal}
-        post={record}
+        meeting={record}
         handleSubmit={handleModalSubmit}
       />
 
       <ViewModal
         visibility={viewURLs}
         setVisibility={setViewURLs}
-        post={record}
+        meeting={record}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
           <MDBCardBody>
             <MDBRow>
-              <Search label="Search by Name" handler={handleSearch} />
+              <Search label="Search by Title" handler={handleSearch} />
               <Pager total={totalPages} page={page} setPage={setPage} />
             </MDBRow>
           </MDBCardBody>
@@ -140,12 +134,12 @@ export default function PostsList() {
         <MDBCard background={theme.color} className={`${theme.text}`}>
           <MDBCardBody>
             <DataTable
-              name="Posts"
-              datas={posts}
+              name="Meetings"
+              datas={meetings}
               titles={[
-                "Name",
+                "Title",
                 {
-                  _title: "URL Count",
+                  _title: "Date",
                   _styles: "text-center",
                 },
                 {
@@ -155,19 +149,19 @@ export default function PostsList() {
               ]}
               contents={[
                 {
-                  _keys: "name",
+                  _keys: "title",
                 },
                 {
-                  _keys: "urls",
+                  _keys: "date",
                   _styles: "text-center",
-                  _format: data => <MDBBadge>{data.length}</MDBBadge>,
+                  _format: data => new Date(data).toLocaleString(),
                 },
               ]}
               handlers={[handleURLs, handleUpdate, handleArchive]}
               actions={[
                 {
-                  _title: "View URLs",
-                  _icon: "link",
+                  _title: "Announce Meeting",
+                  _icon: "bullhorn",
                   _color: "info",
                   _placement: "left",
                   _function: 0,
@@ -192,7 +186,7 @@ export default function PostsList() {
               ]}
               isLoading={isLoading}
               page={page}
-              empty="Posts are empty"
+              empty="Meetings are empty"
             />
           </MDBCardBody>
         </MDBCard>

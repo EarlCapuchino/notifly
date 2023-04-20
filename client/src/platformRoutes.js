@@ -6,6 +6,8 @@ import BulkMessaging from "./pages/platforms/messaging";
 import TagPeople from "./pages/platforms/tags";
 import PostsList from "./pages/platforms/posts/list";
 import PostsArchive from "./pages/platforms/posts/archive";
+import MeetingsList from "./pages/platforms/meetings/list";
+import MeetingsArchive from "./pages/platforms/meetings/archive";
 // import Logs from "./logs";
 
 const routes = [
@@ -53,6 +55,19 @@ const routes = [
       {
         path: "archive",
         element: <PostsArchive />,
+      },
+    ],
+  },
+  {
+    path: "meetings",
+    children: [
+      {
+        path: "list",
+        element: <MeetingsList />,
+      },
+      {
+        path: "archive",
+        element: <MeetingsArchive />,
       },
     ],
   },

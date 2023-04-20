@@ -13,8 +13,7 @@ import Company from "../../fakeDb/company";
 import { BASE } from "../utilities";
 
 const Sidebar = ({ lists, show, toggle, dimensions }) => {
-  const [activeMenu, setActiveMenu] = useState(null),
-    navigate = useNavigate(),
+  const navigate = useNavigate(),
     location = useLocation(),
     [currentPath, setCurrentPath] = useState("");
 
@@ -53,11 +52,7 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
               <SidebarCard
                 list={list}
                 currentPath={currentPath}
-                setCurrentPath={setCurrentPath}
                 key={`link-${index}`}
-                activeMenu={activeMenu}
-                setActiveMenu={setActiveMenu}
-                toggle={toggle}
                 dimensions={dimensions}
               />
             );
@@ -74,7 +69,6 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
                   onClick={() => {
                     setCurrentPath(_path);
                     navigate(_path);
-                    setActiveMenu(list.name);
                     toggle();
                   }}
                   className={`m-0 px-0 w-100 shadow-0 text-light`}

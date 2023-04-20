@@ -7,9 +7,10 @@ import { useSelector } from "react-redux";
 import { socket } from "../../components/utilities";
 import Company from "../../fakeDb/company";
 import sidebar from "../../fakeDb/sidebar";
+import FlyingCards from "../../components/flyingCards";
 
 const Dashboard = () => {
-  const [show, setShow] = useState(false),
+  const [show, setShow] = useState(true),
     { theme, auth } = useSelector(state => state.auth),
     [dimensions, setDimensions] = useState({
       height: window.innerHeight,
@@ -61,6 +62,17 @@ const Dashboard = () => {
       fluid
       className={`px-0 dashboard-container pb-5 ${theme.skin} transition-all`}
     >
+      {show &&
+        sidebar
+          .filter(e => e.children)
+          ?.map((list, index) => (
+            <FlyingCards
+              key={`flying-card-${index}`}
+              list={list}
+              toggle={handleToggle}
+              dimensions={dimensions}
+            />
+          ))}
       <div className="flexible-content">
         <TopNavigation toggle={handleToggle} />
         <main

@@ -8,6 +8,8 @@ import PostsList from "./pages/platforms/posts/list";
 import PostsArchive from "./pages/platforms/posts/archive";
 import MeetingsList from "./pages/platforms/meetings/list";
 import MeetingsArchive from "./pages/platforms/meetings/archive";
+import PagesList from "./pages/platforms/pages/list";
+import PagesArchive from "./pages/platforms/pages/archive";
 // import Logs from "./logs";
 
 const routes = [
@@ -55,6 +57,19 @@ const routes = [
       {
         path: "archive",
         element: <PostsArchive />,
+      },
+    ],
+  },
+  {
+    path: "pages",
+    children: [
+      {
+        path: "list",
+        element: <PagesList />,
+      },
+      {
+        path: "archive",
+        element: <PagesArchive />,
       },
     ],
   },

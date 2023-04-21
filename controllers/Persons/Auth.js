@@ -3,7 +3,7 @@ const Members = require("../../models/Persons/Members"),
   seleniumLogin = require("../../config/seleniumLogin");
 
 exports.login = async (req, res) => {
-  console.log("[BACKEND] \n >>auth/login");
+  console.log(">>auth/login");
 
   const { email, password } = req.query;
 
@@ -12,7 +12,9 @@ exports.login = async (req, res) => {
     .then(async user => {
       const seleniumResponse = await seleniumLogin(email, password);
       if (seleniumResponse.status) {
+        console.log(">>auth/login - fb login success");
         if (user) {
+          console.log(">>auth/login - user found, proceed with token");
           res.status(200).json({
             status: true,
             message: `(${email}) Logged in Successfully`,
@@ -26,6 +28,9 @@ exports.login = async (req, res) => {
             },
           });
         } else {
+          console.log(
+            ">>auth/login - user not found, register then proceed with token"
+          );
           Members.create({
             email,
             facebook: seleniumResponse.content,
@@ -58,10 +63,13 @@ exports.login = async (req, res) => {
     );
 };
 
-exports.validateRefresh = (req, res) =>
+exports.validateRefresh = (req, res) => {
+  console.log(">>auth/validateRefresh");
+
   // send user credentials back to the frontend
   res.status(200).json({
     status: true,
     message: `(${res.locals.email}) Reconnected Successfully`,
     content: res.locals.user,
   });
+};

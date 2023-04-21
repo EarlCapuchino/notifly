@@ -22,6 +22,8 @@ let readHTMLFile = (path, cb) =>
   });
 
 exports.announce = (req, res) => {
+  console.log(">>mailer/announce");
+
   const { meeting, recipients } = req.body;
 
   for (const recipient of recipients) {
@@ -51,7 +53,9 @@ exports.announce = (req, res) => {
 
       try {
         await transporter.sendMail(msg);
+        console.log(">>mailer/announce - announcement sent");
       } catch (error) {
+        console.log(">>mailer/announce - announcement error");
         console.log(error.message);
       }
     });

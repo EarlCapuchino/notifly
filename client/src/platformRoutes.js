@@ -12,6 +12,8 @@ import PagesList from "./pages/platforms/pages/list";
 import PagesArchive from "./pages/platforms/pages/archive";
 import GroupChatsList from "./pages/platforms/groupChats/list";
 import GroupChatsArchive from "./pages/platforms/groupChats/archive";
+import FBGroupsList from "./pages/platforms/fbGroups/list";
+import FBGroupsArchive from "./pages/platforms/fbGroups/archive";
 // import Logs from "./logs";
 
 const routes = [
@@ -98,6 +100,19 @@ const routes = [
       {
         path: "archive",
         element: <GroupChatsArchive />,
+      },
+    ],
+  },
+  {
+    path: "fbgroups",
+    children: [
+      {
+        path: "list",
+        element: <FBGroupsList />,
+      },
+      {
+        path: "archive",
+        element: <FBGroupsArchive />,
       },
     ],
   },

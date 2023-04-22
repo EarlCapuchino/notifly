@@ -326,3 +326,106 @@ exports.sharing = async (req, res) => {
     });
   }
 };
+
+// Function for tagging one or more Facebook users in a post or comment
+exports.posting = async (req, res) => {
+  console.log(">>selenium/posting");
+
+  // Call the seleniumLogin function to log in to a Facebook account
+  const seleniumResponse = await seleniumLogin(
+    res.locals.email,
+    res.locals.password
+  );
+
+  // Check the status of the response
+  const { status, driver } = seleniumResponse;
+
+  // If login was successful
+  if (status) {
+    console.log(">>selenium/posting - fb login success");
+
+    const { recipients, message } = req.body;
+
+    var response = {
+      code: 200,
+      status: true,
+      message: "Members tagged successfully",
+    };
+
+    try {
+      // Loop through each recipient object in the recipients array
+      for (const recipient of recipients) {
+        // Replace all newline characters in the message with SHIFT+ENTER keystrokes and replace "@{nickname}" with the recipient's nickname or Facebook username
+        var parsedMessage = message.replaceAll(
+          "\n",
+          Key.chord(Key.SHIFT, Key.ENTER)
+        );
+
+        try {
+          // Construct the URL for the recipient's message thread and log it
+          var url = recipient;
+          console.log(`Processing URL: ${url}`);
+
+          // Navigate to the recipient's message thread
+          await driver.get(url);
+
+          // Wait for the message input element to load and send the parsed message along with an ENTER keystroke to send the message
+          const postInput = await driver.wait(
+            until.elementLocated(
+              By.xpath("//*[contains(text(),'Write something...')]")
+            )
+          );
+
+          if (postInput) {
+            postInput.click();
+
+            try {
+              const messageInput = await driver.wait(
+                until.elementLocated(By.css('div[class="_1mf _1mj"]'))
+              );
+
+              if (messageInput) {
+                await messageInput.sendKeys(parsedMessage);
+
+                const postBtn = await driver.wait(
+                  until.elementLocated(By.css('div[aria-label="Post"]'))
+                );
+
+                if (postBtn) {
+                  postBtn.click();
+
+                  console.log(`>>selenium/posting - ${url} success`);
+                  await driver.sleep(5000);
+                }
+              }
+            } catch (error) {
+              console.log(">>selenium/posting - third error");
+              console.log(error.message);
+            }
+          }
+        } catch (error) {
+          console.log(">>selenium/posting - second error");
+          console.log(error.message);
+        }
+      }
+    } catch (error) {
+      console.log(`>>selenium/posting - ${url} error`);
+      response.code = 400;
+      response.status = false;
+      response.message = error.message;
+      console.log(error.message);
+    } finally {
+      // Quit the browser driver when finished
+      await driver.quit();
+    }
+
+    res.status(response.code).json(response);
+  } else {
+    console.log(">>selenium/posting - fb login failed");
+
+    res.status(400).json({
+      status: false,
+      message: seleniumResponse.message,
+    });
+  }
+};

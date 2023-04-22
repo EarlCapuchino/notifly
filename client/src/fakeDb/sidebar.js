@@ -10,9 +10,21 @@ const Sidebar = [
     path: "tags",
   },
   {
-    name: "FB group",
+    name: "FB Group",
     icon: "boxes",
-    path: "groups",
+    path: "fbgroups",
+    children: [
+      {
+        name: "List",
+        icon: "clipboard-list",
+        path: "list",
+      },
+      {
+        name: "Archive",
+        icon: "folder-minus",
+        path: "archive",
+      },
+    ],
   },
   {
     name: "Group Chats",

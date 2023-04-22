@@ -118,7 +118,7 @@ export default function BasicForm({ visibility, setVisibility, auth }) {
               >
                 Close
               </MDBBtn>
-              <MDBBtn color="success">Save changes</MDBBtn>
+              <MDBBtn color="warning">Save changes</MDBBtn>
             </MDBModalFooter>
           </form>
         </MDBModalContent>

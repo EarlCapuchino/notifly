@@ -114,7 +114,7 @@ export default function GenerateMessage({
             </MDBBtn>
             <MDBBtn
               type="button"
-              color="success"
+              color="warning"
               disabled={loading}
               className="shadow-0"
               onClick={handleSend}

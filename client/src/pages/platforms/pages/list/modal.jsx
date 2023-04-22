@@ -166,7 +166,7 @@ export default function PageModal({
                   toast.warn("Please specify at least one(1) valid URL");
                 }
               }}
-              color="success"
+              color="warning"
             >
               submit
             </MDBBtn>

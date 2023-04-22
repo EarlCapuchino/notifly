@@ -184,7 +184,7 @@ export default function PagesList() {
                 {
                   _title: "Archive",
                   _icon: "folder-minus",
-                  _color: "warning",
+                  _color: "danger",
                   _placement: "right",
                   _function: 2,
                   _condition: () => isAdmin,

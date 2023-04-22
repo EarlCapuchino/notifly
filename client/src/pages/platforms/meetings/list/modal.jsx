@@ -103,7 +103,7 @@ export default function MeetingModal({
               >
                 Close
               </MDBBtn>
-              <MDBBtn type="submit" color="success">
+              <MDBBtn type="submit" color="warning">
                 submit
               </MDBBtn>
             </MDBModalFooter>

@@ -53,8 +53,8 @@ const TopNavigation = ({ toggle }) => {
             <MDBNavbarItem
               className={`${theme.text} ms-md-5 ms-2 d-flex align-items-center`}
             >
-              <MDBTypography tag="h4" className="mb-0">
-                <strong>Notifly</strong>
+              <MDBTypography tag="h4" className="mb-0 text-muted">
+                Notifly
               </MDBTypography>
             </MDBNavbarItem>
             <span className="d-flex">

@@ -208,7 +208,7 @@ export default function ViewModal({ visibility, setVisibility, meeting }) {
             <MDBBtn
               onClick={handleAnnouncement}
               disabled={loading}
-              color="success"
+              color="warning"
             >
               {loading ? <MDBIcon far icon="clock" spin /> : "announcement"}
             </MDBBtn>

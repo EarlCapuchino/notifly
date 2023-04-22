@@ -3,8 +3,9 @@ import {
   MDBListGroupItem,
   MDBListGroup,
   MDBIcon,
-  MDBTypography,
   MDBBtn,
+  MDBRow,
+  MDBCol,
 } from "mdb-react-ui-kit";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./index.css";
@@ -17,12 +18,7 @@ import { useDispatch } from "react-redux";
 const Sidebar = ({ lists, show, toggle, dimensions }) => {
   const navigate = useNavigate(),
     location = useLocation(),
-    [currentPath, setCurrentPath] = useState(""),
     dispatch = useDispatch();
-
-  useEffect(() => {
-    setCurrentPath(location.pathname);
-  }, [location]);
 
   return (
     <div
@@ -54,7 +50,7 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
             return (
               <SidebarCard
                 list={list}
-                currentPath={currentPath}
+                currentPath={location.pathname}
                 key={`link-${index}`}
                 dimensions={dimensions}
               />
@@ -71,31 +67,36 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
                 <MDBBtn
                   onClick={() => {
                     dispatch(SIDEBAR(""));
-                    setCurrentPath(_path);
                     navigate(_path);
                     if (dimensions.width <= 768) {
                       toggle();
                     }
                   }}
                   className="m-0 px-0 w-100 shadow-0 text-light border-0"
-                  outline
-                  color="transparent"
+                  outline={location.pathname !== _path}
+                  color={location.pathname === _path ? "light" : "transparent"}
                 >
-                  <MDBIcon
-                    icon={list.icon}
-                    size={dimensions.height < 800 ? "lg" : "2x"}
-                    className={`text-${
-                      currentPath === _path ? "warning" : "light"
-                    }`}
-                  />
-                  <MDBTypography
-                    tag="h6"
-                    className={`special-header mb-1 text-${
-                      currentPath === _path ? "warning" : "light"
-                    }`}
-                  >
-                    {list.name}
-                  </MDBTypography>
+                  <MDBRow>
+                    <MDBCol
+                      className="d-flex align-items-center justify-content-center"
+                      size={3}
+                    >
+                      <MDBIcon
+                        icon={list.icon}
+                        size={dimensions.height < 800 ? "lg" : "2x"}
+                        className={`ms-4 text-${
+                          location.pathname === _path ? "primary" : "light"
+                        }`}
+                      />
+                    </MDBCol>
+                    <MDBCol
+                      className={`text-start text-capitalize ps-3 text-${
+                        location.pathname === _path ? "primary" : "light"
+                      }`}
+                    >
+                      {list.name}
+                    </MDBCol>
+                  </MDBRow>
                 </MDBBtn>
               </MDBListGroupItem>
             );

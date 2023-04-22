@@ -105,7 +105,7 @@
 }
 
 .custom-sidebar-dropdown-content {
-  position: absolute;
+  position: fixed;
   z-index: 1051;
   /* top: -1.75rem;
   left: 8.75rem; */

@@ -72,7 +72,7 @@ export default function ViewModal({ visibility, setVisibility, page }) {
             <MDBBtn disabled={loading} onClick={handleLikes}>
               {loading ? <MDBIcon far icon="clock" spin /> : "like"}
             </MDBBtn>
-            <MDBBtn disabled={loading} color="success">
+            <MDBBtn disabled={loading} color="warning">
               {loading ? <MDBIcon far icon="clock" spin /> : "share"}
             </MDBBtn>
           </MDBModalFooter>

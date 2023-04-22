@@ -16,12 +16,12 @@ const currentPath = "";
 export default function FlyingCards({ list, toggle, dimensions }) {
   const { showCard, theme } = useSelector(({ auth }) => auth),
     navigate = useNavigate(),
-    dispatch = useDispatch();
-
-  const [position, setPosition] = useState({
+    dispatch = useDispatch(),
+    [position, setPosition] = useState({
       top: 0,
       left: 0,
     }),
+    [offset, setOffset] = useState(30),
     [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -33,6 +33,18 @@ export default function FlyingCards({ list, toggle, dimensions }) {
           left: div.offsetLeft,
         });
         setShow(true);
+
+        const divTop = div.offsetTop;
+        const divHeight = div.offsetHeight;
+        const windowHeight = window.innerHeight;
+        const windowBottom = window.pageYOffset + windowHeight;
+        const distanceFromBottom = windowBottom - (divTop + divHeight);
+
+        if (distanceFromBottom <= 100) {
+          setOffset(75);
+        } else {
+          setOffset(30);
+        }
       }
     } else {
       setShow(false);
@@ -45,7 +57,7 @@ export default function FlyingCards({ list, toggle, dimensions }) {
         show ? "d-block" : "d-none"
       }`}
       style={{
-        top: position.top - 30,
+        top: position.top - offset,
         left: position.left + 140,
         backgroundColor: theme.bgHex,
       }}

@@ -30,10 +30,10 @@ announce meeting
 -select from members
 -then email stuff to them
 
-fb group list (still not added)
+fb group list
 -can post in groups
 
-group chat list (still not added)
+group chat list
 -message multiple gcs
 
 -option to add all before sending

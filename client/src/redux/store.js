@@ -4,6 +4,7 @@ import clusters from "./slices/organizations/clusters";
 import posts from "./slices/organizations/posts";
 import pages from "./slices/organizations/pages";
 import meetings from "./slices/organizations/meetings";
+import groupchats from "./slices/organizations/groupchats";
 import members from "./slices/persons/members";
 
 export const store = configureStore({
@@ -14,5 +15,6 @@ export const store = configureStore({
     posts,
     meetings,
     pages,
+    groupchats,
   },
 });

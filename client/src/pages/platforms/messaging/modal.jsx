@@ -53,7 +53,7 @@ export default function GenerateMessage({
       setLoading(true);
       const response = await selenium(
         "messaging",
-        { message, recipients },
+        { message, recipients, type: "pm" },
         token
       );
       if (response) {

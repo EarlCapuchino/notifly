@@ -10,6 +10,8 @@ import MeetingsList from "./pages/platforms/meetings/list";
 import MeetingsArchive from "./pages/platforms/meetings/archive";
 import PagesList from "./pages/platforms/pages/list";
 import PagesArchive from "./pages/platforms/pages/archive";
+import GroupChatsList from "./pages/platforms/groupChats/list";
+import GroupChatsArchive from "./pages/platforms/groupChats/archive";
 // import Logs from "./logs";
 
 const routes = [
@@ -83,6 +85,19 @@ const routes = [
       {
         path: "archive",
         element: <MeetingsArchive />,
+      },
+    ],
+  },
+  {
+    path: "groupchats",
+    children: [
+      {
+        path: "list",
+        element: <GroupChatsList />,
+      },
+      {
+        path: "archive",
+        element: <GroupChatsArchive />,
       },
     ],
   },

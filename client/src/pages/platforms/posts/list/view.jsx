@@ -66,9 +66,6 @@ export default function ViewModal({ visibility, setVisibility, post }) {
             >
               Close
             </MDBBtn>
-            <MDBBtn disabled={loading} color="danger">
-              {loading ? <MDBIcon far icon="clock" spin /> : "delete"}
-            </MDBBtn>
             <MDBBtn disabled={loading} onClick={handleLikes}>
               {loading ? <MDBIcon far icon="clock" spin /> : "like"}
             </MDBBtn>

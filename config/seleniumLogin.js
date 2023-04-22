@@ -20,6 +20,7 @@ module.exports = async (email, password) => {
     .build();
 
   try {
+    console.log("here");
     await driver.get("https://facebook.com");
     await driver.findElement(By.name("email")).sendKeys(email);
     await driver.findElement(By.name("pass")).sendKeys(password, Key.RETURN);

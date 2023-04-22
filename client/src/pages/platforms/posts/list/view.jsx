@@ -22,7 +22,11 @@ export default function ViewModal({ visibility, setVisibility, post }) {
 
   const handleLikes = async () => {
     setLoading(true);
-    const response = await selenium("liking", { urls: post.urls }, token);
+    const response = await selenium(
+      "liking",
+      { urls: post.urls, ariaLabel: "Remove Like" },
+      token
+    );
     if (response) {
       toast.success("Posts liked successfully");
       setLoading(false);

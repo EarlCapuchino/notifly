@@ -168,7 +168,7 @@ exports.liking = async (req, res) => {
   if (status) {
     console.log(">>selenium/liking - fb login success");
 
-    const { urls } = req.body;
+    const { urls, ariaLabel } = req.body;
 
     var response = {
       code: 200,
@@ -183,7 +183,7 @@ exports.liking = async (req, res) => {
           await driver.get(url);
 
           const removeLike = await driver.findElement(
-            By.css('div[aria-label="Remove Like"]')
+            By.css(`div[aria-label="${ariaLabel}"]`)
           );
 
           if (removeLike) {

@@ -22,7 +22,11 @@ export default function ViewModal({ visibility, setVisibility, page }) {
 
   const handleLikes = async () => {
     setLoading(true);
-    const response = await selenium("liking", { urls: page.urls }, token);
+    const response = await selenium(
+      "liking",
+      { urls: page.urls, ariaLabel: "Liked" },
+      token
+    );
     if (response) {
       toast.success("Pages liked successfully");
       setLoading(false);
@@ -66,14 +70,8 @@ export default function ViewModal({ visibility, setVisibility, page }) {
             >
               Close
             </MDBBtn>
-            <MDBBtn disabled={loading} color="danger">
-              {loading ? <MDBIcon far icon="clock" spin /> : "delete"}
-            </MDBBtn>
             <MDBBtn disabled={loading} onClick={handleLikes}>
               {loading ? <MDBIcon far icon="clock" spin /> : "like"}
-            </MDBBtn>
-            <MDBBtn disabled={loading} color="warning">
-              {loading ? <MDBIcon far icon="clock" spin /> : "share"}
             </MDBBtn>
           </MDBModalFooter>
         </MDBModalContent>

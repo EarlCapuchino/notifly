@@ -101,8 +101,8 @@ export default function PagesList() {
   };
 
   const handleURLs = data => {
-    // setRecord(data);
-    // setViewURLs(true);
+    setRecord(data);
+    setViewURLs(true);
   };
 
   return (

@@ -28,6 +28,7 @@ export default function TagPeople() {
     [page, setPage] = useState(1),
     [totalPages, setTotalPages] = useState(1),
     [generateTags, setGenerateTags] = useState(false),
+    [selectAll, setSelectAll] = useState(false),
     dispatch = useDispatch();
 
   useEffect(() => {
@@ -63,6 +64,10 @@ export default function TagPeople() {
   };
 
   const handleClusterToggle = data => {
+    if (data.isSelected === true && selectAll === true) {
+      setSelectAll(false);
+    }
+
     const newArr = [...clusters];
 
     const index = newArr.findIndex(e => e._id === data._id);
@@ -84,6 +89,20 @@ export default function TagPeople() {
     } else {
       toast.warn("Please select a cluster first");
     }
+  };
+
+  const handleMultiple = () => {
+    setSelectAll(!selectAll);
+
+    const newArr = [...clusters];
+
+    const container = newArr?.map(item => {
+      const newObj = { ...item };
+      newObj.isSelected = !selectAll;
+      return newObj;
+    });
+
+    setClusters(container);
   };
 
   return (
@@ -116,6 +135,11 @@ export default function TagPeople() {
             <DataTable
               name="Clusters"
               datas={clusters}
+              extraBtn={{
+                _text: selectAll ? "deselect all" : "select all",
+                _color: selectAll ? "danger" : "success",
+                _handler: handleMultiple,
+              }}
               titles={[
                 "Name",
                 {

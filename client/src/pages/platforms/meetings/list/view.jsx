@@ -24,6 +24,22 @@ import { BROWSE } from "../../../../redux/slices/persons/members";
 import axios from "axios";
 
 function MembersList({ members, catalogs, setMembers, loading }) {
+  const [selectAll, setSelectAll] = useState(false);
+
+  const handleSelect = () => {
+    setSelectAll(!selectAll);
+
+    const newArr = [...members];
+
+    const container = newArr?.map(item => {
+      const newObj = { ...item };
+      newObj.isSelected = !selectAll;
+      return newObj;
+    });
+
+    setMembers(container);
+  };
+
   const handleSearch = e => {
     const key = e.target.value;
 
@@ -41,12 +57,19 @@ function MembersList({ members, catalogs, setMembers, loading }) {
   return (
     <MDBCol md={5} className="mt-2 mt-md-0">
       <MDBListGroup>
-        <MDBListGroupItem>
+        <MDBListGroupItem className="d-flex align-items-center justify-content-between">
           <MDBInput
             onChange={handleSearch}
             type="search"
             label="Search by E-mail Address"
           />
+          <MDBBtn
+            onClick={handleSelect}
+            color={selectAll ? "danger" : "success"}
+            size="sm"
+          >
+            {selectAll ? "deselect all" : "select all"}
+          </MDBBtn>
         </MDBListGroupItem>
         {members?.map((member, index) => (
           <MDBListGroupItem key={member.email}>
@@ -65,6 +88,10 @@ function MembersList({ members, catalogs, setMembers, loading }) {
                 <MDBBtn
                   disabled={loading}
                   onClick={() => {
+                    if (member.isSelected === true && selectAll === true) {
+                      setSelectAll(false);
+                    }
+
                     const newArr = [...members],
                       newObj = { ...newArr[index] };
 
@@ -72,7 +99,6 @@ function MembersList({ members, catalogs, setMembers, loading }) {
 
                     newArr[index] = newObj;
 
-                    // newArr[index].isSelected = member.isSelected ? false : true;
                     setMembers(newArr);
                   }}
                   size="sm"

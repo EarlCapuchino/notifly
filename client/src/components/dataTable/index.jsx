@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MDBTable } from "mdb-react-ui-kit";
+import { MDBBtn, MDBCol, MDBRow, MDBTable } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import TableHead from "./head";
 import TableBody from "./body";
@@ -14,6 +14,7 @@ export default function DataTable({
   isLoading = false,
   page = 1,
   empty = "",
+  extraBtn = {},
 }) {
   const { theme } = useSelector(({ auth }) => auth),
     [width, setWidth] = useState(window.innerWidth);
@@ -40,6 +41,20 @@ export default function DataTable({
     return () => window.removeEventListener("resize", debounceResize);
   }, []);
 
+  const handleExtraBtn = () => {
+    const { _text, _handler, _color, _disabled } = extraBtn;
+
+    if (_text) {
+      return (
+        <MDBCol onClick={_handler} className="text-end">
+          <MDBBtn disabled={_disabled} color={_color} size="sm">
+            {_text}
+          </MDBBtn>
+        </MDBCol>
+      );
+    }
+  };
+
   return (
     <MDBTable
       borderless
@@ -52,7 +67,14 @@ export default function DataTable({
       className="my-0"
     >
       <caption className={`${theme.text} caption-top pb-1`}>
-        Total of <b>{datas.length}</b> item(s)
+        <MDBRow>
+          <MDBCol>
+            <span>
+              Total of <b>{datas.length}</b> item(s)
+            </span>
+          </MDBCol>
+          {handleExtraBtn()}
+        </MDBRow>
       </caption>
 
       <TableHead

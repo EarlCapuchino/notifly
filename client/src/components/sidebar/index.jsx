@@ -11,11 +11,14 @@ import "./index.css";
 import SidebarCard from "./card";
 import Company from "../../fakeDb/company";
 import { BASE } from "../utilities";
+import { SIDEBAR } from "../../redux/slices/persons/auth";
+import { useDispatch } from "react-redux";
 
 const Sidebar = ({ lists, show, toggle, dimensions }) => {
   const navigate = useNavigate(),
     location = useLocation(),
-    [currentPath, setCurrentPath] = useState("");
+    [currentPath, setCurrentPath] = useState(""),
+    dispatch = useDispatch();
 
   useEffect(() => {
     setCurrentPath(location.pathname);
@@ -35,7 +38,7 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
         style={{ height: dimensions.width <= 768 ? "4.5rem" : "7.5rem" }}
       >
         <img
-          src={Company.logo}
+          src={Company.icon}
           draggable={false}
           style={{
             width: dimensions.width <= 768 ? "3rem" : "4.5rem",
@@ -67,24 +70,28 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
               >
                 <MDBBtn
                   onClick={() => {
+                    dispatch(SIDEBAR(""));
                     setCurrentPath(_path);
                     navigate(_path);
-                    toggle();
+                    if (dimensions.width <= 768) {
+                      toggle();
+                    }
                   }}
-                  className={`m-0 px-0 w-100 shadow-0 text-light`}
+                  className="m-0 px-0 w-100 shadow-0 text-light border-0"
+                  outline
                   color="transparent"
                 >
                   <MDBIcon
                     icon={list.icon}
                     size={dimensions.height < 800 ? "lg" : "2x"}
                     className={`text-${
-                      currentPath === _path ? "primary" : "muted"
+                      currentPath === _path ? "warning" : "light"
                     }`}
                   />
                   <MDBTypography
                     tag="h6"
                     className={`special-header mb-1 text-${
-                      currentPath === _path ? "light" : "muted"
+                      currentPath === _path ? "warning" : "light"
                     }`}
                   >
                     {list.name}

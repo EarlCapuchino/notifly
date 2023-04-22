@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <MDBContainer fluid style={{ backgroundColor: "#f6e7d8", height: "100vh" }}>
+    <MDBContainer fluid style={{ backgroundColor: "#064395", height: "100vh" }}>
       <MDBCol
         size={10}
         sm={10}
@@ -93,7 +93,7 @@ const Login = () => {
                   onClick={() => setShow(!show)}
                 />
               </div>
-              <MDBBtn className="w-100" color="success" disabled={isLoading}>
+              <MDBBtn className="w-100" disabled={isLoading}>
                 {isLoading ? <MDBSpinner grow size="sm" /> : "log in"}
               </MDBBtn>
             </form>

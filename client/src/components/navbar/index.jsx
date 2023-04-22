@@ -7,6 +7,8 @@ import {
   MDBNavbarBrand,
   MDBCol,
   MDBNavbarNav,
+  MDBNavbarItem,
+  MDBTypography,
 } from "mdb-react-ui-kit";
 import Company from "../../fakeDb/company";
 import { useSelector } from "react-redux";
@@ -47,12 +49,21 @@ const TopNavigation = ({ toggle }) => {
         </MDBCol>
 
         <MDBCol>
-          <MDBNavbarNav className="d-flex flex-row justify-content-end">
-            <NavbarAdminToggle />
-            {/* <NavbarTodo /> */}
-            {/* <NavbarNotifications /> */}
-            <NavSettings />
-            <NavbarProfile />
+          <MDBNavbarNav className="d-flex flex-row justify-content-between">
+            <MDBNavbarItem
+              className={`${theme.text} ms-md-5 ms-2 d-flex align-items-center`}
+            >
+              <MDBTypography tag="h4" className="mb-0">
+                <strong>Notifly</strong>
+              </MDBTypography>
+            </MDBNavbarItem>
+            <span className="d-flex">
+              <NavbarAdminToggle />
+              {/* <NavbarTodo /> */}
+              {/* <NavbarNotifications /> */}
+              <NavSettings />
+              <NavbarProfile />
+            </span>
           </MDBNavbarNav>
         </MDBCol>
       </MDBContainer>

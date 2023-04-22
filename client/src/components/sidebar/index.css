@@ -12,7 +12,7 @@
   z-index: 1050;
   overflow-x: auto;
   padding-top: 0;
-  background-color: #1f1e2c;
+  background-color: #1c549c;
 }
 
 .sidebar-fixed::-webkit-scrollbar {
@@ -21,7 +21,7 @@
 }
 
 .sidebar-fixed .logo-wrapper {
-  background-color: #1b1a29;
+  background-color: #064395;
   position: sticky;
   top: 0;
   z-index: 5;

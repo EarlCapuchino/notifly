@@ -33,7 +33,8 @@ const SidebarCard = ({ list, currentPath, dimensions }) => {
       id={`sidebar-${list.path}`}
     >
       <MDBBtn
-        className="dropbtn-sidebar m-0 px-0 w-100 shadow-0 text-light"
+        className="dropbtn-sidebar m-0 px-0 w-100 shadow-0 text-light border-0"
+        outline
         color="transparent"
         onClick={() =>
           dispatch(SIDEBAR(showCard === list.path ? "" : list.path))
@@ -42,11 +43,11 @@ const SidebarCard = ({ list, currentPath, dimensions }) => {
         <MDBIcon
           icon={list.icon}
           size={dimensions.height < 800 ? "lg" : "2x"}
-          className={`text-${active ? "primary" : "muted"}`}
+          className={`text-${active ? "warning" : "light"}`}
         />
         <MDBTypography
           tag="h6"
-          className={`special-header mb-1 text-${active ? "light" : "muted"}`}
+          className={`special-header mb-1 text-${active ? "warning" : "light"}`}
         >
           {list.name}
         </MDBTypography>

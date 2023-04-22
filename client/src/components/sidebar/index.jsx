@@ -60,9 +60,7 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
             return (
               <MDBListGroupItem
                 key={`sidebar-link-${index}`}
-                className={`border-0 bg-transparent p-0 ${
-                  dimensions.height > 800 && "py-lg-2"
-                }`}
+                className="border-0 bg-transparent px-0 py-2"
               >
                 <MDBBtn
                   onClick={() => {

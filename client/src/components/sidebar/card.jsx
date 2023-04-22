@@ -29,7 +29,7 @@ const SidebarCard = ({ list, currentPath, dimensions }) => {
   return (
     <MDBListGroupItem
       className={`border-0 bg-transparent p-0 ${
-        dimensions.height > 800 && "py-lg-3"
+        dimensions.height > 800 && "py-lg-2"
       }`}
       id={`sidebar-${list.path}`}
     >
@@ -48,7 +48,7 @@ const SidebarCard = ({ list, currentPath, dimensions }) => {
           >
             <MDBIcon
               icon={list.icon}
-              size={dimensions.height < 800 ? "lg" : "2x"}
+              size="lg"
               className={`ms-4 text-${active ? "primary" : "light"}`}
             />
           </MDBCol>

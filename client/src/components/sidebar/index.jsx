@@ -60,8 +60,8 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
             return (
               <MDBListGroupItem
                 key={`sidebar-link-${index}`}
-                className={`border-0 bg-transparent p-0  ${
-                  dimensions.height > 800 && "py-lg-3"
+                className={`border-0 bg-transparent p-0 ${
+                  dimensions.height > 800 && "py-lg-2"
                 }`}
               >
                 <MDBBtn
@@ -83,7 +83,7 @@ const Sidebar = ({ lists, show, toggle, dimensions }) => {
                     >
                       <MDBIcon
                         icon={list.icon}
-                        size={dimensions.height < 800 ? "lg" : "2x"}
+                        size="lg"
                         className={`ms-4 text-${
                           location.pathname === _path ? "primary" : "light"
                         }`}

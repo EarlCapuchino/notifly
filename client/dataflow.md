@@ -31,5 +31,9 @@ announce meeting
 -then email stuff to them
 
 fb group list (still not added)
+-can post in groups
 
 group chat list (still not added)
+-message multiple gcs
+
+-option to add all before sending

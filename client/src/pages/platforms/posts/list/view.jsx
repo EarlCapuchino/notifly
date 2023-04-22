@@ -30,6 +30,16 @@ export default function ViewModal({ visibility, setVisibility, post }) {
     }
   };
 
+  const handleShares = async () => {
+    setLoading(true);
+    const response = await selenium("sharing", { urls: post.urls }, token);
+    if (response) {
+      toast.success("Posts shared successfully");
+      setLoading(false);
+      setVisibility(false);
+    }
+  };
+
   return (
     <MDBModal staticBackdrop show={visibility} tabIndex="-1">
       <MDBModalDialog centered size="lg">
@@ -69,7 +79,7 @@ export default function ViewModal({ visibility, setVisibility, post }) {
             <MDBBtn disabled={loading} onClick={handleLikes}>
               {loading ? <MDBIcon far icon="clock" spin /> : "like"}
             </MDBBtn>
-            <MDBBtn disabled={loading} color="warning">
+            <MDBBtn disabled={loading} onClick={handleShares} color="warning">
               {loading ? <MDBIcon far icon="clock" spin /> : "share"}
             </MDBBtn>
           </MDBModalFooter>

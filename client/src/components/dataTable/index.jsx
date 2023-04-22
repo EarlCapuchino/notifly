@@ -67,7 +67,7 @@ export default function DataTable({
       className="my-0"
     >
       <caption className={`${theme.text} caption-top pb-1`}>
-        <MDBRow>
+        <MDBRow className="p-0 m-0">
           <MDBCol>
             <span>
               Total of <b>{datas.length}</b> item(s)

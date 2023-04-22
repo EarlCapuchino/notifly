@@ -15,9 +15,21 @@ const Sidebar = [
     path: "groups",
   },
   {
-    name: "Group chats",
+    name: "Group Chats",
     icon: "comments",
-    path: "gc",
+    path: "groupchats",
+    children: [
+      {
+        name: "List",
+        icon: "clipboard-list",
+        path: "list",
+      },
+      {
+        name: "Archive",
+        icon: "folder-minus",
+        path: "archive",
+      },
+    ],
   },
   {
     name: "Posts",

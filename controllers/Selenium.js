@@ -25,18 +25,32 @@ exports.messages = async (req, res) => {
       message: "Members messaged successfully",
     };
 
-    const { message, recipients } = req.body;
+    const { message, recipients, type } = req.body;
 
     try {
       // Loop through each recipient object in the recipients array
       for (const recipient of recipients) {
         // Replace all newline characters in the message with SHIFT+ENTER keystrokes and replace "@{nickname}" with the recipient's nickname or Facebook username
-        var parsedMessage = message
-          .replaceAll("\n", Key.chord(Key.SHIFT, Key.ENTER))
-          .replaceAll("@{nickname}", recipient.nickname || recipient.facebook);
+        var parsedMessage = message.replaceAll(
+          "\n",
+          Key.chord(Key.SHIFT, Key.ENTER)
+        );
+
+        if (type === "pm") {
+          parsedMessage = parsedMessage.replaceAll(
+            "@{nickname}",
+            recipient.nickname || recipient.facebook
+          );
+        }
 
         // Construct the URL for the recipient's message thread and log it
-        const url = `https://facebook.com/messages/t/${recipient.messengerId}`;
+        var url = "";
+        if (type === "pm") {
+          url = `https://facebook.com/messages/t/${recipient.messengerId}`;
+        } else {
+          url = recipient;
+        }
+
         console.log(`Processing URL: ${url}`);
 
         // Navigate to the recipient's message thread

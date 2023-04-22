@@ -12,6 +12,7 @@ import DataTable from "../../../components/dataTable";
 import Pager from "../../../components/pager";
 import Search from "../../../components/search";
 import { BROWSE } from "../../../redux/slices/organizations/clusters";
+import { BROWSE as POSTS } from "../../../redux/slices/organizations/posts";
 import { toast } from "react-toastify";
 import GenerateTags from "./modal";
 
@@ -33,6 +34,7 @@ export default function TagPeople() {
 
   useEffect(() => {
     dispatch(BROWSE(token));
+    dispatch(POSTS(token));
   }, [token]);
 
   useEffect(() => {

@@ -36,7 +36,7 @@ export default function ViewModal({ visibility, setVisibility, page }) {
 
   return (
     <MDBModal staticBackdrop show={visibility} tabIndex="-1">
-      <MDBModalDialog centered size="lg">
+      <MDBModalDialog centered size="xl">
         <MDBModalContent className={`${theme.bg} ${theme.text}`}>
           <MDBModalHeader>
             <MDBModalTitle>{page.name}</MDBModalTitle>

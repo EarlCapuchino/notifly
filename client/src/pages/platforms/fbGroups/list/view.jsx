@@ -45,7 +45,7 @@ export default function ViewModal({ visibility, setVisibility, fbgroup }) {
 
   return (
     <MDBModal staticBackdrop show={visibility} tabIndex="-1">
-      <MDBModalDialog centered size="lg">
+      <MDBModalDialog centered size="xl">
         <MDBModalContent className={`${theme.bg} ${theme.text}`}>
           <MDBModalHeader>
             <MDBModalTitle>Message {fbgroup.name} List</MDBModalTitle>

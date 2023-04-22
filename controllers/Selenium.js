@@ -142,14 +142,14 @@ exports.tagging = async (req, res) => {
           await driver.sleep(1000);
           await messageInput.sendKeys(" ");
 
-          console.log(`>>selenium/messages - ${username} success`);
+          console.log(`>>selenium/tagging - ${username} success`);
         }
 
         // Send the message in the comment
         await messageInput.sendKeys(Key.ENTER);
       }
     } catch (error) {
-      console.log(`>>selenium/messages - ${username} failed`);
+      console.log(`>>selenium/tagging - ${username} failed`);
       response.code = 400;
       response.status = false;
       response.message = error.message;
@@ -161,6 +161,84 @@ exports.tagging = async (req, res) => {
     res.status(response.code).json(response);
   } else {
     console.log(">>selenium/tagging - fb login failed");
+
+    res.status(400).json({
+      status: false,
+      message: seleniumResponse.message,
+    });
+  }
+};
+
+exports.taggingMultiple = async (req, res) => {
+  console.log(">>selenium/tagging/multiple");
+
+  // Call the seleniumLogin function to log in to a Facebook account
+  const seleniumResponse = await seleniumLogin(
+    res.locals.email,
+    res.locals.password
+  );
+
+  // Check the status of the response
+  const { status, driver } = seleniumResponse;
+
+  // If login was successful
+  if (status) {
+    console.log(">>selenium/tagging/multiple - fb login success");
+
+    const { members, message, posts } = req.body;
+
+    var response = {
+      code: 200,
+      status: true,
+      message: "Members tagged successfully",
+    };
+
+    try {
+      for (const index in posts) {
+        const url = posts[index];
+        // Navigate to the Facebook page or post where the tagging will take place
+        console.log(`Processing URL: ${url}`);
+        await driver.get(url);
+
+        // Wait for the comment input element to load and send the message along with a space to create a new comment
+        const messageInput = await driver.wait(
+          until.elementLocated(By.css('div[aria-label="Write a comment"]'))
+        );
+
+        if (messageInput) {
+          await messageInput.sendKeys(`${message} `);
+
+          // Loop through the recipients array and tag each username in a separate comment
+          for (const member of members) {
+            const { username } = member;
+
+            // Send the recipient's username preceded by "@" and ENTER keystrokes to tag them in the comment
+            await messageInput.sendKeys(`@${username}`);
+            await driver.sleep(1000);
+            await messageInput.sendKeys(Key.ENTER);
+            await driver.sleep(1000);
+            await messageInput.sendKeys(" ");
+
+            console.log(`>>selenium/tagging/multiple - ${username} success`);
+          }
+
+          // Send the message in the comment
+          await messageInput.sendKeys(Key.ENTER);
+        }
+      }
+    } catch (error) {
+      console.log(`>>selenium/tagging/multiple - tagging failed`);
+      response.code = 400;
+      response.status = false;
+      response.message = error.message;
+      console.log(error.message);
+    } finally {
+      await driver.quit();
+    }
+
+    res.status(response.code).json(response);
+  } else {
+    console.log(">>selenium/tagging/multiple - fb login failed");
 
     res.status(400).json({
       status: false,

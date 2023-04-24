@@ -3,6 +3,7 @@ import ClustersArchive from "./pages/platforms/clusters/archive";
 import MembersList from "./pages/platforms/members/list";
 import MembersArchive from "./pages/platforms/members/archive";
 import BulkMessaging from "./pages/platforms/messaging";
+import ClusterMailing from "./pages/platforms/mails";
 import TagPeople from "./pages/platforms/tags";
 import PostsList from "./pages/platforms/posts/list";
 import PostsArchive from "./pages/platforms/posts/archive";
@@ -20,6 +21,10 @@ const routes = [
   {
     path: "messaging",
     element: <BulkMessaging />,
+  },
+  {
+    path: "mails",
+    element: <ClusterMailing />,
   },
   {
     path: "tags",

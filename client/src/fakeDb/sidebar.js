@@ -5,6 +5,11 @@ const Sidebar = [
     path: "messaging",
   },
   {
+    name: "Mails",
+    icon: "envelope",
+    path: "mails",
+  },
+  {
     name: "Tag people",
     icon: "tag",
     path: "tags",

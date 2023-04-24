@@ -13,15 +13,15 @@ import Pager from "../../../components/pager";
 import Search from "../../../components/search";
 import { BROWSE } from "../../../redux/slices/organizations/clusters";
 import { toast } from "react-toastify";
-import GenerateMessage from "./modal";
+import GenerateMail from "./modal";
 
 const paths = [
   {
-    name: "Generate Messages",
+    name: "Generate Mails",
   },
 ];
 
-export default function BulkMessaging() {
+export default function ClusterMailing() {
   const { theme, maxPage, token } = useSelector(({ auth }) => auth),
     { catalogs, isLoading } = useSelector(({ clusters }) => clusters),
     [clusters, setClusters] = useState([]),
@@ -118,14 +118,14 @@ export default function BulkMessaging() {
   return (
     <>
       <BreadCrumb
-        title="Messaging"
+        title="Mailing"
         button={true}
         paths={paths}
-        tooltip="Generate a message"
+        tooltip="Generate a mail"
         handler={handleMessaging}
       />
 
-      <GenerateMessage
+      <GenerateMail
         visibility={generateMessage}
         setVisibility={setGenerateMessage}
         clusters={clusters.filter(e => e.isSelected)}

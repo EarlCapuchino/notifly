@@ -21,6 +21,7 @@ exports.messages = async (req, res) => {
 
     var response = {
       code: 200,
+      skipped: [],
       status: true,
       message: "Members messaged successfully",
     };
@@ -73,13 +74,23 @@ exports.messages = async (req, res) => {
 
             // Wait for a few seconds before sending the next message
             await driver.sleep(5000);
+          } else {
+            const duplicate = response.skipped.find(
+              e => e === recipient.username
+            );
+
+            if (!duplicate) {
+              response.skipped.push(recipient.username);
+            }
           }
         } else {
           console.log(">>selenium/messaging - invalid url");
+          response.skipped.push(recipient.username);
         }
       }
     } catch (error) {
       console.log(`>>selenium/messages - ${url} error`);
+
       response.code = 400;
       response.status = false;
       response.message = error.message;
@@ -143,11 +154,13 @@ exports.tagging = async (req, res) => {
         for (const recipient of recipients) {
           const { username } = recipient;
 
+          await driver.sleep(3000);
+
           // Send the recipient's username preceded by "@" and ENTER keystrokes to tag them in the comment
           await messageInput.sendKeys(`@${username}`);
-          await driver.sleep(1000);
+          await driver.sleep(3000);
           await messageInput.sendKeys(Key.ENTER);
-          await driver.sleep(1000);
+          await driver.sleep(3000);
           await messageInput.sendKeys(" ");
 
           console.log(`>>selenium/tagging - ${username} success`);
@@ -214,6 +227,7 @@ exports.taggingMultiple = async (req, res) => {
         );
 
         if (messageInput) {
+          await driver.sleep(3000);
           await messageInput.sendKeys(`${message} `);
 
           // Loop through the recipients array and tag each username in a separate comment
@@ -222,9 +236,9 @@ exports.taggingMultiple = async (req, res) => {
 
             // Send the recipient's username preceded by "@" and ENTER keystrokes to tag them in the comment
             await messageInput.sendKeys(`@${username}`);
-            await driver.sleep(1000);
+            await driver.sleep(3000);
             await messageInput.sendKeys(Key.ENTER);
-            await driver.sleep(1000);
+            await driver.sleep(3000);
             await messageInput.sendKeys(" ");
 
             console.log(`>>selenium/tagging/multiple - ${username} success`);

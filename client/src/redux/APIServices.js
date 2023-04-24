@@ -188,6 +188,11 @@ export const selenium = async (endpoint, form, token) =>
       },
     })
     .then(res => {
+      if (res.data.skipped) {
+        if (res.data.skipped.length > 0) {
+          toast.warn(`Items skipped: ${res.data.skipped.join(", ")}`);
+        }
+      }
       return res.data.status;
     })
     .catch(err => {
@@ -196,5 +201,8 @@ export const selenium = async (endpoint, form, token) =>
         localStorage.removeItem("token");
       }
       toast.error(err.response.data.message);
-      throw new Error(err);
+      toast.error(`Error occured, will refresh automatically`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 5500);
     });

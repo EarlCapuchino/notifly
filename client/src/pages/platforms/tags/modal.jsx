@@ -79,6 +79,8 @@ export default function GenerateTags({
         }
       }
 
+      console.log(response);
+
       if (response) {
         toast.success("Recipients tagged successfully");
         setMessage("");

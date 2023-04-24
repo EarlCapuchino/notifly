@@ -85,9 +85,29 @@ export default function TableBody({
                     _placement,
                     _color,
                     _function,
+                    _style,
+                    _iconType,
+                    _iconSize,
                     _icon,
+                    _outline = true,
                     _condition,
                   } = action;
+
+                  var icon;
+
+                  switch (_iconType) {
+                    case "far":
+                      icon = <MDBIcon size={_iconSize} far icon={_icon} />;
+                      break;
+
+                    case "fab":
+                      icon = <MDBIcon size={_iconSize} fab icon={_icon} />;
+                      break;
+
+                    default:
+                      icon = <MDBIcon size={_iconSize} icon={_icon} />;
+                      break;
+                  }
 
                   if (_condition) {
                     if (_condition(data)) {
@@ -101,13 +121,14 @@ export default function TableBody({
                         >
                           <MDBBtn
                             onClick={() => handlers[_function](data)}
-                            outline
+                            outline={_outline}
+                            className={`${_style}`}
                             floating
                             color={_color}
                             size={width < 768 && "sm"}
                             key={`${name}-btn-${index}`}
                           >
-                            <MDBIcon icon={_icon} />
+                            {icon}
                           </MDBBtn>
                         </MDBTooltip>
                       );
@@ -123,13 +144,14 @@ export default function TableBody({
                       >
                         <MDBBtn
                           onClick={() => handlers[_function](data)}
-                          outline
+                          outline={_outline}
                           floating
+                          className={`${_style}`}
                           color={_color}
                           size={width < 768 && "sm"}
                           key={`${name}-btn-${index}`}
                         >
-                          <MDBIcon icon={_icon} />
+                          {icon}
                         </MDBBtn>
                       </MDBTooltip>
                     );

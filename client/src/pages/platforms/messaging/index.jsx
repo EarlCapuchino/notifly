@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
   MDBBadge,
+  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBContainer,
+  MDBIcon,
   MDBRow,
 } from "mdb-react-ui-kit";
 import BreadCrumb from "../../../components/breadcrumb";
@@ -62,6 +64,16 @@ export default function BulkMessaging() {
       setClusters(catalogs);
     }
   };
+
+  useEffect(() => {
+    if (clusters.length > 0) {
+      const selected = clusters.filter(e => e.isSelected);
+
+      if (clusters.length === selected.length) {
+        setSelectAll(true);
+      }
+    }
+  }, [clusters]);
 
   const handleClusterToggle = data => {
     if (data.isSelected === true && selectAll === true) {
@@ -165,18 +177,24 @@ export default function BulkMessaging() {
               actions={[
                 {
                   _title: "Select",
-                  _icon: "check",
-                  _color: "success",
+                  _icon: "square",
+                  _iconSize: "lg",
+                  _iconType: "far",
+                  _color: "transparent",
                   _placement: "left",
                   _function: 0,
+                  _style: "shadow-0 border-0",
                   _condition: data => !data.isSelected,
                 },
                 {
                   _title: "Remove",
-                  _icon: "times",
-                  _color: "danger",
+                  _icon: "check-square",
+                  _iconSize: "lg",
+                  _iconType: "far",
+                  _color: "transparent",
                   _placement: "left",
                   _function: 0,
+                  _style: "shadow-0 border-0",
                   _condition: data => data.isSelected,
                 },
               ]}

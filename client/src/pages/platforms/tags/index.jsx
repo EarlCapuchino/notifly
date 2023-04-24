@@ -53,6 +53,16 @@ export default function TagPeople() {
     setClusters(catalogs);
   }, [catalogs]);
 
+  useEffect(() => {
+    if (clusters.length > 0) {
+      const selected = clusters.filter(e => e.isSelected);
+
+      if (clusters.length === selected.length) {
+        setSelectAll(true);
+      }
+    }
+  }, [clusters]);
+
   const handleSearch = e => {
     const key = e.target.value;
 
@@ -167,18 +177,24 @@ export default function TagPeople() {
               actions={[
                 {
                   _title: "Select",
-                  _icon: "check",
-                  _color: "success",
+                  _icon: "square",
+                  _iconSize: "lg",
+                  _iconType: "far",
+                  _color: "transparent",
                   _placement: "left",
                   _function: 0,
+                  _style: "shadow-0 border-0",
                   _condition: data => !data.isSelected,
                 },
                 {
                   _title: "Remove",
-                  _icon: "times",
-                  _color: "danger",
+                  _icon: "check-square",
+                  _iconSize: "lg",
+                  _iconType: "far",
+                  _color: "transparent",
                   _placement: "left",
                   _function: 0,
+                  _style: "shadow-0 border-0",
                   _condition: data => data.isSelected,
                 },
               ]}

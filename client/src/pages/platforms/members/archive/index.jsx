@@ -47,7 +47,7 @@ export default function MembersArchive() {
     if (key) {
       setMembers(
         catalogs.filter(catalog =>
-          catalog.email.toLowerCase().includes(key.toLowerCase())
+          catalog.facebook.toLowerCase().includes(key.toLowerCase())
         )
       );
     } else {
@@ -76,7 +76,7 @@ export default function MembersArchive() {
         <MDBCard background={theme.color} className={`${theme.text} mb-2`}>
           <MDBCardBody>
             <MDBRow>
-              <Search label="Search by E-mail Address" handler={handleSearch} />
+              <Search label="Search by Name" handler={handleSearch} />
               <Pager total={totalPages} page={page} setPage={setPage} />
             </MDBRow>
           </MDBCardBody>

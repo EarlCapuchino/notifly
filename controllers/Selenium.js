@@ -46,28 +46,36 @@ exports.messages = async (req, res) => {
         // Construct the URL for the recipient's message thread and log it
         var url = "";
         if (type === "pm") {
-          url = `https://facebook.com/messages/t/${recipient.messengerId}`;
+          const messengerId = Date.parse(recipient.messengerId);
+
+          if (isNaN(messengerId)) {
+            url = `https://facebook.com/messages/t/${recipient.messengerId}`;
+          }
         } else {
           url = recipient;
         }
 
-        console.log(`Processing URL: ${url}`);
+        if (url) {
+          console.log(`Processing URL: ${url}`);
 
-        // Navigate to the recipient's message thread
-        await driver.get(url);
+          // Navigate to the recipient's message thread
+          await driver.get(url);
 
-        // Wait for the message input element to load and send the parsed message along with an ENTER keystroke to send the message
-        const messageInput = await driver.wait(
-          until.elementLocated(By.css('div[aria-label="Message"]'))
-        );
+          // Wait for the message input element to load and send the parsed message along with an ENTER keystroke to send the message
+          const messageInput = await driver.wait(
+            until.elementLocated(By.css('div[aria-label="Message"]'))
+          );
 
-        if (messageInput) {
-          await messageInput.sendKeys(parsedMessage, Key.ENTER);
+          if (messageInput) {
+            await messageInput.sendKeys(parsedMessage, Key.ENTER);
 
-          console.log(`>>selenium/messages - ${url} success`);
+            console.log(`>>selenium/messages - ${url} success`);
 
-          // Wait for a few seconds before sending the next message
-          await driver.sleep(5000);
+            // Wait for a few seconds before sending the next message
+            await driver.sleep(5000);
+          }
+        } else {
+          console.log(">>selenium/messaging - invalid url");
         }
       }
     } catch (error) {

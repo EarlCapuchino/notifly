@@ -10,35 +10,14 @@ exports.login = async (req, res) => {
   Members.findOne({ email })
     .select("-createdAt -updatedAt -__v")
     .then(async user => {
-      const seleniumResponse = await seleniumLogin(email, password);
-      if (seleniumResponse.status) {
-        console.log(">>auth/login - fb login success");
-        if (user) {
-          console.log(">>auth/login - user found, proceed with token");
-          res.status(200).json({
-            status: true,
-            message: `(${email}) Logged in Successfully`,
-            content: {
-              user,
-              token: generateToken({
-                id: user._id,
-                email,
-                password,
-              }),
-            },
-          });
-        } else {
-          console.log(
-            ">>auth/login - user not found, register then proceed with token"
-          );
-          Members.create({
-            email,
-            facebook: seleniumResponse.content,
-            messengerId: new Date().toLocaleString(),
-          }).then(user => {
-            res.status(201).json({
+      seleniumLogin(email, password).then(selResponse => {
+        if (selResponse.status) {
+          console.log(">>auth/login - fb login success");
+          if (user) {
+            console.log(">>auth/login - user found, proceed with token");
+            res.status(200).json({
               status: true,
-              message: `(${email}) Created Successfully`,
+              message: `(${email}) Logged in Successfully`,
               content: {
                 user,
                 token: generateToken({
@@ -48,15 +27,37 @@ exports.login = async (req, res) => {
                 }),
               },
             });
+          } else {
+            console.log(
+              ">>auth/login - user not found, register then proceed with token"
+            );
+            Members.create({
+              email,
+              facebook: seleniumResponse.content,
+              messengerId: new Date().toLocaleString(),
+            }).then(user => {
+              res.status(201).json({
+                status: true,
+                message: `(${email}) Created Successfully`,
+                content: {
+                  user,
+                  token: generateToken({
+                    id: user._id,
+                    email,
+                    password,
+                  }),
+                },
+              });
+            });
+          }
+        } else {
+          res.status(400).json({
+            status: false,
+            message: selResponse.message,
           });
         }
-      } else {
-        res.status(400).json({
-          status: false,
-          message: seleniumResponse.message,
-        });
-      }
-      seleniumResponse.driver.quit();
+        selResponse.driver.quit();
+      });
     })
     .catch(error =>
       res.status(400).json({ status: false, message: error.message })

@@ -89,6 +89,10 @@ export default function MembersArchive() {
               titles={[
                 "E-mail & Messenger ID",
                 {
+                  _title: "Facebook",
+                  _styles: "text-center",
+                },
+                {
                   _title: "Username & Nickname",
                   _styles: "text-center",
                 },
@@ -101,6 +105,10 @@ export default function MembersArchive() {
                 {
                   _keys: ["email", "messengerId"],
                   _format: [],
+                },
+                {
+                  _keys: "facebook",
+                  _styles: "text-center",
                 },
                 {
                   _keys: ["username", "nickname"],

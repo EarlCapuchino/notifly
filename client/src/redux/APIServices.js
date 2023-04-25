@@ -10,7 +10,7 @@ export const login = async (email, password) =>
     .get(`auth/login?email=${email}&password=${password}`)
     .then(res => {
       if (res.data.status) {
-        return res.data.content;
+        return res.data?.content;
       } else {
         toast.warn(res.data.message);
         throw new Error(res.data.message);
@@ -30,7 +30,7 @@ export const validateRefresh = async token =>
     })
     .then(res => {
       if (res.data.status) {
-        return res.data.content;
+        return res.data?.content;
       } else {
         localStorage.removeItem("token");
         window.location.href = "/login";
@@ -57,7 +57,7 @@ export const browse = async (entity, key = "", token) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => res.data.content)
+      .then(res => res.data?.content)
       .catch(err => {
         if (err.response.data.expired) {
           toast.warn("Session expired, login again.");
@@ -99,7 +99,7 @@ export const save = async (entity, form, token, willToast = true) =>
       if (willToast) {
         toast.success("Item saved successfully");
       }
-      return res.data.content;
+      return res.data?.content;
     })
     .catch(err => {
       if (err.response.data.expired) {
@@ -122,7 +122,7 @@ export const update = (entity, data, id, token, willToast = true) =>
       if (willToast) {
         toast.info("Item updated successfully");
       }
-      return res.data.content;
+      return res.data?.content;
     })
     .catch(err => {
       if (err.response.data.expired) {
@@ -143,7 +143,7 @@ export const destroy = async (entity, id, token) =>
     })
     .then(res => {
       toast.success("Item archived successfully");
-      return res.data.content;
+      return res.data?.content;
     })
     .catch(err => {
       if (err.response.data.expired) {
@@ -168,7 +168,7 @@ export const restore = async (entity, id, token) =>
     )
     .then(res => {
       toast.success("Item restored successfully");
-      return res.data.content;
+      return res.data?.content;
     })
     .catch(err => {
       if (err.response.data.expired) {

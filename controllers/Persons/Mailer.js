@@ -30,7 +30,7 @@ exports.announce = (req, res) => {
     readHTMLFile("./mails/announcement.html", async (err, html) => {
       let template = handlebars.compile(html);
       let replacements = {
-        content: meeting.content,
+        content: meeting?.content,
         title: meeting.title,
         appName: process.env.APP_NAME,
       };

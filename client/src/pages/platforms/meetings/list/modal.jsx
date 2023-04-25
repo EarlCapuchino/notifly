@@ -78,7 +78,7 @@ export default function MeetingModal({
                 </MDBCol>
               </MDBRow>
               <MDBTextArea
-                value={form.content}
+                value={form?.content}
                 onChange={e => setForm({ ...form, content: e.target.value })}
                 className="mt-2"
                 label="Content"

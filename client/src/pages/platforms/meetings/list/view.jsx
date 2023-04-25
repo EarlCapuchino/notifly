@@ -8,154 +8,118 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
-  MDBListGroup,
-  MDBListGroupItem,
   MDBIcon,
   MDBRow,
   MDBCol,
   MDBInput,
-  MDBBadge,
-  MDBContainer,
   MDBTextArea,
 } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { BROWSE } from "../../../../redux/slices/persons/members";
+import { BROWSE } from "../../../../redux/slices/organizations/clusters";
+import { BROWSE as GC } from "../../../../redux/slices/organizations/groupchats";
 import axios from "axios";
-
-function MembersList({ members, catalogs, setMembers, loading }) {
-  const [selectAll, setSelectAll] = useState(false);
-
-  const handleSelect = () => {
-    setSelectAll(!selectAll);
-
-    const newArr = [...members];
-
-    const container = newArr?.map(item => {
-      const newObj = { ...item };
-      newObj.isSelected = !selectAll;
-      return newObj;
-    });
-
-    setMembers(container);
-  };
-
-  const handleSearch = e => {
-    const key = e.target.value;
-
-    if (key) {
-      setMembers(
-        catalogs.filter(catalog =>
-          catalog.email.toLowerCase().includes(key.toLowerCase())
-        )
-      );
-    } else {
-      setMembers(catalogs);
-    }
-  };
-
-  return (
-    <MDBCol md={5} className="mt-2 mt-md-0">
-      <MDBListGroup>
-        <MDBListGroupItem className="d-flex align-items-center justify-content-between">
-          <MDBInput
-            onChange={handleSearch}
-            type="search"
-            label="Search by E-mail Address"
-          />
-          <MDBBtn
-            onClick={handleSelect}
-            color={selectAll ? "danger" : "success"}
-            size="sm"
-          >
-            {selectAll ? "deselect all" : "select all"}
-          </MDBBtn>
-        </MDBListGroupItem>
-        {members?.map((member, index) => (
-          <MDBListGroupItem key={member.email}>
-            <MDBRow>
-              <MDBCol
-                size={10}
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {member.email}
-              </MDBCol>
-              <MDBCol size={1} className="text-center">
-                <MDBBtn
-                  disabled={loading}
-                  onClick={() => {
-                    if (member.isSelected === true && selectAll === true) {
-                      setSelectAll(false);
-                    }
-
-                    const newArr = [...members],
-                      newObj = { ...newArr[index] };
-
-                    newObj.isSelected = !member.isSelected;
-
-                    newArr[index] = newObj;
-
-                    setMembers(newArr);
-                  }}
-                  size="sm"
-                  floating
-                  color={member.isSelected ? "danger" : "primary"}
-                >
-                  <MDBIcon icon={member.isSelected ? "times" : "check"} />
-                </MDBBtn>
-              </MDBCol>
-            </MDBRow>
-          </MDBListGroupItem>
-        ))}
-      </MDBListGroup>
-    </MDBCol>
-  );
-}
+import MeetingTabs from "./tabs";
+import { selenium } from "../../../../redux/APIServices";
 
 export default function ViewModal({ visibility, setVisibility, meeting }) {
   const { theme, token } = useSelector(({ auth }) => auth),
     [loading, setLoading] = useState(false),
-    { catalogs } = useSelector(({ members }) => members),
-    [members, setMembers] = useState([]),
+    [recipients, setRecipients] = useState([]),
+    [activeTab, setActiveTab] = useState("Email"),
     dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(BROWSE(token));
+    dispatch(GC(token));
   }, [token]);
 
-  useEffect(() => {
-    setMembers(catalogs);
-  }, [catalogs]);
-
   const handleAnnouncement = async () => {
-    const recipients = members.filter(e => e.isSelected);
-
     if (recipients.length > 0) {
-      setLoading(true);
+      // setLoading(true);
 
-      axios
-        .post(
-          "mailer/announce",
-          { meeting, recipients },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+      const _message = `${meeting.title} - ${new Date(
+        meeting.date
+      ).toLocaleString()}\n\n${meeting.content}`;
+
+      switch (activeTab) {
+        case "Group Chat":
+          var _container = [];
+
+          for (const index in recipients) {
+            const recipient = recipients[index];
+
+            for (const ndx in recipient.urls) {
+              _container.push(recipient.urls[ndx]);
+            }
           }
-        )
-        .then(res => {
-          if (res.data.status) {
-            setMembers(catalogs);
-            toast.success(res.data.message);
+
+          var _recipients = Array.from(new Set(_container.map(item => item)));
+
+          const response = await selenium(
+            "messaging",
+            { recipients: _recipients, message: _message, type: "gc" },
+            token
+          );
+          if (response) {
+            toast.success("Group Chats messaged successfully");
             setLoading(false);
             setVisibility(false);
           }
-        })
-        .catch(err => toast.warn(err.message));
+
+          break;
+
+        default:
+          var _container = [];
+
+          for (const index in recipients) {
+            const recipient = recipients[index];
+
+            for (const ndx in recipient.members) {
+              _container.push(recipient.members[ndx]);
+            }
+          }
+
+          var _recipients = [];
+
+          Array.from(new Set(_container.map(item => item._id))).map(mmbr =>
+            _recipients.push(_container.find(e => e._id === mmbr))
+          );
+
+          if (activeTab === "Email") {
+            axios
+              .post(
+                "mailer/announce",
+                { meeting, recipients: _recipients },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+              .then(res => {
+                if (res.data.status) {
+                  toast.success(res.data.message);
+                  setLoading(false);
+                  setVisibility(false);
+                }
+              })
+              .catch(err => toast.warn(err.message));
+          } else {
+            const response = await selenium(
+              "messaging",
+              { message: _message, recipients: _recipients, type: "pm" },
+              token
+            );
+            if (response) {
+              toast.success("Messages sent successfully");
+              setLoading(false);
+              setVisibility(false);
+            }
+          }
+
+          break;
+      }
     } else {
       toast.warn("Please select at least one(1) recipient");
     }
@@ -183,38 +147,20 @@ export default function ViewModal({ visibility, setVisibility, meeting }) {
                     />
                   </MDBCol>
                 </MDBRow>
-                <MDBContainer className="rounded border my-2">
-                  <MDBRow>
-                    <MDBCol size={1} className="text-center">
-                      To:
-                    </MDBCol>
-                    <MDBCol size={11}>
-                      {members?.map(
-                        (member, index) =>
-                          member.isSelected && (
-                            <MDBBadge
-                              key={`selected-member-email-${index}`}
-                              className="mx-1"
-                            >
-                              {member.email}
-                            </MDBBadge>
-                          )
-                      )}
-                    </MDBCol>
-                  </MDBRow>
-                </MDBContainer>
                 <MDBTextArea
+                  className="mt-3"
                   label="Content"
-                  value={meeting.content}
+                  value={meeting?.content}
                   rows={5}
                   readOnly
                 />
               </MDBCol>
-              <MembersList
-                members={members}
-                setMembers={setMembers}
-                catalogs={catalogs}
+              <MeetingTabs
                 loading={loading}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                recipients={recipients}
+                setRecipients={setRecipients}
               />
             </MDBRow>
           </MDBModalBody>

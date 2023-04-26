@@ -170,7 +170,7 @@ exports.tagging = async (req, res) => {
         await messageInput.sendKeys(Key.ENTER);
       }
     } catch (error) {
-      console.log(`>>selenium/tagging - ${username} failed`);
+      console.log(`>>selenium/tagging - failed`);
       response.code = 400;
       response.status = false;
       response.message = error.message;

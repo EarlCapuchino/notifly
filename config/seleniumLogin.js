@@ -46,7 +46,7 @@ module.exports = (email, password) => {
               }
             })
             .catch(() => {
-              return { status: false, message: "Cannot find Name", driver };
+              return { status: false, message: "Cannot find Elements", driver };
             });
         });
     })

@@ -9,6 +9,7 @@ import {
   MDBNavbarNav,
   MDBNavbarItem,
   MDBTypography,
+  MDBTooltip,
 } from "mdb-react-ui-kit";
 import Company from "../../fakeDb/company";
 import { useSelector } from "react-redux";
@@ -58,6 +59,17 @@ const TopNavigation = ({ toggle }) => {
               </MDBTypography>
             </MDBNavbarItem>
             <span className="d-flex">
+              <MDBNavbarItem className={theme.text}>
+                <MDBTooltip
+                  tag="span"
+                  wrapperClass="d-inline-block"
+                  title="Facebook"
+                >
+                  <MDBTypography className="mb-0 text-primary cursor-pointer">
+                    {auth.facebook}
+                  </MDBTypography>
+                </MDBTooltip>
+              </MDBNavbarItem>
               <NavbarAdminToggle />
               {/* <NavbarTodo /> */}
               {/* <NavbarNotifications /> */}

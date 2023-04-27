@@ -34,7 +34,7 @@ export default function ViewModal({ visibility, setVisibility, fbgroup }) {
         token
       );
       if (response) {
-        toast.success("Group Chats messaged successfully");
+        toast.success("Successfully posted in Groups");
         setLoading(false);
         setVisibility(false);
       }

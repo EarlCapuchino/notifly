@@ -44,17 +44,17 @@ export default function ViewModal({ visibility, setVisibility, meeting }) {
 
       switch (activeTab) {
         case "Group Chat":
-          var _container = [];
+          var _containers = [];
 
           for (const index in recipients) {
             const recipient = recipients[index];
 
             for (const ndx in recipient.urls) {
-              _container.push(recipient.urls[ndx]);
+              _containers.push(recipient.urls[ndx]);
             }
           }
 
-          var _recipients = Array.from(new Set(_container.map(item => item)));
+          var _recipients = Array.from(new Set(_containers.map(item => item)));
 
           const response = await selenium(
             "messaging",
@@ -80,17 +80,17 @@ export default function ViewModal({ visibility, setVisibility, meeting }) {
             }
           }
 
-          var _recipients = [];
+          var _recipientsx = [];
 
           Array.from(new Set(_container.map(item => item._id))).map(mmbr =>
-            _recipients.push(_container.find(e => e._id === mmbr))
+            _recipientsx.push(_container.find(e => e._id === mmbr))
           );
 
           if (activeTab === "Email") {
             axios
               .post(
                 "mailer/announce",
-                { meeting, recipients: _recipients },
+                { meeting, recipients: _recipientsx },
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,

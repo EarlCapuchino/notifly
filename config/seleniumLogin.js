@@ -30,7 +30,9 @@ module.exports = (email, password) => {
         .then(() => {
           return { status: false, message: "Invalid Credentials", driver };
         })
-        .catch(() => {
+        .catch(async () => {
+          await driver.sleep(10000);
+
           return driver
             .findElements(
               By.css(

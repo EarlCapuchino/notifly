@@ -302,10 +302,11 @@ exports.liking = async (req, res) => {
 
           if (removeLike) {
             console.log("Already liked");
+            await driver.sleep(2000);
           }
         } catch (error) {
           // this error states that Remove like is not found, so it is available for liking
-          console.log(error.message);
+          // console.log(error.message);
 
           try {
             const like = await driver.findElement(
@@ -315,9 +316,9 @@ exports.liking = async (req, res) => {
             if (like) {
               await like.click();
 
-              await driver.sleep(5000);
+              await driver.sleep(10000);
 
-              console.log(`>>selenium/liking - ${url} success`);
+              console.log(`>>selenium/liking - ${url} liked`);
             }
           } catch (error) {
             console.log(error.message);

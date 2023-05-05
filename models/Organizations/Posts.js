@@ -9,7 +9,12 @@ const modelSchema = new mongoose.Schema(
     },
     urls: [
       {
-        type: String,
+        name: {
+          type: String,
+        },
+        postId: {
+          type: String,
+        },
       },
     ],
     deletedAt: {

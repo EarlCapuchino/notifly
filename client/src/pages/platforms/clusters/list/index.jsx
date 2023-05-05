@@ -140,6 +140,7 @@ export default function ClustersList() {
         visibility={viewMembers}
         setVisibility={setViewMembers}
         cluster={cluster}
+        setCluster={setCluster}
       />
 
       <MDBContainer fluid className="pt-5 mt-5">

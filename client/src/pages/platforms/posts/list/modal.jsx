@@ -15,6 +15,7 @@ import {
   MDBListGroupItem,
   MDBIcon,
   MDBInput,
+  MDBInputGroup,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -29,7 +30,12 @@ export default function PostModal({
   const { theme } = useSelector(({ auth }) => auth),
     [form, setForm] = useState({
       name: "",
-      urls: [""],
+      urls: [
+        {
+          name: "",
+          postId: "",
+        },
+      ],
     });
 
   useEffect(() => {
@@ -40,7 +46,7 @@ export default function PostModal({
 
   return (
     <MDBModal staticBackdrop show={modal.visibility} tabIndex="-1">
-      <MDBModalDialog centered size="lg">
+      <MDBModalDialog centered size="xl">
         <MDBModalContent className={`${theme.bg} ${theme.text}`}>
           <MDBModalHeader>
             <MDBModalTitle>
@@ -74,7 +80,35 @@ export default function PostModal({
                 <MDBListGroupItem key={`url-list-${index}`}>
                   <MDBRow>
                     <MDBCol size={11}>
-                      <MDBInput
+                      <MDBInputGroup>
+                        <input
+                          className="form-control"
+                          placeholder="Post Name"
+                          value={url.name}
+                          onChange={e => {
+                            const newArr = [...form.urls];
+
+                            newArr[index].name = e.target.value;
+
+                            setForm({ ...form, urls: newArr });
+                          }}
+                          type="text"
+                        />
+                        <input
+                          className="form-control"
+                          placeholder="Post ID (sammy.capuchino/posts/pfbid03Syegs9KopRiM2wnNRxPJ7EGF1HPvBUKEJqLF9iGVr97edVwJeVphXCWLbzAXscWl)"
+                          value={url.postId}
+                          onChange={e => {
+                            const newArr = [...form.urls];
+
+                            newArr[index].postId = e.target.value;
+
+                            setForm({ ...form, urls: newArr });
+                          }}
+                          type="text"
+                        />
+                      </MDBInputGroup>
+                      {/* <MDBInput
                         label={`${form.name} URL #${index + 1}`}
                         value={url}
                         onChange={e => {
@@ -85,7 +119,7 @@ export default function PostModal({
                           setForm({ ...form, urls: newArr });
                         }}
                         className="w-75"
-                      />
+                      /> */}
                     </MDBCol>
                     <MDBCol
                       size={1}
@@ -118,7 +152,12 @@ export default function PostModal({
               onClick={() => {
                 setForm({
                   name: "",
-                  urls: [""],
+                  urls: [
+                    {
+                      name: "",
+                      postId: "",
+                    },
+                  ],
                 });
                 setVisibility({ visibility: false, create: true });
               }}
@@ -130,16 +169,11 @@ export default function PostModal({
                 const newObj = { ...form };
 
                 if (newObj.urls.length > 0) {
-                  var invalids = [],
-                    nonFb = [];
+                  var invalids = [];
 
                   newObj.urls.map((url, index) => {
-                    if (!isValidURL(url)) {
+                    if (!url.postId) {
                       invalids.push(`#${index + 1}`);
-                    }
-
-                    if (!url.includes("facebook")) {
-                      nonFb.push(`#${index + 1}`);
                     }
 
                     return null;
@@ -148,18 +182,19 @@ export default function PostModal({
                   if (invalids.length > 0) {
                     toast.warn(`Invalid URL(s): ${invalids.join(", ")}`);
                   } else {
-                    if (nonFb.length > 0) {
-                      toast.warn(`Non-Facebook URL(s): ${nonFb.join(", ")}`);
+                    if (newObj.name) {
+                      setForm({
+                        name: "",
+                        urls: [
+                          {
+                            name: "",
+                            postId: "",
+                          },
+                        ],
+                      });
+                      handleSubmit(form);
                     } else {
-                      if (newObj.name) {
-                        setForm({
-                          name: "",
-                          urls: [""],
-                        });
-                        handleSubmit(form);
-                      } else {
-                        toast.warn("Please specify a name");
-                      }
+                      toast.warn("Please specify a name");
                     }
                   }
                 } else {

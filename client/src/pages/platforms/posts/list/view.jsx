@@ -11,6 +11,7 @@ import {
   MDBListGroup,
   MDBListGroupItem,
   MDBIcon,
+  MDBBadge,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import { selenium } from "../../../../redux/APIServices";
@@ -52,7 +53,7 @@ export default function ViewModal({ visibility, setVisibility, post }) {
             <MDBModalTitle>{post.name}</MDBModalTitle>
           </MDBModalHeader>
           <MDBModalBody className="py-0">
-            <MDBListGroup numbered>
+            <MDBListGroup>
               {post.urls?.map((url, index) => (
                 <MDBListGroupItem
                   key={`url-view-${index}`}
@@ -61,8 +62,10 @@ export default function ViewModal({ visibility, setVisibility, post }) {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
+                  className="d-flex justify-content-between align-items-center"
                 >
-                  {url}
+                  <span>{url?.name}</span>
+                  <MDBBadge>{url?.postId}</MDBBadge>
                 </MDBListGroupItem>
               ))}
             </MDBListGroup>

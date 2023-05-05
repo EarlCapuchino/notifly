@@ -71,7 +71,9 @@ export default function MeetingModal({
                     id="datetime"
                     label="Date"
                     type="datetime-local"
-                    value={form.date}
+                    value={() => {
+                      return form.date;
+                    }}
                     onChange={e => setForm({ ...form, date: e.target.value })}
                     required
                   />

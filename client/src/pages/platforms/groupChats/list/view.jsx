@@ -14,6 +14,7 @@ import {
   MDBRow,
   MDBCol,
   MDBTextArea,
+  MDBBadge,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import { selenium } from "../../../../redux/APIServices";
@@ -61,7 +62,7 @@ export default function ViewModal({ visibility, setVisibility, groupchat }) {
                 />
               </MDBCol>
               <MDBCol size={5}>
-                <MDBListGroup numbered>
+                <MDBListGroup>
                   {groupchat.urls?.map((url, index) => (
                     <MDBListGroupItem
                       key={`url-view-${index}`}
@@ -70,8 +71,10 @@ export default function ViewModal({ visibility, setVisibility, groupchat }) {
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                       }}
+                      className="d-flex justify-content-between align-items-center"
                     >
-                      {url}
+                      <span>{url?.name}</span>
+                      <MDBBadge>{url?.messengerId}</MDBBadge>
                     </MDBListGroupItem>
                   ))}
                 </MDBListGroup>

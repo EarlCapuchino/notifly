@@ -57,7 +57,7 @@ export default function PageModal({
             />
             <MDBListGroup className="mt-2">
               <MDBListGroupItem className="d-flex align-items-center justify-content-between">
-                <MDBTypography className="mb-0">URLS</MDBTypography>
+                <MDBTypography className="mb-0">Pages</MDBTypography>
                 <MDBBtn
                   size="sm"
                   floating
@@ -75,7 +75,7 @@ export default function PageModal({
                   <MDBRow>
                     <MDBCol size={11}>
                       <MDBInput
-                        label={`${form.name} URL #${index + 1}`}
+                        label={`Page name (darkestconfessionsPH)`}
                         value={url}
                         onChange={e => {
                           const newArr = [...form.urls];
@@ -130,16 +130,11 @@ export default function PageModal({
                 const newObj = { ...form };
 
                 if (newObj.urls.length > 0) {
-                  var invalids = [],
-                    nonFb = [];
+                  var invalids = [];
 
                   newObj.urls.map((url, index) => {
-                    if (!isValidURL(url)) {
+                    if (!url) {
                       invalids.push(`#${index + 1}`);
-                    }
-
-                    if (!url.includes("facebook")) {
-                      nonFb.push(`#${index + 1}`);
                     }
 
                     return null;
@@ -148,18 +143,14 @@ export default function PageModal({
                   if (invalids.length > 0) {
                     toast.warn(`Invalid URL(s): ${invalids.join(", ")}`);
                   } else {
-                    if (nonFb.length > 0) {
-                      toast.warn(`Non-Facebook URL(s): ${nonFb.join(", ")}`);
+                    if (newObj.name) {
+                      setForm({
+                        name: "",
+                        urls: [""],
+                      });
+                      handleSubmit(form);
                     } else {
-                      if (newObj.name) {
-                        setForm({
-                          name: "",
-                          urls: [""],
-                        });
-                        handleSubmit(form);
-                      } else {
-                        toast.warn("Please specify a name");
-                      }
+                      toast.warn("Please specify a name");
                     }
                   }
                 } else {

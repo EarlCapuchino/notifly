@@ -36,7 +36,7 @@ export default function ViewModal({ visibility, setVisibility, meeting }) {
 
   const handleAnnouncement = async () => {
     if (recipients.length > 0) {
-      // setLoading(true);
+      setLoading(true);
 
       const _message = `${meeting.title} - ${new Date(
         meeting.date

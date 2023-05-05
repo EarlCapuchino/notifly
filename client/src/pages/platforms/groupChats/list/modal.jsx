@@ -19,7 +19,6 @@ import {
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { isValidURL } from "../../../../components/utilities";
 
 export default function GroupChatModal({
   modal,
@@ -171,16 +170,21 @@ export default function GroupChatModal({
                 const newObj = { ...form };
 
                 if (newObj.urls.length > 0) {
-                  var invalids = [],
-                    nonFb = [];
+                  var invalids = [];
 
                   newObj.urls.map((url, index) => {
-                    if (!isValidURL(url)) {
-                      invalids.push(`#${index + 1}`);
+                    var isInvalid = false;
+
+                    if (!url.name) {
+                      isInvalid = true;
                     }
 
-                    if (!url.includes("facebook")) {
-                      nonFb.push(`#${index + 1}`);
+                    if (!url.messengerId) {
+                      isInvalid = true;
+                    }
+
+                    if (isInvalid) {
+                      invalids.push(`#${index + 1}`);
                     }
 
                     return null;
@@ -189,18 +193,19 @@ export default function GroupChatModal({
                   if (invalids.length > 0) {
                     toast.warn(`Invalid URL(s): ${invalids.join(", ")}`);
                   } else {
-                    if (nonFb.length > 0) {
-                      toast.warn(`Non-Facebook URL(s): ${nonFb.join(", ")}`);
+                    if (newObj.name) {
+                      setForm({
+                        name: "",
+                        urls: [
+                          {
+                            name: "",
+                            messengerId: "",
+                          },
+                        ],
+                      });
+                      handleSubmit(form);
                     } else {
-                      if (newObj.name) {
-                        setForm({
-                          name: "",
-                          urls: [""],
-                        });
-                        handleSubmit(form);
-                      } else {
-                        toast.warn("Please specify a name");
-                      }
+                      toast.warn("Please specify a name");
                     }
                   }
                 } else {

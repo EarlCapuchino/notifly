@@ -11,7 +11,7 @@ const initialState = {
   auth: {},
   showCard: "",
   token,
-  isAdmin: false,
+  isAdmin: true,
   maxPage: maxPage || 6,
   theme: theme || light,
   progress: 0,

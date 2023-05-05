@@ -53,7 +53,8 @@ exports.messages = async (req, res) => {
             url = `https://facebook.com/messages/t/${recipient.messengerId}`;
           }
         } else {
-          url = recipient;
+          url =
+            url = `https://facebook.com/messages/t/${recipient.messengerId}`;
         }
 
         if (url) {
@@ -293,8 +294,16 @@ exports.liking = async (req, res) => {
     try {
       for (const url of urls) {
         try {
-          console.log(`Processing URL: ${url}`);
-          await driver.get(url);
+          var _url;
+
+          if (ariaLabel === "Liked") {
+            _url = `https://www.facebook.com/${url}`;
+          } else {
+            _url = url.postId;
+          }
+
+          console.log(`Processing URL: ${_url}`);
+          await driver.get(_url);
 
           const removeLike = await driver.findElement(
             By.css(`div[aria-label="${ariaLabel}"]`)
@@ -318,7 +327,7 @@ exports.liking = async (req, res) => {
 
               await driver.sleep(10000);
 
-              console.log(`>>selenium/liking - ${url} liked`);
+              console.log(`>>selenium/liking - ${_url} liked`);
             }
           } catch (error) {
             console.log(error.message);
@@ -373,8 +382,8 @@ exports.sharing = async (req, res) => {
 
     try {
       for (const url of urls) {
-        console.log(`Processing URL: ${url}`);
-        await driver.get(url);
+        console.log(`Processing URL: ${url.postId}`);
+        await driver.get(url.postId);
 
         const shareButton = driver.wait(
           until.elementLocated(

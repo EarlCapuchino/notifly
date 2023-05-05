@@ -131,14 +131,14 @@ export default function MembersList() {
         form={[
           {
             _name: "messengerId",
-            _label: "Messenger ID",
+            _label: "Messenger ID (100013428994520)",
             _required: true,
             _message: "Messenger ID is required.",
             _md: 6,
           },
           {
             _name: "email",
-            _label: "E-mail Address",
+            _label: "E-mail Address (example@suggestion.com)",
             _required: true,
             _message: "E-mail Address is required.",
             _type: "email",
@@ -146,23 +146,23 @@ export default function MembersList() {
           },
           {
             _name: "facebook",
-            _label: "Facebook",
+            _label: "Facebook (Facebook name)",
             _required: true,
             _style: "mt-3",
-            _md: 4,
-          },
-          {
-            _name: "username",
-            _label: "Username",
-            _required: true,
-            _style: "mt-3",
-            _md: 4,
+            _md: 6,
           },
           {
             _name: "nickname",
-            _label: "Nickname",
+            _label: "Nickname (Notifly Bot System)",
             _style: "mt-3",
-            _md: 4,
+            _md: 6,
+          },
+          {
+            _name: "username",
+            _label: "Username (https://www.facebook.com/NotiflyBotSystem)",
+            _required: true,
+            _style: "mt-3",
+            _md: 12,
           },
         ]}
         data={modal.create ? preset : record}

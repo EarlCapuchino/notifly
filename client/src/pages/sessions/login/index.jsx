@@ -61,7 +61,7 @@ const Login = () => {
         />
         <MDBCard>
           <MDBCardBody>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} autoComplete="off">
               <MDBInput
                 type="text"
                 label="E-mail Address"
@@ -99,20 +99,6 @@ const Login = () => {
             </form>
           </MDBCardBody>
         </MDBCard>
-        {/* <MDBCard className="mt-2">
-          <MDBCardBody>
-            <MDBTypography className="mb-0">
-              New to <b>{Company.name}</b>?&nbsp;
-              <span
-                onClick={() => navigate("/register")}
-                className="cursor-pointer text-primary hover-line"
-              >
-                Create an account
-              </span>
-              .
-            </MDBTypography>
-          </MDBCardBody>
-        </MDBCard> */}
       </MDBCol>
     </MDBContainer>
   );

@@ -108,7 +108,7 @@ export default function ViewModal({ visibility, setVisibility, meeting }) {
           } else {
             const response = await selenium(
               "messaging",
-              { message: _message, recipients: _recipients, type: "pm" },
+              { message: _message, recipients: _recipientsx, type: "pm" },
               token
             );
             if (response) {

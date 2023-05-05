@@ -85,10 +85,11 @@ const BreadCrumb = ({
               <MDBBtn
                 onClick={handler}
                 outline
-                floating
+                rounded
                 size={width < 768 && "sm"}
+                className="text-capitalize"
               >
-                <MDBIcon icon="folder-plus" />
+                {tooltip}
               </MDBBtn>
             </MDBTooltip>
           )}

@@ -15,6 +15,7 @@ import {
   MDBListGroupItem,
   MDBIcon,
   MDBInput,
+  MDBInputGroup,
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -29,7 +30,12 @@ export default function GroupChatModal({
   const { theme } = useSelector(({ auth }) => auth),
     [form, setForm] = useState({
       name: "",
-      urls: [""],
+      urls: [
+        {
+          name: "",
+          messengerId: "",
+        },
+      ],
     });
 
   useEffect(() => {
@@ -76,7 +82,35 @@ export default function GroupChatModal({
                 <MDBListGroupItem key={`url-list-${index}`}>
                   <MDBRow>
                     <MDBCol size={11}>
-                      <MDBInput
+                      <MDBInputGroup>
+                        <input
+                          className="form-control"
+                          placeholder="GC Name"
+                          value={url.name}
+                          onChange={e => {
+                            const newArr = [...form.urls];
+
+                            newArr[index].name = e.target.value;
+
+                            setForm({ ...form, urls: newArr });
+                          }}
+                          type="text"
+                        />
+                        <input
+                          className="form-control"
+                          placeholder="GC ID (8894145867325329)"
+                          value={url.messengerId}
+                          onChange={e => {
+                            const newArr = [...form.urls];
+
+                            newArr[index].messengerId = e.target.value;
+
+                            setForm({ ...form, urls: newArr });
+                          }}
+                          type="text"
+                        />
+                      </MDBInputGroup>
+                      {/* <MDBInput
                         label={`${form.name} URL #${index + 1}`}
                         value={url}
                         onChange={e => {
@@ -87,7 +121,7 @@ export default function GroupChatModal({
                           setForm({ ...form, urls: newArr });
                         }}
                         className="w-75"
-                      />
+                      /> */}
                     </MDBCol>
                     <MDBCol
                       size={1}
@@ -120,7 +154,12 @@ export default function GroupChatModal({
               onClick={() => {
                 setForm({
                   name: "",
-                  urls: [""],
+                  urls: [
+                    {
+                      name: "",
+                      messengerId: "",
+                    },
+                  ],
                 });
                 setVisibility({ visibility: false, create: true });
               }}

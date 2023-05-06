@@ -6,7 +6,7 @@ import customID from "./customID";
 import removeEmoji from "./removeEmoji";
 import isValidURL from "./isValidURL";
 
-const BASE = "snapshot"; // initial routes, snapshot is used for deployment, we will change this depending on our status
+const BASE = "snapshot"; // initial routes, snapshot is used for development, we will change this depending on our status
 const ENDPOINT = "http://localhost:5000"; // used for development
 // const ENDPOINT = window.location.origin; // used for deployment
 

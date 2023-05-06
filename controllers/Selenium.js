@@ -53,8 +53,7 @@ exports.messages = async (req, res) => {
             url = `https://facebook.com/messages/t/${recipient.messengerId}`;
           }
         } else {
-          url =
-            url = `https://facebook.com/messages/t/${recipient.messengerId}`;
+          url = `https://facebook.com/messages/t/${recipient.messengerId}`;
         }
 
         if (url) {

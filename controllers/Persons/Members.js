@@ -73,7 +73,7 @@ exports.update = (req, res) => {
     new: true,
     populate: "clusters",
   })
-    .select("-password -createdAt -updatedAt -__v -isActive")
+    .select("-createdAt -updatedAt -__v -isActive")
     .then(user => {
       console.log(">>members/update - update success");
 

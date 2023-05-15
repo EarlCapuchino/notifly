@@ -111,7 +111,7 @@ export default function PostsList() {
         title="Posts List"
         button={isAdmin}
         paths={paths}
-        tooltip="Create new Post"
+        tooltip="Create new Post List"
         handler={() => setModal({ visibility: true, create: true })}
       />
 

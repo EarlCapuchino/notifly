@@ -111,7 +111,7 @@ export default function FBGroupsList() {
         title="Facebook Groups List"
         button={isAdmin}
         paths={paths}
-        tooltip="Create new Facebook Group"
+        tooltip="Create New Facebook Group List"
         handler={() => setModal({ visibility: true, create: true })}
       />
 

@@ -105,7 +105,7 @@ export default function MeetingsList() {
         title="Meetings List"
         button={isAdmin}
         paths={paths}
-        tooltip="Create new Post"
+        tooltip="Create new Meeting"
         handler={() => setModal({ visibility: true, create: true })}
       />
 

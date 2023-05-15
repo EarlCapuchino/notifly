@@ -111,7 +111,7 @@ export default function PagesList() {
         title="Pages List"
         button={isAdmin}
         paths={paths}
-        tooltip="Create new Page"
+        tooltip="Create New Page List"
         handler={() => setModal({ visibility: true, create: true })}
       />
 

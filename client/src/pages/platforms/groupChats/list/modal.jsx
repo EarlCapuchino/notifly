@@ -70,7 +70,10 @@ export default function GroupChatModal({
                   floating
                   onClick={() => {
                     const newArr = [...form.urls];
-                    newArr.push("");
+                    newArr.push({
+                      name: "",
+                      messengerId: "",
+                    });
                     setForm({ ...form, urls: newArr });
                   }}
                 >
@@ -88,8 +91,17 @@ export default function GroupChatModal({
                           value={url.name}
                           onChange={e => {
                             const newArr = [...form.urls];
+                            console.log(e.target.value);
 
-                            newArr[index].name = e.target.value;
+                            if (modal.create) {
+                              newArr[index].name = e.target.value;
+                            } else {
+                              const newObj = { ...newArr[index] };
+
+                              newObj.name = e.target.value;
+
+                              newArr[index] = newObj;
+                            }
 
                             setForm({ ...form, urls: newArr });
                           }}
@@ -102,7 +114,15 @@ export default function GroupChatModal({
                           onChange={e => {
                             const newArr = [...form.urls];
 
-                            newArr[index].messengerId = e.target.value;
+                            if (modal.create) {
+                              newArr[index].messengerId = e.target.value;
+                            } else {
+                              const newObj = { ...newArr[index] };
+
+                              newObj.messengerId = e.target.value;
+
+                              newArr[index] = newObj;
+                            }
 
                             setForm({ ...form, urls: newArr });
                           }}

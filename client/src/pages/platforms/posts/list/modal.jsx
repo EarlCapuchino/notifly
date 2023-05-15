@@ -19,7 +19,6 @@ import {
 } from "mdb-react-ui-kit";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { isValidURL } from "../../../../components/utilities";
 
 export default function PostModal({
   modal,
@@ -69,7 +68,10 @@ export default function PostModal({
                   floating
                   onClick={() => {
                     const newArr = [...form.urls];
-                    newArr.push("");
+                    newArr.push({
+                      name: "",
+                      postId: "",
+                    });
                     setForm({ ...form, urls: newArr });
                   }}
                 >
@@ -88,7 +90,15 @@ export default function PostModal({
                           onChange={e => {
                             const newArr = [...form.urls];
 
-                            newArr[index].name = e.target.value;
+                            if (modal.create) {
+                              newArr[index].name = e.target.value;
+                            } else {
+                              const newObj = { ...newArr[index] };
+
+                              newObj.name = e.target.value;
+
+                              newArr[index] = newObj;
+                            }
 
                             setForm({ ...form, urls: newArr });
                           }}
@@ -101,7 +111,15 @@ export default function PostModal({
                           onChange={e => {
                             const newArr = [...form.urls];
 
-                            newArr[index].postId = e.target.value;
+                            if (modal.create) {
+                              newArr[index].postId = e.target.value;
+                            } else {
+                              const newObj = { ...newArr[index] };
+
+                              newObj.postId = e.target.value;
+
+                              newArr[index] = newObj;
+                            }
 
                             setForm({ ...form, urls: newArr });
                           }}

@@ -207,6 +207,7 @@ exports.taggingMultiple = async (req, res) => {
     console.log(">>selenium/tagging/multiple - fb login success");
 
     const { members, message, posts } = req.body;
+  
 
     var response = {
       code: 200,
@@ -217,9 +218,10 @@ exports.taggingMultiple = async (req, res) => {
     try {
       for (const index in posts) {
         const url = posts[index];
+       
         // Navigate to the Facebook page or post where the tagging will take place
         console.log(`Processing URL: ${url}`);
-        await driver.get(url);
+        await driver.get(url.postId);
 
         // Wait for the comment input element to load and send the message along with a space to create a new comment
         const messageInput = await driver.wait(

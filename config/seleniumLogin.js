@@ -31,7 +31,7 @@ module.exports = (email, password) => {
           return { status: false, message: "Invalid Credentials", driver };
         })
         .catch(async () => {
-          await driver.sleep(10000);
+          // await driver.sleep(10000); comment out for slow internet connection
 
           return driver
             .findElements(

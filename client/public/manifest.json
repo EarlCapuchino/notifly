@@ -1,0 +1,16 @@
+{
+  "name": "Notifly Chatbot System",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "manifest_version": 2,
+  "permissions": ["activeTab"],
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Notifly Chatbot System"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
